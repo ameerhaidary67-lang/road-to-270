@@ -463,6 +463,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
             <span class="enlive" id="enLive"><span class="pulse"></span>LIVE</span>
             <button class="enbtn" id="playEN">▶ Play election night</button>
             <button class="btn" id="cartoBtn" style="flex:none;padding:6px 11px;font-size:12px">⬡ Tile map</button>
+            <button class="btn" id="gameBtn" style="flex:none;padding:6px 11px;font-size:12px">🎮 Beat the model</button>
             <div class="modeset" id="mapmode">
               <button data-m="margin" class="on">Margin</button>
               <button data-m="prob">Win %</button>
@@ -617,6 +618,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
 
 <div class="tip" id="tip"></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet" style="position:relative"><button class="closex" id="closex" aria-label="Close">✕</button><div id="sheetContent"></div></div></div>
+<div class="modal" id="gameModal"><div class="sheet" style="position:relative;max-width:720px"><button class="closex" id="gameClose" aria-label="Close">✕</button><div id="gameBody"></div></div></div>
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -1471,4 +1473,63 @@ if(typeof paint==="function"){ const _origPaint=paint; paint=function(){ _origPa
 (function bindCarto(){ const b=document.getElementById("cartoBtn"); if(!b)return;
   b.addEventListener("click",()=>{ const w=document.getElementById("cartoWrap"),m=document.getElementById("map"); const on=w.classList.toggle("on"); m.classList.toggle("hidden",on);
     b.style.background=on?"var(--ink)":""; b.style.color=on?"var(--bg)":""; b.textContent=on?"🗺 Geographic":"⬡ Tile map"; if(on){buildCarto();paintCarto();} }); })();
+
+/* ===================== v4: BEAT THE MODEL ===================== */
+let gameWinners=null, gameDesc="", gameRev=0, guesses={};
+function rollGameScenario(){
+  const rnd=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+  const Rs=CANDS.filter(c=>c.p==="R").map(c=>c.id),Ds=CANDS.filter(c=>c.p==="D").map(c=>c.id);
+  const g={...DEF,rnom:pick(Rs),dnom:pick(Ds),econ:Math.floor(rnd(0,6)),appr:Math.round(rnd(-18,10)),gen:Math.round(rnd(-5,5)),
+    t_wnc:Math.round(rnd(-3,4)),t_lat:Math.round(rnd(-3,4)),t_blk:Math.round(rnd(-3,3)),t_yng:Math.round(rnd(-3,4))};
+  const e=ECON[g.econ]; g.gdp=e.gdp;g.unemp=e.unemp;g.infl=e.infl;
+  const saveP=P,saveSim=SIM; P=g; runModel();
+  gameWinners={}; let rev=0; SIM.mus.forEach(o=>{ const w=o.mu>0?"R":"D"; gameWinners[o.s[0]]=w; if(w==="R")rev+=o.s[2]; });
+  gameRev=rev; gameDesc=`<b>${C[g.rnom].name}</b> (R) vs. <b>${C[g.dnom].name}</b> (D) &nbsp;·&nbsp; ${ECON[g.econ].name} economy &nbsp;·&nbsp; approval ${g.appr>0?'+':''}${g.appr}`;
+  P=saveP; SIM=saveSim;
+}
+function openGame(){
+  rollGameScenario(); guesses={};
+  const tiles=STATES.filter(s=>GRID[s[0]]).map(s=>`<div class="ctile gtile" data-a="${s[0]}" style="grid-row:${GRID[s[0]][0]+1};grid-column:${GRID[s[0]][1]+1};background:var(--bg2);color:var(--ink)"><span class="ca">${s[0]}</span><span class="ce">${s[2]}</span></div>`).join("");
+  document.getElementById("gameBody").innerHTML=`
+    <div style="padding:20px 22px 0"><h3 style="font-size:22px">🎮 Beat the model</h3>
+    <p style="font-size:13.5px;color:var(--ink2);margin:6px 0 0">Predict who wins each state in this scenario, then see how you did. <b>Click a state</b> to cycle your call: grey → <span style="color:var(--d-deep);font-weight:700">Blue</span> → <span style="color:var(--r-deep);font-weight:700">Red</span>.</p>
+    <p style="font-size:13px;margin:10px 0 0;padding:10px 12px;background:var(--bg2);border-radius:9px;border:1px solid var(--line)">${gameDesc}</p></div>
+    <div style="padding:14px 22px 22px"><div class="cartogrid" id="gameGrid">${tiles}</div>
+    <div id="gameTally" style="font-family:var(--mono);font-size:13px;text-align:center;margin-top:12px"></div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn" id="gameReveal" style="flex:1;background:var(--ink);color:var(--bg);border:0">Reveal &amp; score</button><button class="btn ghost" id="gameAgain" style="flex:none;padding:9px 16px">New game</button></div>
+    <div id="gameScore" style="margin-top:14px"></div></div>`;
+  document.getElementById("gameModal").classList.add("open");
+  document.querySelectorAll("#gameGrid .gtile").forEach(t=>t.addEventListener("click",()=>cycleGuess(t)));
+  document.getElementById("gameReveal").addEventListener("click",revealGame);
+  document.getElementById("gameAgain").addEventListener("click",openGame);
+  updateGameTally();
+}
+function cycleGuess(t){ const a=t.dataset.a,cur=guesses[a];
+  if(!cur){guesses[a]="D";t.style.background=cv("--d-deep");t.style.color="#fff";}
+  else if(cur==="D"){guesses[a]="R";t.style.background=cv("--r-deep");t.style.color="#fff";}
+  else{delete guesses[a];t.style.background=cv("--bg2");t.style.color=cv("--ink");}
+  updateGameTally();
+}
+function updateGameTally(){ let r=0,d=0,un=0; STATES.forEach(s=>{ if(!GRID[s[0]])return; const g=guesses[s[0]]; if(g==="R")r+=s[2];else if(g==="D")d+=s[2];else un+=s[2]; });
+  document.getElementById("gameTally").innerHTML=`Your call: <span style="color:var(--d-deep);font-weight:700">D ${d}</span> &mdash; <span style="color:var(--r-deep);font-weight:700">${r} R</span>${un?` &nbsp;·&nbsp; <span style="color:var(--muted)">${un} EV unassigned</span>`:''}`; }
+function revealGame(){ let correct=0,total=0,yourR=0;
+  document.querySelectorAll("#gameGrid .gtile").forEach(t=>{ const a=t.dataset.a; total++; const model=gameWinners[a],g=guesses[a];
+    if(g==="R")yourR+=ABBR[a][2];
+    t.style.background=model==="R"?cv("--r-deep"):cv("--d-deep"); t.style.color="#fff"; t.style.outlineOffset="1px";
+    t.style.outline="2px solid "+(g===model?cv("--good"):cv("--warn")); });
+  const pct=Math.round(correct/total*100)||0; // recompute below
+  let c=0; STATES.forEach(s=>{ if(GRID[s[0]]&&guesses[s[0]]===gameWinners[s[0]])c++; });
+  const p=Math.round(c/51*100);
+  const modelWin=gameRev>=270?"R":"D", yourWin=yourR>=270?"R":"D", calledWinner=modelWin===yourWin;
+  const grade=p>=90?"🏆 Forecasting savant":p>=80?"🎯 Sharp read":p>=68?"👍 Solid":p>=55?"🙂 Not bad":"📚 Keep studying";
+  document.getElementById("gameScore").innerHTML=`<div style="text-align:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px">
+    <div style="font-family:var(--serif);font-size:30px;font-weight:600">${c} / 51 <span style="font-size:16px;color:var(--muted)">states</span></div>
+    <div style="font-size:12.5px;color:var(--muted);margin-top:2px">you matched the model (${p}%)</div>
+    <div style="font-size:15px;font-weight:600;margin-top:8px">${grade}</div>
+    <div style="font-size:13px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)">Model's result: <b style="color:${modelWin==='R'?cv('--r-deep'):cv('--d-deep')}">${modelWin==='R'?'Republican':'Democrat'} ${modelWin==='R'?gameRev:538-gameRev}</b> — you ${calledWinner?'<b style="color:var(--good)">called the winner right ✓</b>':'<b style="color:var(--warn)">missed the overall winner</b>'}.</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px">Green outline = you nailed it · Orange = model disagreed</div></div>`;
+}
+(function bindGame(){ const b=document.getElementById("gameBtn"); if(b)b.addEventListener("click",openGame);
+  const c=document.getElementById("gameClose"); if(c)c.addEventListener("click",()=>document.getElementById("gameModal").classList.remove("open"));
+  const m=document.getElementById("gameModal"); if(m)m.addEventListener("click",e=>{if(e.target.id==="gameModal")m.classList.remove("open");}); })();
 </script>

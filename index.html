@@ -289,6 +289,23 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
 .ctile:hover{transform:scale(1.08);z-index:3} .ctile.sel{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--ink)}
 .ctile .ca{font-weight:700;font-size:clamp(8px,1.5vw,13px);line-height:1;text-shadow:0 1px 1px rgba(0,0,0,.3)} .ctile .ce{font-size:clamp(6px,1vw,9px);opacity:.88;font-family:var(--mono)}
 @media(prefers-reduced-motion:reduce){.panel.active{animation:none}.enlive .pulse{animation:none}}
+/* ===== v5: cinematic dark home ===== */
+.landing{min-height:min(880px,94vh);display:flex;flex-direction:column;justify-content:center;isolation:isolate;background:#0a0e1a;color:#eaf0fb}
+.flagrib{position:absolute;top:0;left:0;right:0;height:4px;z-index:5;background:linear-gradient(90deg,#b22234,#b22234 33%,#f2f2f2 33%,#f2f2f2 66%,#3c5aa6 66%,#3c5aa6)}
+.lcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.landing .lbg{z-index:1;background:radial-gradient(1000px 520px at 76% 0%,rgba(178,34,52,.24),transparent 60%),radial-gradient(1000px 560px at 10% 100%,rgba(60,90,166,.28),transparent 60%),linear-gradient(180deg,rgba(10,14,26,.25),transparent 32% 58%,#0a0e1a)}
+.landing .inner{z-index:2;position:relative}
+.landing .dateline{color:#8ea0c0}
+.landing h1{color:#fff;text-shadow:0 2px 50px rgba(0,0,0,.55)} .landing h1 .r270{color:#e3b448}
+.landing .big{color:#cdd7ea;text-shadow:0 1px 20px rgba(0,0,0,.45)}
+.landing .tagpill{color:#e7c572;background:rgba(227,180,72,.13);border:1px solid rgba(227,180,72,.35);backdrop-filter:blur(5px)} .landing .tagpill .dot{background:#e3b448;box-shadow:0 0 0 3px rgba(227,180,72,.22)}
+.landing .bigbtn{background:#fff;color:#0a0e1a;box-shadow:0 12px 34px rgba(0,0,0,.45)} .landing .bigbtn:hover{transform:translateY(-2px)}
+.landing .bigbtn.alt{background:rgba(255,255,255,.07);color:#fff;border:1.5px solid rgba(255,255,255,.32);backdrop-filter:blur(5px)}
+.landing .stats{border-top:1px solid rgba(255,255,255,.13)}
+.landing .stats .s .n{font-variant-numeric:tabular-nums;color:#fff} .landing .stats .s .n.r{color:#ff6b66} .landing .stats .s .n.d{color:#6fa0ff} .landing .stats .s .n.a{color:#e3b448}
+.landing .stats .s .l{color:#8ea0c0}
+.feats{position:relative;z-index:2;background:linear-gradient(180deg,#0a0e1a,var(--bg) 24%)}
+.feats .fcard{color:var(--ink);background:var(--panel)} .feats .fcard h4{color:var(--ink)} .feats .fcard p{color:var(--ink2)}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
@@ -305,7 +322,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
   <button class="themebtn" id="themebtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
 </div></nav>
 
-<section id="home" class="panel"><div class="landing gut"><div class="lbg"></div>
+<section id="home" class="panel"><div class="landing gut"><div class="flagrib"></div><canvas class="lcanvas" id="homeCanvas" aria-hidden="true"></canvas><div class="lbg"></div>
   <div class="inner">
     <span class="tagpill"><span class="dot" style="width:7px;height:7px"></span>An AI-built forecasting engine · Hypothetical 2028</span>
     <h1>Road to <span class="r270">270</span></h1>
@@ -315,11 +332,11 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
       <button class="bigbtn alt" id="tourBtn">How it works</button>
     </div>
     <div class="stats">
-      <div class="s"><div class="n a">51</div><div class="l">contests modeled</div></div>
-      <div class="s"><div class="n r">2,001</div><div class="l">simulations / scenario</div></div>
-      <div class="s"><div class="n d">14</div><div class="l">candidates</div></div>
+      <div class="s"><div class="n a" data-target="51">51</div><div class="l">contests modeled</div></div>
+      <div class="s"><div class="n r" data-target="2001">2,001</div><div class="l">simulations / scenario</div></div>
+      <div class="s"><div class="n d" data-target="14">14</div><div class="l">candidates</div></div>
       <div class="s"><div class="n a">1960</div><div class="l">–2024 real history</div></div>
-      <div class="s"><div class="n d">5</div><div class="l">voter blocks / state</div></div>
+      <div class="s"><div class="n d" data-target="5">5</div><div class="l">voter blocks / state</div></div>
     </div>
   </div>
   <div class="feats gut">
@@ -1282,6 +1299,7 @@ function showTab(id){
   TAB_IDS.forEach(t=>{const el=document.getElementById(t); if(el)el.classList.toggle("active",t===id);});
   document.querySelectorAll("nav a.tab").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+id));
   window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
+  if(id==="home"){ if(window.__homeResize)window.__homeResize(); if(window.__animCounters)window.__animCounters(); }
 }
 function navTo(id){ showTab(id); if(history.replaceState)history.replaceState(null,"","#"+id); }
 document.querySelectorAll('nav a.tab, a.logo').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();navTo(a.getAttribute("href").slice(1));}));
@@ -1532,4 +1550,37 @@ function revealGame(){ let correct=0,total=0,yourR=0;
 (function bindGame(){ const b=document.getElementById("gameBtn"); if(b)b.addEventListener("click",openGame);
   const c=document.getElementById("gameClose"); if(c)c.addEventListener("click",()=>document.getElementById("gameModal").classList.remove("open"));
   const m=document.getElementById("gameModal"); if(m)m.addEventListener("click",e=>{if(e.target.id==="gameModal")m.classList.remove("open");}); })();
+
+/* ===================== v5: CINEMATIC HOME BACKGROUND ===================== */
+function hexA(h,a){ h=(h||"").trim(); if(h[0]!=="#"||h.length<7)return `rgba(120,120,120,${a})`; const n=parseInt(h.slice(1,7),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; }
+function initHomeCanvas(){
+  const cvs=document.getElementById("homeCanvas"); if(!cvs)return; const ctx=cvs.getContext("2d");
+  const DPR=Math.min(window.devicePixelRatio||1,2); let W=1,H=1;
+  function resize(){ const r=cvs.getBoundingClientRect(); if(r.width<2)return; W=cvs.width=Math.round(r.width*DPR); H=cvs.height=Math.round(r.height*DPR); }
+  window.__homeResize=resize; resize(); window.addEventListener("resize",resize);
+  const blobs=[{c:"r",p:0.0,sx:.00022,sy:.00019},{c:"b",p:1.9,sx:.00018,sy:.00024},{c:"g",p:3.6,sx:.00026,sy:.00016},{c:"b",p:5.2,sx:.00015,sy:.00021}];
+  const N=64, parts=Array.from({length:N},()=>({x:Math.random(),y:Math.random(),v:0.00006+Math.random()*0.00016,s:0.8+Math.random()*2.1,a:0.18+Math.random()*0.5,c:Math.random(),tw:Math.random()*6.28}));
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches;
+  let t=0;
+  function frame(){
+    if(W<2){resize();}
+    const R="#ff5a54",B="#5d93f2",G="#e3b448";
+    ctx.clearRect(0,0,W,H);
+    const mx=Math.max(W,H);
+    blobs.forEach(bl=>{ const cx=(0.5+0.36*Math.sin(t*bl.sx+bl.p))*W, cyy=(0.5+0.34*Math.cos(t*bl.sy+bl.p))*H;
+      const col=bl.c==="r"?R:bl.c==="b"?B:G; const g=ctx.createRadialGradient(cx,cyy,0,cx,cyy,mx*0.44);
+      g.addColorStop(0,hexA(col,0.26)); g.addColorStop(1,hexA(col,0)); ctx.fillStyle=g; ctx.fillRect(0,0,W,H); });
+    parts.forEach(p=>{ if(!reduce){ p.y-=p.v; if(p.y<-0.03)p.y=1.03; } const col=p.c<0.4?R:p.c<0.68?B:"#ffffff";
+      const tw=0.55+0.45*Math.sin(t*0.02+p.tw); ctx.globalAlpha=Math.min(p.a*tw,0.9); ctx.fillStyle=col;
+      ctx.beginPath(); ctx.arc(p.x*W,p.y*H,p.s*DPR,0,6.2832); ctx.fill(); });
+    ctx.globalAlpha=1;
+    t+=reduce?0:16; if(!reduce)requestAnimationFrame(frame);
+  }
+  frame();
+}
+function animateCounters(){ document.querySelectorAll('#home .stats .s .n[data-target]').forEach(el=>{ const target=+el.dataset.target,dur=1100,st=performance.now();
+  function step(now){ const k=Math.min((now-st)/dur,1),e=1-Math.pow(1-k,3); el.textContent=Math.round(target*e).toLocaleString(); if(k<1)requestAnimationFrame(step); } requestAnimationFrame(step); }); }
+window.__animCounters=animateCounters;
+initHomeCanvas();
+if(document.getElementById("home").classList.contains("active"))animateCounters();
 </script>

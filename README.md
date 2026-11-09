@@ -1,30 +1,44 @@
-# Road to 270 — deploy guide
+# Road to 270 🇺🇸
 
-An interactive, probabilistic 2028 election platform. To host it, upload these next to each other:
+**An AI-built, interactive probabilistic forecast of the 2028 U.S. presidential election.**
 
-- `index.html` — the whole app
-- `us-states.geojson` — US map geometry
-- `history.json` — 1960–2024 election results
-- `img/` — the 14 candidate photos (keep the folder name `img`)
+Build your own 2028 election: set the economy, pick the nominees, move turnout and dozens of other real-world signals, and watch all 50 states, the Electoral College, and the odds of winning redraw in real time.
 
-`us-states.json` is the raw source geometry — **not needed to deploy**.
+> ⚠️ A teaching model and a hypothetical — not a prediction of record. No 2028 polling exists yet; every number is a modeled estimate. State baselines use real 2024 certified results, and the historical maps are real results 1960–2024.
 
-## Option A — Netlify (easiest, drag-and-drop)
-1. Go to app.netlify.com → **Add new site → Deploy manually**.
-2. Drag the whole `road-to-270` folder onto the page.
-3. You get a public `https://<name>.netlify.app` URL instantly. Add a custom domain in Site settings if you want.
+## Features
+- **Interactive map** — real geographic U.S. map (and a tile-map cartogram), colored by margin, win probability, or flips.
+- **Probabilistic engine** — a 4-layer model (fundamentals → demographic voter blocks → 2024 calibration → 2,001-run Monte Carlo) producing win odds, an outcome range, and the tipping-point state.
+- **30+ defined inputs** — economy, approval, turnout by demographic group, education polarization, event shocks, and more — each explained in plain English under the slider and in a full glossary.
+- **1960–2024 history explorer** — replay every real presidential map and each state's voting record.
+- **14 candidates** — real photos, profiles, and an electability matrix.
+- **AI Forecast** — a written central-case call: who wins, and why.
+- **Fun tools** — election-night simulator, swing-o-meter, Electoral College bias meter, "ask in plain English," Beat-the-model game, Maine/Nebraska district split, and more.
 
-## Option B — GitHub Pages (free public URL)
-1. Create a repo, e.g. `road-to-270`.
-2. Upload `index.html`, `us-states.geojson`, `history.json`, and the `img/` folder.
-3. **Settings → Pages → Build from branch → `main` / root → Save**.
-4. Live at `https://<your-username>.github.io/road-to-270/` in ~1 minute.
+## Run it
+It's a static site — no build step. Open `index.html` through any local web server (the app loads `us-states.geojson` and `history.json` with relative paths, which browsers block over `file://`):
 
-Both work because the app loads its data with **relative** paths — any static host works (Vercel, Cloudflare Pages, etc.). No server code needed.
+```bash
+cd road-to-270
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
 
-## Swapping candidate photos
-Photos live in `img/<id>.jpg` (e.g. `img/vance.jpg`). Replace any file with your own square image of the same name to change it. Current photos are U.S. government official portraits (public domain) and Wikimedia Commons images; credits are listed in the app's **Data** section.
+## Deploy it (free public URL)
+Any static host works. Two easy options:
+- **GitHub Pages:** repo **Settings → Pages → Branch `main` / root**. Live at `https://<username>.github.io/road-to-270/`.
+- **Netlify:** drag this folder onto [app.netlify.com/drop](https://app.netlify.com/drop).
 
-## Notes
-- The CSV "download" works on your own hosted site; inside the claude.ai preview it copies to the clipboard instead (browser download is sandboxed there).
-- County-level zoom and live polling/market feeds are the planned next additions.
+## Files
+| File | What it is |
+|---|---|
+| `index.html` | The entire app (model, UI, visuals) |
+| `us-states.geojson` | U.S. state geometry for the map |
+| `history.json` | 1960–2024 state-by-state results |
+| `img/` | Candidate photos |
+
+## Credits
+- Built with [Claude](https://claude.com/claude-code).
+- Geography: U.S. Census cartographic boundaries (via us-atlas).
+- Candidate photos: U.S. government official portraits (public domain) and Wikimedia Commons; per-candidate sources are listed in the app's **Data** section.
+- Model framing after Abramowitz's "Time for Change," Hibbs's "Bread and Peace," and the simulation approach of outlets like 538 and The Economist. Coefficients are illustrative, not fitted.

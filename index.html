@@ -238,33 +238,90 @@ table.dt th{background:var(--bg2);font-family:var(--mono);font-size:10px;text-tr
 footer{padding-block:28px 46px;border-top:1px solid var(--line);color:var(--muted);font-size:12px} footer .disc{max-width:80ch} footer b{color:var(--ink)}
 .srcnote{font-size:11px;color:var(--muted);margin-top:8px}
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== v4: tabs, landing, effect lines ===== */
+.panel{display:none} .panel.active{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+nav a.tab.home{font-family:var(--serif);font-size:15px}
+/* landing */
+#home{padding:0}
+.landing{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.landing .lbg{position:absolute;inset:0;background:radial-gradient(1100px 500px at 72% -10%,color-mix(in srgb,var(--r-deep) 16%,transparent),transparent 60%),radial-gradient(1000px 520px at 20% 110%,color-mix(in srgb,var(--d-deep) 18%,transparent),transparent 60%);opacity:.9;pointer-events:none}
+.landing .lbg svg{position:absolute;right:-4%;top:12%;width:62%;max-width:760px;opacity:.14;filter:saturate(.6)}
+.landing .inner{position:relative;max-width:1220px;margin:0 auto;padding-block:clamp(48px,11vw,118px) clamp(40px,8vw,86px)}
+.landing .tagpill{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);border-radius:30px;padding:7px 15px;font-weight:600}
+.landing h1{font-size:clamp(46px,12vw,118px);line-height:.92;margin:20px 0 0;letter-spacing:-.03em}
+.landing h1 .r270{color:var(--accent);position:relative}
+.landing .big{max-width:60ch;font-size:clamp(17px,2.6vw,24px);color:var(--ink2);margin-top:20px;line-height:1.4}
+.landing .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:34px}
+.bigbtn{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:16px;font-weight:700;padding:15px 26px;border-radius:12px;border:0;cursor:pointer;background:var(--ink);color:var(--bg);box-shadow:var(--shadow);transition:transform .12s}
+.bigbtn:hover{transform:translateY(-2px)} .bigbtn.alt{background:transparent;color:var(--ink);border:1.5px solid var(--line2)}
+.bigbtn .ar{font-size:18px}
+.landing .stats{display:flex;gap:26px;flex-wrap:wrap;margin-top:44px;padding-top:26px;border-top:1px solid var(--line)}
+.landing .stats .s .n{font-family:var(--serif);font-size:clamp(26px,5vw,40px);font-weight:600;line-height:1} .landing .stats .s .n.r{color:var(--r-deep)} .landing .stats .s .n.d{color:var(--d-deep)} .landing .stats .s .n.a{color:var(--accent)}
+.landing .stats .s .l{font-size:12px;color:var(--muted);margin-top:3px}
+.feats{max-width:1220px;margin:0 auto;padding-block:38px 50px;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.fcard{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:transform .12s,border-color .12s}
+.fcard:hover{transform:translateY(-3px);border-color:var(--accent)}
+.fcard .ic{font-size:24px} .fcard h4{font-size:17px;margin:10px 0 5px} .fcard p{font-size:13px;color:var(--ink2);margin:0} .fcard .go{font-family:var(--mono);font-size:11px;color:var(--accent);margin-top:10px;font-weight:600}
+/* effect line under sliders */
+.efx{display:flex;justify-content:space-between;gap:10px;font-size:10px;margin-top:4px;line-height:1.3;font-weight:600}
+.efx .hr{color:var(--r-deep)} .efx .hd{color:var(--d-deep)} .efx span:last-child{text-align:right}
+.efxone{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.4}
+.intro{background:linear-gradient(120deg,var(--accent-soft),transparent);border:1px solid var(--line);border-radius:12px;padding:13px 15px;font-size:12.5px;color:var(--ink2)} .intro b{color:var(--ink)}
+/* glossary */
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:18px}
+.gcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+.gcard h4{font-size:15px;margin-bottom:8px;display:flex;align-items:center;gap:7px} .gcard h4 .gi{width:9px;height:9px;border-radius:50%;flex:none}
+.gitem{padding:9px 0;border-top:1px solid var(--line)} .gitem:first-of-type{border-top:0} .gitem .gt{font-weight:700;font-size:13px} .gitem .gd{font-size:12px;color:var(--ink2);margin-top:2px} .gitem .up{color:var(--r-deep);font-weight:600} .gitem .dn{color:var(--d-deep);font-weight:600}
+/* election night */
+.enbtn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13px;padding:8px 14px;border-radius:9px;border:0;cursor:pointer;background:var(--ink);color:var(--bg)}
+.enlive{display:none;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--r-deep);font-weight:700;text-transform:uppercase;letter-spacing:.1em} .enlive.on{display:inline-flex} .enlive .pulse{width:8px;height:8px;border-radius:50%;background:var(--r-deep);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.biasmeter{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow);font-size:13px;color:var(--ink2)} .biasmeter b{color:var(--ink)} .biasmeter .bt{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:5px}
+@media(prefers-reduced-motion:reduce){.panel.active{animation:none}.enlive .pulse{animation:none}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
 <nav class="gut"><div class="wrap inner">
-  <div class="logo"><span class="dot"></span>Road to <b>270</b></div>
-  <a class="tab on" href="#forecast">Forecast</a>
+  <a class="logo" href="#home" style="text-decoration:none;color:inherit"><span class="dot"></span>Road to <b>270</b></a>
+  <a class="tab" href="#forecast">Forecast</a>
   <a class="tab" href="#history">History</a>
   <a class="tab" href="#candidates">Candidates</a>
   <a class="tab" href="#model">Model</a>
+  <a class="tab" href="#glossary">Glossary</a>
   <a class="tab" href="#aiforecast">AI Forecast</a>
   <a class="tab" href="#data">Data</a>
   <button class="themebtn" id="cbbtn" title="Colorblind-safe palette" aria-label="Colorblind palette">◑</button>
   <button class="themebtn" id="themebtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
 </div></nav>
 
-<header class="hero gut"><div class="wrap">
-  <div class="dateline" id="dateline">Forecast as of November 2026 · Hypothetical 2028 cycle</div>
-  <h1>Road to <span class="r270">270</span></h1>
-  <p class="tagline">A probabilistic model of the 2028 presidential race you can interrogate. Set the economy, pick the nominees, move turnout and dozens of other signals — and watch every state, the Electoral College, and the <b>odds of winning</b> re-forecast in real time.</p>
-  <div class="herorow">
-    <span class="chip"><span class="k">51</span> contests modeled</span>
-    <span class="chip"><span class="k">5</span> demographic blocks/state</span>
-    <span class="chip"><span class="k" id="simchip">2,001</span> simulations</span>
-    <span class="chip"><span class="k">14</span> candidates</span>
-    <span class="chip"><span class="k">1960</span>–2024 history</span>
+<section id="home" class="panel"><div class="landing gut"><div class="lbg"></div>
+  <div class="inner">
+    <span class="tagpill"><span class="dot" style="width:7px;height:7px"></span>An AI-built forecasting engine · Hypothetical 2028</span>
+    <h1>Road to <span class="r270">270</span></h1>
+    <p class="big">Build your own 2028 election. Set the economy, pick the nominees, move turnout and dozens of other real-world signals — and watch all 50 states, the Electoral College, and the <b>odds of winning</b> redraw in real time.</p>
+    <div class="cta">
+      <button class="bigbtn" id="launchBtn"><span class="ar">▶</span> Launch the forecast</button>
+      <button class="bigbtn alt" id="tourBtn">How it works</button>
+    </div>
+    <div class="stats">
+      <div class="s"><div class="n a">51</div><div class="l">contests modeled</div></div>
+      <div class="s"><div class="n r">2,001</div><div class="l">simulations / scenario</div></div>
+      <div class="s"><div class="n d">14</div><div class="l">candidates</div></div>
+      <div class="s"><div class="n a">1960</div><div class="l">–2024 real history</div></div>
+      <div class="s"><div class="n d">5</div><div class="l">voter blocks / state</div></div>
+    </div>
   </div>
-</div></header>
+  <div class="feats gut">
+    <div class="fcard" data-go="forecast"><div class="ic">🗺️</div><h4>Forecast</h4><p>The interactive map and the full control panel — your scenario, re-run 2,001 times.</p><div class="go">Open the map →</div></div>
+    <div class="fcard" data-go="history"><div class="ic">🕰️</div><h4>History</h4><p>Replay every real presidential map from 1960 to 2024 and watch the country realign.</p><div class="go">See the past →</div></div>
+    <div class="fcard" data-go="candidates"><div class="ic">👥</div><h4>Candidates</h4><p>Fourteen contenders with real photos, profiles, and an electability matrix.</p><div class="go">Meet the field →</div></div>
+    <div class="fcard" data-go="model"><div class="ic">⚙️</div><h4>The Model</h4><p>Exactly how it thinks — four layers, the equations, and what moves the needle.</p><div class="go">Look inside →</div></div>
+    <div class="fcard" data-go="glossary"><div class="ic">📖</div><h4>Glossary</h4><p>Every slider and term in plain English — what moving it does and who it helps.</p><div class="go">Learn the terms →</div></div>
+    <div class="fcard" data-go="aiforecast"><div class="ic">🎯</div><h4>AI Forecast</h4><p>The model's own central-case call: who wins 2028, and why.</p><div class="go">Read the call →</div></div>
+  </div>
+</div></section>
 
 <section id="forecast" class="gut"><div class="wrap">
   <div class="fc">
@@ -303,7 +360,12 @@ footer{padding-block:28px 46px;border-top:1px solid var(--line);color:var(--mute
         <div class="grp"><div class="lab">Non-college white <span class="info" title="Turnout of white voters without a 4-year degree, vs. 2024. This group leans Republican, so a positive shift (surge) generally helps the GOP, most in heavily working-class states. 0 = 2024 levels.">i</span><span class="v" id="t_wncV">0</span></div><input type="range" id="t_wnc" min="-6" max="6" step="1" value="0"></div>
         <div class="grp"><div class="lab">Latino <span class="info" title="Latino turnout vs. 2024. Latino voters lean Democratic on balance (though they shifted toward the GOP in 2024), so a surge tends to help Democrats, concentrated in AZ, NV, TX, FL, NM. 0 = 2024 levels.">i</span><span class="v" id="t_latV">0</span></div><input type="range" id="t_lat" min="-6" max="6" step="1" value="0"></div>
         <div class="grp"><div class="lab">Black <span class="info" title="Black turnout vs. 2024. Black voters are the most Democratic group, so a surge helps Democrats, concentrated in GA, NC, MS, SC, and the industrial Midwest cities. 0 = 2024 levels.">i</span><span class="v" id="t_blkV">0</span></div><input type="range" id="t_blk" min="-6" max="6" step="1" value="0"></div>
-        <div class="grp" style="margin-bottom:0"><div class="lab">Young voters (18–29) <span class="info" title="Turnout of voters under 30 vs. 2024. Younger voters lean Democratic, so a surge helps Democrats broadly. 0 = 2024 levels.">i</span><span class="v" id="t_yngV">0</span></div><input type="range" id="t_yng" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">Young voters (18–29) <span class="info" title="Turnout of voters under 30 vs. 2024. Younger voters lean Democratic, so a surge helps Democrats broadly. 0 = 2024 levels.">i</span><span class="v" id="t_yngV">0</span></div><input type="range" id="t_yng" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">College-educated white <span class="info" title="Turnout of white voters WITH a 4-year degree, vs. 2024. This group now leans Democratic, so a surge helps Democrats — especially in the suburbs. 0 = 2024 levels.">i</span><span class="v" id="t_wcV">0</span></div><input type="range" id="t_wc" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">Asian / other <span class="info" title="Asian and other-race turnout vs. 2024. Leans Democratic, so a surge helps Democrats. 0 = 2024 levels.">i</span><span class="v" id="t_asnV">0</span></div><input type="range" id="t_asn" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">Seniors (65+) <span class="info" title="Turnout of voters 65 and older vs. 2024. Seniors lean Republican, so a surge helps Republicans. 0 = 2024 levels.">i</span><span class="v" id="t_senV">0</span></div><input type="range" id="t_sen" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">White evangelical push <span class="info" title="How mobilized white evangelical voters are. Strongly Republican and concentrated in the South and Plains, so more mobilization helps Republicans there. 0 = neutral.">i</span><span class="v" id="evangV">0</span></div><input type="range" id="evang" min="-2" max="2" step="0.5" value="0"></div>
+        <div class="grp" style="margin-bottom:0"><div class="lab">Urban &harr; rural balance <span class="info" title="Which way the turnout balance tips. Toward rural helps Republicans; toward urban helps Democrats. Scales with how rural each state actually is. 0 = neutral.">i</span><span class="v" id="urbV">0</span></div><input type="range" id="urb" min="-2" max="2" step="0.5" value="0"></div>
       </div>
 
       <div class="card">
@@ -514,6 +576,13 @@ footer{padding-block:28px 46px;border-top:1px solid var(--line);color:var(--mute
   </div>
 </div></section>
 
+<section id="glossary" class="gut panel"><div class="wrap">
+  <div class="eyebrow">Plain English</div>
+  <h2 class="secttl">What do these mean?</h2>
+  <p class="lead">Every control, scenario, and result — explained simply, with what moving it up or down does and who it helps. No political-science degree required.</p>
+  <div id="glossBody"></div>
+</div></section>
+
 <footer class="gut"><div class="wrap">
   <p class="disc"><b>How to read this.</b> Road to 270 is a teaching model and a hypothetical — a 2028 built to be interrogated, not a prediction of record. No 2028 polling exists yet; every number is a modeled estimate. State baselines are real <b>2024 certified results</b>; the historical maps are real results 1960–2024; demographic shares approximate the 2024 electorate; coefficients are illustrative. County-level zoom and live polling/market feeds are planned next. Built with Claude.</p>
 </div></footer>
@@ -563,46 +632,46 @@ STATES.forEach(s=>{FIPS[s[5]]=s;ABBR[s[0]]=s;
 });
 
 const CANDS=[
-{id:"vance",name:"J.D. Vance",role:"Vice President",p:"R",ideo:.7,fav:-6,home:"OH",age:44,ap:{wnc:3,wc:-1,lat:-2,asn:-1},
+{id:"vance",name:"J.D. Vance",role:"Vice President",p:"R",ideo:.7,fav:-6,home:"OH",age:42,ap:{wnc:3,wc:-1,lat:-2,asn:-1},
  bio:"Venture capitalist turned senator from Ohio and author of Hillbilly Elegy, elevated to the vice presidency in 2025. A standard-bearer for national populism with deep roots in the industrial Midwest.",
  str:["Natural fit with non-college white voters","Rust Belt and Appalachian appeal","Incumbent vice-presidential profile"],rsk:["Below-water personal favorability","Weakness with suburban and Latino voters"]},
-{id:"rubio",name:"Marco Rubio",role:"Secretary of State",p:"R",ideo:.5,fav:2,home:"FL",age:57,ap:{lat:4,wnc:-1,wc:1,asn:1},
+{id:"rubio",name:"Marco Rubio",role:"Secretary of State",p:"R",ideo:.5,fav:2,home:"FL",age:55,ap:{lat:4,wnc:-1,wc:1,asn:1},
  bio:"Longtime Florida senator and the sitting Secretary of State, with a national-security profile and unusual reach into Latino communities for a Republican.",
  str:["Strongest GOP performer with Latino voters","Locks down Florida","More palatable to suburbanites"],rsk:["Less magnetic with the populist base","Thinner Rust Belt appeal"]},
-{id:"desantis",name:"Ron DeSantis",role:"Governor of Florida",p:"R",ideo:.75,fav:-4,home:"FL",age:49,ap:{wnc:2,lat:1},
+{id:"desantis",name:"Ron DeSantis",role:"Governor of Florida",p:"R",ideo:.75,fav:-4,home:"FL",age:48,ap:{wnc:2,lat:1},
  bio:"Two-term governor of Florida who built a national brand on culture-war fights and pandemic-era contrarianism before a bruising 2024 primary run.",
  str:["Record of winning a mega-state by landslide","Strong with conservative base"],rsk:["Uneven retail-politics skills","Favorability underwater nationally"]},
 {id:"haley",name:"Nikki Haley",role:"Fmr. UN Ambassador",p:"R",ideo:.35,fav:4,home:"SC",age:54,ap:{wc:3,wnc:-2,asn:2,lat:1},
  bio:"Former South Carolina governor and UN ambassador, the most moderate and broadly acceptable figure in the GOP field, with crossover appeal to college-educated voters.",
  str:["Best GOP numbers with suburban/college voters","Highest net favorability in the field","Daughter-of-immigrants profile"],rsk:["Distrusted by the MAGA base","Turnout risk with populists"]},
-{id:"youngkin",name:"Glenn Youngkin",role:"Governor of Virginia",p:"R",ideo:.45,fav:3,home:"VA",age:58,ap:{wc:2,wnc:1},
+{id:"youngkin",name:"Glenn Youngkin",role:"Fmr. Governor of Virginia",p:"R",ideo:.45,fav:3,home:"VA",age:59,ap:{wc:2,wnc:1},
  bio:"Private-equity executive who won blue-trending Virginia in 2021 by fusing business-friendly moderation with cultural conservatism.",
  str:["Suburban-friendly fleece-vest brand","Won a Biden state"],rsk:["Low national name recognition","Untested on a presidential stage"]},
-{id:"cruz",name:"Ted Cruz",role:"U.S. Senator, TX",p:"R",ideo:.85,fav:-8,home:"TX",age:57,ap:{wnc:2,lat:1,wc:-2},
+{id:"cruz",name:"Ted Cruz",role:"U.S. Senator, TX",p:"R",ideo:.85,fav:-8,home:"TX",age:55,ap:{wnc:2,lat:1,wc:-2},
  bio:"Texas senator and 2016 runner-up, a movement-conservative debater with a hardcore base and famously high negatives.",
  str:["Deep conservative-movement loyalty","Strong debater and fundraiser"],rsk:["Among the worst favorability in the field","Repels moderates and suburbanites"]},
 {id:"djtjr",name:"Donald Trump Jr.",role:"Businessman",p:"R",ideo:.9,fav:-10,home:"FL",age:48,ap:{wnc:3,wc:-3,lat:-1},
  bio:"Businessman and the most prominent heir to the MAGA movement, a rally favorite who would run as the keeper of his father's coalition.",
  str:["Unmatched base enthusiasm","Massive small-dollar network"],rsk:["Deeply polarizing; high floor but low ceiling","Alienates college-educated voters"]},
-{id:"buttigieg",name:"Pete Buttigieg",role:"Fmr. Transportation Sec.",p:"D",ideo:-.4,fav:6,home:"MI",age:46,ap:{wnc:-2,wc:-2,lat:2,blk:1},
+{id:"buttigieg",name:"Pete Buttigieg",role:"Fmr. Transportation Sec.",p:"D",ideo:-.4,fav:6,home:"MI",age:44,ap:{wnc:-2,wc:-2,lat:2,blk:1},
  bio:"Former South Bend mayor and Transportation Secretary, a Midwestern moderate and gifted communicator who relocated to Michigan.",
  str:["Crossover appeal to white working-class voters","Disciplined messenger on hostile turf","Strong in the industrial Midwest"],rsk:["Softer support among Black and Latino voters","Has never won a big statewide race"]},
-{id:"newsom",name:"Gavin Newsom",role:"Governor of California",p:"D",ideo:-.6,fav:-2,home:"CA",age:61,ap:{wnc:2,wc:-1,lat:-3,blk:-2,asn:-1},
+{id:"newsom",name:"Gavin Newsom",role:"Governor of California",p:"D",ideo:-.6,fav:-2,home:"CA",age:59,ap:{wnc:2,wc:-1,lat:-3,blk:-2,asn:-1},
  bio:"Two-term California governor and prolific fundraiser who has become the party's most aggressive national messenger.",
  str:["Enormous fundraising and media reach","Energizes the Democratic base and Sun Belt turnout"],rsk:["'California liberal' attack line","Weaker with Rust Belt working-class whites"]},
-{id:"whitmer",name:"Gretchen Whitmer",role:"Governor of Michigan",p:"D",ideo:-.45,fav:4,home:"MI",age:54,ap:{wnc:-2,wc:-2,blk:-1},
+{id:"whitmer",name:"Gretchen Whitmer",role:"Governor of Michigan",p:"D",ideo:-.45,fav:4,home:"MI",age:55,ap:{wnc:-2,wc:-2,blk:-1},
  bio:"Two-term Michigan governor who has won the ultimate swing state twice, with a kitchen-table brand built on roads and manufacturing.",
  str:["Proven winner in the tipping-point state","Strong with Midwestern working-class voters"],rsk:["Lower national name ID","Less tested with Sun Belt coalitions"]},
-{id:"shapiro",name:"Josh Shapiro",role:"Governor of Pennsylvania",p:"D",ideo:-.4,fav:5,home:"PA",age:52,ap:{wnc:-2,wc:-1,blk:-1},
+{id:"shapiro",name:"Josh Shapiro",role:"Governor of Pennsylvania",p:"D",ideo:-.4,fav:5,home:"PA",age:53,ap:{wnc:-2,wc:-1,blk:-1},
  bio:"Popular Pennsylvania governor who won the single most important swing state by double digits, with a reputation as a disciplined pragmatist.",
  str:["Owns Pennsylvania, the likeliest tipping point","High approval; broad coalition"],rsk:["Less defined nationally","Untested in a brutal primary"]},
-{id:"beshear",name:"Andy Beshear",role:"Governor of Kentucky",p:"D",ideo:-.35,fav:5,home:"KY",age:47,ap:{wnc:-3,wc:-1},
+{id:"beshear",name:"Andy Beshear",role:"Governor of Kentucky",p:"D",ideo:-.35,fav:5,home:"KY",age:49,ap:{wnc:-3,wc:-1},
  bio:"Two-term Democratic governor of deep-red Kentucky, proof of unusual crossover appeal with rural and working-class white voters.",
  str:["Exceptional Appalachian/rural crossover","Folksy, broadly likable brand"],rsk:["Thin national profile","More conservative than the primary base"]},
-{id:"aoc",name:"Alexandria Ocasio-Cortez",role:"U.S. Rep., NY",p:"D",ideo:-.85,fav:-6,home:"NY",age:36,ap:{wnc:3,lat:-3,blk:-1},
+{id:"aoc",name:"Alexandria Ocasio-Cortez",role:"U.S. Rep., NY",p:"D",ideo:-.85,fav:-6,home:"NY",age:37,ap:{wnc:3,lat:-3,blk:-1},
  bio:"New York congresswoman and the most prominent figure on the party's left, a fundraising and turnout powerhouse among young and Latino voters.",
  str:["Electrifies young and Latino turnout","Unrivaled small-dollar fundraising"],rsk:["Polarizing; weak with white working class","'Socialist' attack line in swing states"]},
-{id:"harris",name:"Kamala Harris",role:"Fmr. Vice President",p:"D",ideo:-.55,fav:-3,home:"CA",age:63,ap:{blk:-3,asn:-2,lat:-1,wnc:2},
+{id:"harris",name:"Kamala Harris",role:"Fmr. Vice President",p:"D",ideo:-.55,fav:-3,home:"CA",age:62,ap:{blk:-3,asn:-2,lat:-1,wnc:2},
  bio:"Former vice president and 2024 nominee, with deep strength among Black and Asian voters but carrying the baggage of a narrow 2024 loss.",
  str:["Strong with Black and Asian coalitions","Fully vetted, known national quantity"],rsk:["Carries 2024 defeat","Weak with white working-class voters"]}
 ];
@@ -619,10 +688,12 @@ const BT=[
  {yr:2012,inc:"D",gdp:1.3,unemp:8.1,infl:1.7,appr:-0.5,actual:3.9,win:"D",incName:"Obama (D)"},
  {yr:2016,inc:"D",gdp:1.2,unemp:4.9,infl:1.1,appr:3,actual:2.1,win:"D",note:"PV D, EC R",incName:"Clinton (D)"},
  {yr:2020,inc:"R",gdp:-9,unemp:8.4,infl:1.2,appr:-10,actual:-4.5,win:"D",incName:"Trump (R)"},
- {yr:2024,inc:"D",gdp:3.0,unemp:4.1,infl:3.0,appr:-14,actual:-1.5,win:"R",incName:"Harris (D)"}
+ {yr:2024,inc:"D",gdp:3.0,unemp:4.1,infl:3.0,appr:-14,actual:-1.5,win:"R",incName:"Biden/Harris (D)",note:"Biden was the incumbent; he withdrew, Harris was nominee"}
 ];
-const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","abo","crisis","surp"];
-const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,abo:0,crisis:0,surp:0};
+// per-state [white-evangelical share, rural share] — approximate (Pew / Census)
+const EX={AL:[.40,.41],AK:[.22,.34],AZ:[.20,.10],AR:[.35,.44],CA:[.10,.05],CO:[.15,.14],CT:[.08,.12],DE:[.12,.17],DC:[.05,.00],FL:[.20,.09],GA:[.30,.25],HI:[.08,.08],ID:[.22,.30],IL:[.15,.12],IN:[.25,.27],IA:[.22,.36],KS:[.25,.26],KY:[.35,.42],LA:[.27,.27],ME:[.10,.60],MD:[.12,.12],MA:[.05,.08],MI:[.18,.25],MN:[.18,.27],MS:[.40,.50],MO:[.28,.30],MT:[.22,.44],NE:[.25,.27],NV:[.15,.06],NH:[.08,.40],NJ:[.08,.05],NM:[.18,.22],NY:[.08,.12],NC:[.28,.34],ND:[.22,.40],OH:[.20,.22],OK:[.35,.34],OR:[.15,.19],PA:[.18,.21],RI:[.06,.09],SC:[.30,.34],SD:[.25,.43],TN:[.40,.33],TX:[.28,.16],UT:[.05,.09],VT:[.07,.60],VA:[.18,.24],WA:[.12,.16],WV:[.30,.50],WI:[.20,.30],WY:[.25,.35]};
+const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","t_wc","t_asn","t_sen","evang","urb","abo","crisis","surp"];
+const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,t_wc:0,t_asn:0,t_sen:0,evang:0,urb:0,abo:0,crisis:0,surp:0};
 let P={...DEF}, sel=null, mapMode="margin", geo=null, SIM=null, HIST=null, histYearIdx=16, histMode="result", histSel=null, forced={};
 
 /* ============================ MODEL ============================ */
@@ -630,14 +701,14 @@ function nationalMargin(){
   const r=C[P.rnom],d=C[P.dnom];
   let m=1.5 + 0.30*P.appr + 0.9*(P.gdp-2.2) - 0.8*(P.unemp-4.2) - 0.7*(P.infl-2.5)
     + 0.9*(P.rdi-1.8) + 0.5*(P.wage-0.5) + 0.04*(P.sent-75) + 0.06*(P.track+20)
-    - 0.5*P.gen - 1.5*(P.thermo-0.5) - 0.4*(P.pid-2) - 1.0*P.abo + 0.8*P.crisis + 1.0*P.surp + 0.4*P.ad;
+    - 0.5*P.gen - 1.5*(P.thermo-0.5) - 0.4*(P.pid-2) - 1.0*P.abo + 0.8*P.crisis + 1.0*P.surp + 0.4*P.ad + 0.12*P.t_sen;
   m += 0.10*(r.fav-d.fav);
   m += -1.5*(Math.abs(r.ideo)-Math.abs(d.ideo));
   return m;
 }
 function stateDelta(s){
   const r=C[P.rnom],d=C[P.dnom];
-  const tshift={wnc:P.t_wnc,lat:P.t_lat,blk:P.t_blk,asn:0,wc:0};
+  const tshift={wnc:P.t_wnc,lat:P.t_lat,blk:P.t_blk,asn:P.t_asn,wc:P.t_wc};
   let w={},wsum=0;
   GK.forEach(k=>{const mult=1+(tshift[k]||0)/100*3; w[k]=s.share[k]*mult; wsum+=w[k];});
   const leanAdj={};
@@ -648,6 +719,8 @@ function stateDelta(s){
   demoDelta -= P.abo*s.share.wc*1.5;
   if(P.locecon){ const ec=0.9*(P.gdp-2.2)+0.9*(P.rdi-1.8)-0.8*(P.unemp-4.2); demoDelta += ec*(s.share.wnc-0.42)*1.3; }
   let home=0; if(r.home===s[0])home+=2.5; if(d.home===s[0])home-=2.5;
+  const ex=EX[s[0]]||[.15,.25];
+  demoDelta += P.evang*ex[0]*6 + P.urb*(ex[1]-0.25)*5;
   return demoDelta+home;
 }
 function stateMu(s,natM){ return s[3]+s[4]*(natM-1.5)+stateDelta(s); }
@@ -1063,6 +1136,7 @@ function syncControls(){
   setv("sent",P.sent,P.sent); setv("track",P.track,(P.track>0?'+':'')+P.track); setv("gen",P.gen,(P.gen>0?'+':'')+P.gen);
   setv("thermo",P.thermo,P.thermo.toFixed(1)); setv("pid",P.pid,(P.pid>0?'+':'')+P.pid); setv("edu",P.edu,P.edu.toFixed(2)+"×"); setv("ad",P.ad,(P.ad>0?'+':'')+P.ad);
   setv("t_wnc",P.t_wnc,(P.t_wnc>0?'+':'')+P.t_wnc); setv("t_lat",P.t_lat,(P.t_lat>0?'+':'')+P.t_lat); setv("t_blk",P.t_blk,(P.t_blk>0?'+':'')+P.t_blk); setv("t_yng",P.t_yng,(P.t_yng>0?'+':'')+P.t_yng);
+  setv("t_wc",P.t_wc,(P.t_wc>0?'+':'')+P.t_wc); setv("t_asn",P.t_asn,(P.t_asn>0?'+':'')+P.t_asn); setv("t_sen",P.t_sen,(P.t_sen>0?'+':'')+P.t_sen); setv("evang",P.evang,(P.evang>0?'+':'')+P.evang); setv("urb",P.urb,(P.urb>0?'+':'')+P.urb);
   setv("abo",P.abo,(P.abo>0?'+':'')+P.abo); setv("crisis",P.crisis,(P.crisis>0?'+':'')+P.crisis); setv("surp",P.surp,(P.surp>0?'+':'')+P.surp);
   document.getElementById("locecon").checked=!!P.locecon;
 }
@@ -1070,7 +1144,7 @@ function bindControls(){
   document.getElementById("rnom").addEventListener("change",e=>{P.rnom=e.target.value;drawCards();render();});
   document.getElementById("dnom").addEventListener("change",e=>{P.dnom=e.target.value;drawCards();render();});
   document.getElementById("econ").addEventListener("input",e=>{setEconP(+e.target.value);syncEconReadout();render();drawTornado();});
-  const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v]];
+  const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["t_wc",v=>(v>0?'+':'')+v],["t_asn",v=>(v>0?'+':'')+v],["t_sen",v=>(v>0?'+':'')+v],["evang",v=>(v>0?'+':'')+v],["urb",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v]];
   simple.forEach(([id,fmt])=>{ const el=document.getElementById(id); el.addEventListener("input",e=>{P[id]=+e.target.value; document.getElementById(id+"V").textContent=fmt(+e.target.value); render(); drawTornado();}); });
   document.getElementById("locecon").addEventListener("change",e=>{P.locecon=e.target.checked?1:0;render();});
   document.getElementById("preset").addEventListener("change",e=>{applyPreset(e.target.value);e.target.value="";});
@@ -1086,8 +1160,7 @@ function bindControls(){
   document.getElementById("cbbtn").addEventListener("click",()=>{ const on=document.documentElement.getAttribute("data-cb")==="1"; document.documentElement.setAttribute("data-cb",on?"0":"1"); setTimeout(repaintAll,30); toast(on?"Standard colors":"Colorblind-safe colors"); });
   document.getElementById("closex").addEventListener("click",closeModal);
   document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
-  const secs=["forecast","history","candidates","model","aiforecast","data"];
-  addEventListener("scroll",()=>{ let cur=secs[0]; for(const id of secs){ if(document.getElementById(id).getBoundingClientRect().top<120)cur=id; } document.querySelectorAll("nav a.tab").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur)); },{passive:true});
+  // tab navigation replaces scroll-spy (see v4 tab controller below)
 }
 function repaintAll(){ if(geo){paint();paintHist();} drawGauge(SIM.pWin); drawHist(); drawLeg(); if(sel)renderReason(); drawCards(); drawMatrix(); drawScatter(); drawPVTrend(); drawTornado(); }
 
@@ -1122,8 +1195,7 @@ function drawCredits(){
 }
 
 /* ============================ BOOT ============================ */
-document.getElementById("simchip").textContent=N_SIM.toLocaleString();
-document.getElementById("histSub").textContent=`Across ${N_SIM.toLocaleString()} simulated elections with correlated, polling-style error. Red bars = GOP totals at or above 270.`;
+{const hs=document.getElementById("histSub"); if(hs)hs.textContent=`Across ${N_SIM.toLocaleString()} simulated elections with correlated, polling-style error. Red bars = GOP totals at or above 270.`;}
 loadFromHash();
 fillSelects(); setEconP(P.econ); syncControls();
 drawCards(); drawEconTable(); drawBacktest(); drawCredits(); bindControls();
@@ -1135,4 +1207,102 @@ Promise.all([
   render(); drawLeg(); drawMap("#map",fcClick,fcHover); paint();
   drawHistMap(); drawPVTrend(); drawMatrix(); drawScatter(); drawTornado();
 }).catch(err=>{ document.getElementById("map").outerHTML='<p class="empty" style="padding:20px">Map data could not load. If hosting yourself, keep <b>us-states.geojson</b> and <b>history.json</b> next to index.html.</p>'; render(); drawMatrix(); drawScatter(); drawTornado(); });
+</script>
+
+<script>
+/* ===================== v4: TABS ===================== */
+const TAB_IDS=["home","forecast","history","candidates","model","glossary","aiforecast","data"];
+TAB_IDS.forEach(id=>{const el=document.getElementById(id); if(el)el.classList.add("panel");});
+function showTab(id){
+  if(!TAB_IDS.includes(id))id="home";
+  TAB_IDS.forEach(t=>{const el=document.getElementById(t); if(el)el.classList.toggle("active",t===id);});
+  document.querySelectorAll("nav a.tab").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+id));
+  window.scrollTo({top:0,behavior:"instant" in window?"instant":"auto"});
+}
+function navTo(id){ showTab(id); if(history.replaceState)history.replaceState(null,"","#"+id); }
+document.querySelectorAll('nav a.tab, a.logo').forEach(a=>a.addEventListener("click",e=>{e.preventDefault();navTo(a.getAttribute("href").slice(1));}));
+document.querySelectorAll(".fcard").forEach(c=>c.addEventListener("click",()=>navTo(c.dataset.go)));
+document.getElementById("launchBtn").addEventListener("click",()=>navTo("forecast"));
+document.getElementById("tourBtn").addEventListener("click",()=>navTo("model"));
+(function initTab(){ const h=location.hash.slice(1); if(h.startsWith("s="))showTab("forecast"); else if(TAB_IDS.includes(h))showTab(h); else showTab("home"); })();
+addEventListener("hashchange",()=>{const h=location.hash.slice(1); if(TAB_IDS.includes(h))showTab(h);});
+
+/* ===================== v4: EFFECT LINES ===================== */
+const HELP={
+ econ:["weaker · Dems","D","stronger · GOP","R"], appr:["unpopular · Dems","D","popular · GOP","R"],
+ gdp:["slow growth · Dems","D","fast growth · GOP","R"], unemp:["low · GOP","R","high · Dems","D"], infl:["low · GOP","R","high · Dems","D"],
+ t_wnc:["fewer vote · Dems","D","more vote · GOP","R"], t_lat:["fewer · GOP","R","more · Dems","D"], t_blk:["fewer · GOP","R","more · Dems","D"], t_yng:["fewer · GOP","R","more · Dems","D"],
+ rdi:["incomes falling · Dems","D","rising · GOP","R"], wage:["pay lags prices · Dems","D","pay beats prices · GOP","R"], sent:["gloomy · Dems","D","upbeat · GOP","R"],
+ track:["sour mood · Dems","D","hopeful · GOP","R"], gen:["← Republican edge","R","Democratic edge →","D"], thermo:["calm toward GOP","R","'throw them out' · Dems","D"], pid:["← more Republicans","R","more Democrats →","D"],
+ ad:["Democrats outspend","D","Republicans outspend","R"], abo:["low-profile issue","R","mobilizing · Dems","D"], surp:["late news helps Dems","D","late news helps GOP","R"],
+ t_wc:["fewer · GOP","R","more · Dems","D"], t_asn:["fewer · GOP","R","more · Dems","D"], t_sen:["fewer · Dems","D","more · GOP","R"], evang:["demobilized · Dems","D","mobilized · GOP","R"], urb:["← urban · Dems","D","rural · GOP →","R"]
+};
+const SPECIAL={ edu:"Higher widens the college/non-college divide — degree-heavy states get bluer, working-class states redder.", crisis:"Right = a 'rally around the flag' moment helps the party in power (GOP). Left = a crisis blamed on them helps Dems." };
+function injectEffects(){
+  Object.keys(HELP).concat(Object.keys(SPECIAL)).forEach(id=>{
+    const inp=document.getElementById(id); if(!inp)return; const grp=inp.closest(".grp"); if(!grp||grp.querySelector(".efx,.efxone"))return;
+    if(SPECIAL[id]){ const d=document.createElement("div"); d.className="efxone"; d.textContent=SPECIAL[id]; grp.appendChild(d); return; }
+    const h=HELP[id],d=document.createElement("div"); d.className="efx";
+    d.innerHTML=`<span class="${h[1]==='R'?'hr':'hd'}">${h[0]}</span><span class="${h[3]==='R'?'hr':'hd'}">${h[2]}</span>`; grp.appendChild(d);
+  });
+}
+injectEffects();
+
+/* ===================== v4: GLOSSARY ===================== */
+const GLOSS=[
+ {g:"The economy",c:"var(--accent)",items:[
+  {t:"Presidential approval",d:"Share who approve of the sitting president (a Republican) minus who disapprove. <span class='up'>Higher = helps Republicans</span>; <span class='dn'>lower = helps Democrats</span>. The strongest single predictor."},
+  {t:"Economy (overall climate)",d:"A one-slider summary that sets GDP, unemployment and inflation together. <span class='up'>Stronger = helps the party in power (GOP)</span>; <span class='dn'>recession = helps Democrats</span>."},
+  {t:"GDP growth",d:"How fast the economy grows. <span class='up'>Faster helps Republicans</span>, <span class='dn'>slower/shrinking helps Democrats</span>."},
+  {t:"Unemployment",d:"Share who can't find work. Reversed: <span class='dn'>higher helps Democrats</span>, <span class='up'>lower helps Republicans</span>."},
+  {t:"Inflation",d:"How fast prices rise. Reversed: <span class='dn'>higher helps Democrats</span>, <span class='up'>lower helps Republicans</span>."},
+  {t:"Real disposable income growth",d:"After-inflation growth in take-home pay — the best economic predictor. <span class='up'>Rising helps Republicans</span>, <span class='dn'>falling helps Democrats</span>."},
+  {t:"Real wage growth",d:"Wages minus inflation. <span class='up'>Pay beating prices helps Republicans</span>, <span class='dn'>lagging helps Democrats</span>."},
+  {t:"Consumer sentiment",d:"How good people feel about the economy. <span class='up'>Upbeat helps Republicans</span>, <span class='dn'>gloomy helps Democrats</span>."}
+ ]},
+ {g:"Political climate",c:"var(--d-deep)",items:[
+  {t:"Right / wrong track",d:"Net share saying the country is headed the right way. <span class='up'>More optimistic helps Republicans</span>, <span class='dn'>more sour helps Democrats</span>."},
+  {t:"Generic ballot (D–R)",d:"A 'generic Democrat vs. generic Republican' national margin. <span class='dn'>Toward Democrats helps Democrats</span>, <span class='up'>toward Republicans helps Republicans</span>."},
+  {t:"Thermostatic penalty",d:"The public's urge to 'throw the bums out.' Since the GOP holds power, <span class='dn'>a stronger urge helps Democrats</span>, <span class='up'>a calmer mood helps Republicans</span>."},
+  {t:"Party-ID edge (D–R)",d:"How many more people call themselves Democrats than Republicans. <span class='dn'>More Democrats helps Democrats</span>, <span class='up'>more Republicans helps Republicans</span>."}
+ ]},
+ {g:"Turnout & demographics",c:"var(--r-deep)",items:[
+  {t:"Non-college white turnout",d:"This group leans Republican. <span class='up'>More of them voting helps Republicans</span>, <span class='dn'>fewer helps Democrats</span>."},
+  {t:"Latino turnout",d:"Leans Democratic on balance. <span class='dn'>More helps Democrats</span>, <span class='up'>fewer helps Republicans</span>. Concentrated in AZ, NV, TX, FL, NM."},
+  {t:"Black turnout",d:"The most Democratic group. <span class='dn'>More helps Democrats</span>, <span class='up'>fewer helps Republicans</span>. Concentrated in GA, NC and Midwest cities."},
+  {t:"Young voter turnout (18–29)",d:"Leans Democratic. <span class='dn'>More helps Democrats</span>, <span class='up'>fewer helps Republicans</span>."},
+  {t:"The five voter blocks",d:"Each state is built from White-college, White-non-college, Black, Hispanic/Latino and Asian/other voters — each with a real population share and partisan lean, from Census data."}
+ ]},
+ {g:"Campaign & events",c:"var(--accent)",items:[
+  {t:"Education polarization",d:"How hard college vs. non-college voters split. Higher widens the divide: college-heavy states get bluer, working-class states redder (reshapes the map more than the national total)."},
+  {t:"Fundraising / ad edge",d:"Who has the money advantage. <span class='up'>Toward Republicans helps Republicans</span>, <span class='dn'>toward Democrats helps Democrats</span>."},
+  {t:"State-localized economy",d:"When ON, a boom or bust hits working-class industrial states harder than white-collar ones. When OFF, the economy moves every state equally."},
+  {t:"Abortion salience",d:"How mobilizing abortion is post-Dobbs. <span class='dn'>More salient helps Democrats</span> (especially suburbs), <span class='up'>less modestly helps Republicans</span>."},
+  {t:"Foreign-policy crisis",d:"Cuts both ways: <span class='up'>a 'rally around the flag' moment helps the party in power (GOP)</span>; <span class='dn'>a crisis blamed on them helps Democrats</span>."},
+  {t:"October surprise",d:"A generic late-breaking shock. <span class='up'>Positive helps Republicans</span>, <span class='dn'>negative helps Democrats</span>."}
+ ]},
+ {g:"The scenarios (presets)",c:"var(--d-deep)",items:[
+  {t:"Baseline (neutral)",d:"Everything at its long-run average — a genuine coin-flip starting point."},
+  {t:"2028 recession",d:"A downturn: weak growth, rising unemployment, falling incomes, a sour mood, and a sinking president — all pushing toward Democrats."},
+  {t:"Economic boom",d:"A roaring economy with high approval and optimism — a strong tailwind for the Republicans in power."},
+  {t:"Democratic wave",d:"An anti-incumbent year: low approval, a Democratic generic-ballot edge, high base turnout, and abortion front-and-center."},
+  {t:"MAGA base surge",d:"Republican approval holding, a non-college-white turnout spike, and a late break toward the GOP."},
+  {t:"Repeat of 2024",d:"The 2024 conditions and matchup — a strong economy but an unpopular incumbent party, a near-tie that broke Republican."}
+ ]},
+ {g:"The results, explained",c:"var(--r-deep)",items:[
+  {t:"Electoral votes (EV)",d:"Each state is worth EV roughly by population; 538 total. The first candidate to <b>270</b> wins the presidency."},
+  {t:"Win probability",d:"Out of 2,001 simulated elections (each with realistic random error), the share this candidate wins. 50% means a true tossup."},
+  {t:"Tipping-point state",d:"Line the states up from most to least favorable; the one that delivers the 270th vote is the tipping point. Win it and you win."},
+  {t:"National popular vote",d:"The nationwide margin between the two parties. It can differ from who wins the Electoral College."},
+  {t:"Competitive states",d:"How many states are within a few points — the real battlegrounds where the election is actually decided."},
+  {t:"80% range",d:"8 of 10 simulations landed between these two electoral-vote totals — a plain measure of how uncertain the forecast is."},
+  {t:"EC / popular split odds",d:"The chance one candidate wins the Electoral College while the other wins the popular vote (as in 2000 and 2016)."}
+ ]}
+];
+function buildGlossary(){
+  document.getElementById("glossBody").innerHTML='<div class="gloss">'+GLOSS.map(sec=>
+   `<div class="gcard"><h4><span class="gi" style="background:${sec.c}"></span>${sec.g}</h4>`+
+   sec.items.map(it=>`<div class="gitem"><div class="gt">${it.t}</div><div class="gd">${it.d}</div></div>`).join("")+`</div>`).join("")+'</div>';
+}
+buildGlossary();
 </script>

@@ -306,9 +306,58 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
 .landing .stats .s .l{color:#8ea0c0}
 .feats{position:relative;z-index:2;background:linear-gradient(180deg,#0a0e1a,var(--bg) 24%)}
 .feats .fcard{color:var(--ink);background:var(--panel)} .feats .fcard h4{color:var(--ink)} .feats .fcard p{color:var(--ink2)}
+/* ===== v6: polish & motion ===== */
+.evbar .bd,.evbar .br{transition:width .55s cubic-bezier(.4,0,.2,1)}
+svg.usmap{filter:drop-shadow(0 8px 24px rgba(18,20,40,.16))}
+.stat{transition:transform .14s ease,box-shadow .14s ease} .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.vside .ev{transition:color .3s}
+.btn,.enbtn,.bigbtn,.resetbtn{transition:transform .1s ease,box-shadow .14s ease,border-color .14s ease,background .14s ease,color .14s ease}
+.btn:active,.enbtn:active,.resetbtn:active{transform:translateY(1px)}
+.mapcard,.verdict,.summary,.reason{transition:box-shadow .2s ease}
+.card:hover{box-shadow:0 2px 4px rgba(40,34,20,.07),0 10px 30px rgba(40,34,20,.07)}
+.cc{will-change:transform}
+.gauge-wrap svg{filter:drop-shadow(0 2px 6px rgba(0,0,0,.12))}
+.reveal{opacity:0;transform:translateY(14px)} .reveal.shown{opacity:1;transform:none;transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none} .evbar .bd,.evbar .br{transition:none}}
+.secmast{position:relative;overflow:hidden;border-radius:14px;padding:22px 24px;margin-bottom:6px;color:#fff;box-shadow:var(--shadow)}
+.secmast canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.9}
+.secmast .mastinner{position:relative;z-index:1}
+.secmast .eyebrow{color:rgba(255,255,255,.85)} .secmast h2{color:#fff;margin-top:4px} .secmast .lead{color:rgba(255,255,255,.9)}
+.secmast .micon{font-size:26px;margin-bottom:4px;display:block}
+/* news ticker */
+.ticker{position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:25;background:var(--ink);color:var(--bg);overflow:hidden;height:30px;display:flex;align-items:center}
+.ticker .tickrow{display:inline-flex;white-space:nowrap;animation:tick 42s linear infinite;will-change:transform}
+.ticker:hover .tickrow{animation-play-state:paused}
+.ticker .ti{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11.5px;padding:0 18px}
+.ticker .ti b{color:var(--gold);font-weight:600} .ticker .ti .star{color:var(--gold);font-size:9px}
+.ticker .ti.r b{color:#ff8a86} .ticker .ti.d b{color:#8fb6ff}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ticker .tickrow{animation:none;transform:none}}
+/* campaign-poster candidate cards */
+.cc.poster{position:relative}
+.cc.poster .port{border-bottom:3px solid var(--line)}
+.cc.poster.pr .port{border-bottom-color:var(--r-deep)} .cc.poster.pd .port{border-bottom-color:var(--d-deep)}
+.cc.poster::before{content:"★ ★ ★";position:absolute;top:6px;left:50%;transform:translateX(-50%);font-size:8px;letter-spacing:4px;color:var(--gold);z-index:3;text-shadow:0 1px 3px rgba(0,0,0,.55);pointer-events:none}
+.cc .pseal{position:absolute;top:8px;right:8px;z-index:3;background:var(--gold);color:#3a2c0c;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 7px;border-radius:12px;box-shadow:0 1px 5px rgba(0,0,0,.35);letter-spacing:.03em}
+.cc.poster.pr .meta{border-top:1px solid var(--line)} .cc.poster .meta .nm{letter-spacing:-.01em}
+.cc.poster.pr:hover{border-color:var(--r-deep)} .cc.poster.pd:hover{border-color:var(--d-deep)}
+/* documentary intro */
+.intro-splash{position:fixed;inset:0;z-index:200;background:#0a0e1a;display:flex;align-items:center;justify-content:center;cursor:pointer;animation:isOut .6s ease 2s forwards}
+.intro-splash .is-rib{height:4px;width:0;margin:0 auto 22px;background:linear-gradient(90deg,#b22234 33%,#f2f2f2 33%,#f2f2f2 66%,#3c5aa6 66%);animation:isRib .7s ease forwards;border-radius:2px}
+.intro-splash .is-title{font-family:var(--serif);font-weight:600;font-size:clamp(44px,10vw,92px);color:#fff;letter-spacing:-.03em;opacity:0;transform:scale(.82);animation:isTitle .75s cubic-bezier(.2,.85,.25,1) .32s forwards;text-align:center;line-height:1}
+.intro-splash .is-title span{color:#e3b448}
+.intro-splash .is-sub{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8ea0c0;margin-top:16px;opacity:0;animation:isSub .6s ease .85s forwards;text-align:center}
+.intro-splash .is-skip{position:absolute;bottom:34px;left:0;right:0;text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#56607a;opacity:0;animation:isSub .5s ease 1.3s forwards}
+@keyframes isRib{to{width:min(340px,72vw)}}
+@keyframes isTitle{to{opacity:1;transform:scale(1)}}
+@keyframes isSub{to{opacity:1}}
+@keyframes isOut{to{opacity:0;visibility:hidden}}
+.intro-splash.skip{animation:isOut .4s ease forwards}
+@media(prefers-reduced-motion:reduce){.intro-splash{animation:isOut .3s ease .5s forwards}.intro-splash .is-rib,.intro-splash .is-title,.intro-splash .is-sub,.intro-splash .is-skip{animation-duration:.01s;animation-delay:0s;width:min(340px,72vw);opacity:1}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 
+<div class="intro-splash" id="introSplash"><div><div class="is-rib"></div><div class="is-title">Road to <span>270</span></div><div class="is-sub">An AI-built forecast of the 2028 election</div><div class="is-skip">Click to skip</div></div></div>
 <nav class="gut"><div class="wrap inner">
   <a class="logo" href="#home" style="text-decoration:none;color:inherit"><span class="dot"></span>Road to <b>270</b></a>
   <a class="tab" href="#forecast">Forecast</a>
@@ -321,6 +370,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
   <button class="themebtn" id="cbbtn" title="Colorblind-safe palette" aria-label="Colorblind palette">◑</button>
   <button class="themebtn" id="themebtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
 </div></nav>
+<div class="ticker" id="ticker"><div class="tickrow" id="tickRow"></div></div>
 
 <section id="home" class="panel"><div class="landing gut"><div class="flagrib"></div><canvas class="lcanvas" id="homeCanvas" aria-hidden="true"></canvas><div class="lbg"></div>
   <div class="inner">
@@ -861,15 +911,33 @@ function drawGauge(p){ // p = GOP win prob
 }
 
 /* ============================ RENDER ============================ */
+function animNum(el,to,fmt){ if(!el)return; if(el._raf)cancelAnimationFrame(el._raf);
+  let from=parseFloat(el.dataset.cur); if(isNaN(from))from=to;
+  if(Math.abs(from-to)<0.5){el.dataset.cur=to; el.textContent=fmt?fmt(to):Math.round(to); return;}
+  const dur=520,st=performance.now();
+  const step=now=>{ const k=Math.min((now-st)/dur,1),e=1-Math.pow(1-k,3),v=from+(to-from)*e; el.textContent=fmt?fmt(v):Math.round(v); if(k<1)el._raf=requestAnimationFrame(step); else {el.dataset.cur=to; el._raf=0;} };
+  el._raf=requestAnimationFrame(step); }
+let _tickT=0;
+function buildTicker(){ const row=document.getElementById("tickRow"); if(!row||!SIM)return; const now=Date.now(); if(now-_tickT<900)return; _tickT=now;
+  const r=C[P.rnom],d=C[P.dnom],winR=SIM.rEV>=270,p=Math.round((winR?SIM.pWin:1-SIM.pWin)*100);
+  const battles=SIM.mus.map(o=>({s:o.s,mu:o.mu})).filter(o=>Math.abs(o.mu)<6).sort((a,b)=>Math.abs(a.mu)-Math.abs(b.mu)).slice(0,6);
+  const items=[{t:`${(winR?r:d).name.split(' ').slice(-1)[0]} favored`,c:winR?'r':'d',b:p+'%'},
+    {t:`Electoral College`,b:`${SIM.rEV}–${SIM.dEV}`},
+    {t:`Popular vote`,c:SIM.natM>0?'r':'d',b:`${SIM.natM>0?'R+':'D+'}${Math.abs(SIM.natM).toFixed(1)}`},
+    {t:`Tipping point`,b:SIM.tip},{t:`In play`,b:SIM.comp+' states'}];
+  battles.forEach(o=>items.push({t:o.s[1],c:o.mu>0?'r':'d',b:`${o.mu>0?'R':'D'}+${Math.abs(o.mu).toFixed(1)}`}));
+  const html=items.map(it=>`<span class="ti ${it.c||''}"><span class="star">✦</span> ${it.t} <b>${it.b}</b></span>`).join("");
+  row.innerHTML=html+html;
+}
 function render(){
   runModel(); if(geo)paint();
   const r=C[P.rnom],d=C[P.dnom];
   document.getElementById("rName").textContent=r.name; document.getElementById("dName").textContent=d.name;
-  document.getElementById("rEV").textContent=SIM.rEV; document.getElementById("dEV").textContent=SIM.dEV;
+  animNum(document.getElementById("rEV"),SIM.rEV); animNum(document.getElementById("dEV"),SIM.dEV);
   document.getElementById("barD").style.width=(SIM.dEV/538*100)+"%"; document.getElementById("barR").style.width=(SIM.rEV/538*100)+"%";
   const winR=SIM.rEV>=270, winName=(winR?r:d).name.split(" ").slice(-1)[0];
   const pShown=winR?SIM.pWin:1-SIM.pWin;
-  document.getElementById("pWin").textContent=Math.round(pShown*100)+"%";
+  animNum(document.getElementById("pWin"),Math.round(pShown*100),v=>Math.round(v)+"%");
   document.getElementById("pWin").style.color=winR?cv("--r-deep"):cv("--d-deep");
   document.getElementById("pWinL").textContent=winName+" chance of winning";
   document.getElementById("ciLine").textContent=`80% range: ${SIM.lo}–${SIM.hi} GOP EV`;
@@ -880,7 +948,7 @@ function render(){
   document.getElementById("pSplit").textContent=Math.round(SIM.split*100)+"%";
   drawHist(); writeSummary(); updateBias(); if(sel)renderReason();
   document.getElementById("matchLine").textContent=`${r.name} (R) vs. ${d.name} (D)`;
-  updateAIForecast(); updateDataTable();
+  updateAIForecast(); updateDataTable(); buildTicker();
 }
 function writeSummary(){
   const r=C[P.rnom],d=C[P.dnom],winR=SIM.rEV>=270,win=(winR?r:d),winEV=winR?SIM.rEV:SIM.dEV,loseEV=winR?SIM.dEV:SIM.rEV;
@@ -1029,7 +1097,8 @@ function drawPVTrend(){
 function candCard(c){
   const picked=(c.p==="R"&&P.rnom===c.id)||(c.p==="D"&&P.dnom===c.id);
   const ideoL=c.ideo< -.6?"Progressive":c.ideo<-.3?"Liberal":c.ideo<0?"Moderate lib.":c.ideo<.4?"Moderate con.":c.ideo<.7?"Conservative":"Very cons.";
-  return `<div class="cc ${picked?'pick':''}" data-cid="${c.id}">
+  return `<div class="cc poster ${c.p==='R'?'pr':'pd'} ${picked?'pick':''}" data-cid="${c.id}">
+    <span class="pseal">’28</span>
     <img class="port" src="img/${c.id}.jpg" alt="${c.name}" loading="lazy">
     <div class="meta"><div class="nm">${c.name}</div><div class="role">${c.role}</div>
     <div class="tags"><span class="t">${ideoL}</span><span class="t">fav ${c.fav>0?'+':''}${c.fav}</span><span class="pickbadge">running</span></div></div></div>`;
@@ -1583,4 +1652,14 @@ function animateCounters(){ document.querySelectorAll('#home .stats .s .n[data-t
 window.__animCounters=animateCounters;
 initHomeCanvas();
 if(document.getElementById("home").classList.contains("active"))animateCounters();
+
+/* ===================== v6: DOCUMENTARY INTRO ===================== */
+(function intro(){ const s=document.getElementById("introSplash"); if(!s)return;
+  let shown=false; try{shown=sessionStorage.getItem("r270intro")==="1";}catch(e){}
+  if(shown){ s.remove(); return; }
+  try{sessionStorage.setItem("r270intro","1");}catch(e){}
+  const done=()=>{ if(s)s.style.display="none"; };
+  s.addEventListener("click",()=>{ s.classList.add("skip"); setTimeout(done,420); });
+  setTimeout(done,2650);
+})();
 </script>

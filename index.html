@@ -279,6 +279,15 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
 .enlive{display:none;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:var(--r-deep);font-weight:700;text-transform:uppercase;letter-spacing:.1em} .enlive.on{display:inline-flex} .enlive .pulse{width:8px;height:8px;border-radius:50%;background:var(--r-deep);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .biasmeter{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;box-shadow:var(--shadow);font-size:13px;color:var(--ink2)} .biasmeter b{color:var(--ink)} .biasmeter .bt{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:5px}
+.askcard{border-left:3px solid var(--accent)}
+.askchips{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.askchips button{font-size:11px;padding:4px 10px;border-radius:20px;border:1px solid var(--line);background:var(--bg2);color:var(--muted);cursor:pointer;font-family:var(--sans)}
+.askchips button:hover{color:var(--ink);border-color:var(--accent)}
+.cartowrap{display:none} .cartowrap.on{display:block} svg.usmap.hidden{display:none}
+.cartogrid{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;aspect-ratio:11/8;margin-top:2px}
+.ctile{position:relative;border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#fff;border:1.5px solid transparent;transition:transform .08s;overflow:hidden}
+.ctile:hover{transform:scale(1.08);z-index:3} .ctile.sel{border-color:var(--ink);box-shadow:0 0 0 1.5px var(--bg),0 0 0 3px var(--ink)}
+.ctile .ca{font-weight:700;font-size:clamp(8px,1.5vw,13px);line-height:1;text-shadow:0 1px 1px rgba(0,0,0,.3)} .ctile .ce{font-size:clamp(6px,1vw,9px);opacity:.88;font-family:var(--mono)}
 @media(prefers-reduced-motion:reduce){.panel.active{animation:none}.enlive .pulse{animation:none}}
 </style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
@@ -415,6 +424,14 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
     </aside>
 
     <div class="rescol">
+      <div class="card askcard">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:18px">💬</span>
+          <input id="askInput" type="text" placeholder="Describe a scenario in words…" aria-label="Ask in plain English" style="flex:1;min-width:150px;font-size:14px;padding:10px 12px;border:1px solid var(--line2);border-radius:9px;background:var(--panel);color:var(--ink)">
+          <button class="btn" id="askGo" style="flex:none;padding:10px 18px">Build it</button>
+        </div>
+        <div class="askchips" id="askChips"></div>
+      </div>
       <div class="verdict">
         <div class="vtop">
           <div class="vside d"><div class="nm" id="dName">Buttigieg</div><div class="party">Democrat</div><div class="ev" id="dEV">226</div></div>
@@ -444,6 +461,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
           <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
             <span class="enlive" id="enLive"><span class="pulse"></span>LIVE</span>
             <button class="enbtn" id="playEN">▶ Play election night</button>
+            <button class="btn" id="cartoBtn" style="flex:none;padding:6px 11px;font-size:12px">⬡ Tile map</button>
             <div class="modeset" id="mapmode">
               <button data-m="margin" class="on">Margin</button>
               <button data-m="prob">Win %</button>
@@ -453,6 +471,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
           </div>
         </div>
         <svg class="usmap" id="map" viewBox="0 0 960 560" role="img" aria-label="Interactive US electoral map"></svg>
+        <div class="cartowrap" id="cartoWrap"><div class="cartogrid" id="cartoGrid"></div></div>
         <div class="leg" id="leg"></div>
         <div class="pathnote" id="pathnote" hidden>In <b>Path to 270</b> mode, click tossup states to assign a winner and watch each side's total. Safe states are locked; starred states are must-wins.</div>
       </div>
@@ -1390,4 +1409,56 @@ function confetti(col){
 (function bindEN(){ const b=document.getElementById("playEN"); if(b)b.addEventListener("click",playElectionNight);
   document.querySelectorAll("#mapmode button").forEach(x=>x.addEventListener("click",()=>{ if(enPlaying)stopEN(); }));
   document.querySelectorAll("nav a.tab").forEach(a=>a.addEventListener("click",()=>{ if(enPlaying){stopEN();render();} })); })();
+
+/* ===================== v4: ASK IN PLAIN ENGLISH ===================== */
+const ALIAS={djtjr:["trump jr","don jr","trump junior"],aoc:["aoc","ocasio","cortez"],harris:["kamala"],buttigieg:["pete"]};
+function askParse(txt){
+  const t=" "+txt.toLowerCase()+" ", changed=[], set=(k,v,label)=>{P[k]=v;if(label)changed.push(label);};
+  if(/deep recession|depression|economic crash/.test(t)){P.econ=0;setEconP(0);changed.push("a severe recession");}
+  else if(/recession|downturn|slump/.test(t)){P.econ=1;setEconP(1);changed.push("a recession");}
+  else if(/boom|roaring|booming|strong economy|great economy/.test(t)){P.econ=5;setEconP(5);changed.push("a booming economy");}
+  if(/unpopular|low approval|disliked|underwater/.test(t))set("appr",-15,"an unpopular president");
+  if(/popular president|high approval|well.?liked/.test(t))set("appr",10,"a popular president");
+  if(/inflation|high prices|expensive|cost of living/.test(t))set("infl",5,"high inflation");
+  if(/young.{0,22}(stay home|don'?t vote|stay away|low|depress)|low youth|youth.{0,10}(stay|low|collapse)/.test(t))set("t_yng",-4,"low youth turnout");
+  else if(/young.{0,22}(surge|turnout|show up|vote)|youth surge/.test(t))set("t_yng",4,"a youth surge");
+  if(/latino|hispanic/.test(t)){ if(/stay home|low|depress|collapse|down/.test(t))set("t_lat",-4,"low Latino turnout"); else set("t_lat",4,"high Latino turnout"); }
+  if(/black|african.?american/.test(t)){ if(/stay home|low|depress|collapse|down/.test(t))set("t_blk",-4,"low Black turnout"); else set("t_blk",4,"high Black turnout"); }
+  if(/working class|blue collar|non.?college/.test(t))set("t_wnc",4,"working-class turnout up");
+  if(/evangelical|religious right/.test(t))set("evang",2,"an evangelical surge");
+  if(/abortion|dobbs|\broe\b/.test(t))set("abo",2,"abortion front-and-center");
+  if(/blue wave|democratic wave|dem wave/.test(t)){P.gen=6;P.thermo=1.3;P.appr=-12;changed.push("a Democratic wave");}
+  if(/red wave|republican wave|maga/.test(t)){P.gen=-3;P.t_wnc=5;changed.push("a Republican wave");}
+  CANDS.forEach(c=>{ const last=c.name.split(" ").slice(-1)[0].toLowerCase().replace(/[^a-z-]/g,"");
+    const hit=(last.length>3 && t.includes(last))||(ALIAS[c.id]||[]).some(a=>t.includes(a));
+    if(hit){ if(c.p==="R")set("rnom",c.id,c.name.split(" ").slice(-1)[0]+" (R)"); else set("dnom",c.id,c.name.split(" ").slice(-1)[0]+" (D)"); } });
+  return changed;
+}
+function runAsk(){ const inp=document.getElementById("askInput"); const ch=askParse(inp.value);
+  if(ch.length){ sel=null; syncControls(); render(); drawTornado(); toast("✓ Set: "+ch.join(", ")); }
+  else toast("Try words like 'recession', 'Newsom', 'youth surge', 'high inflation'."); }
+(function bindAsk(){ const g=document.getElementById("askGo"),i=document.getElementById("askInput");
+  if(g)g.addEventListener("click",runAsk); if(i)i.addEventListener("keydown",e=>{if(e.key==="Enter")runAsk();});
+  const chips=["A recession with Newsom","Youth surge + abortion salience","MAGA surge for Vance","Booming economy, popular president","Latino turnout collapse"];
+  const box=document.getElementById("askChips"); if(box){ box.innerHTML=chips.map(c=>`<button>${c}</button>`).join("");
+    box.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{document.getElementById("askInput").value=b.textContent;runAsk();})); } })();
+
+/* ===================== v4: CARTOGRAM (tile map) ===================== */
+const GRID={AK:[0,0],ME:[0,10],VT:[1,9],NH:[1,10],WA:[2,0],ID:[2,1],MT:[2,2],ND:[2,3],MN:[2,4],IL:[2,5],WI:[2,6],MI:[2,7],NY:[2,9],MA:[2,10],OR:[3,0],NV:[3,1],WY:[3,2],SD:[3,3],IA:[3,4],IN:[3,5],OH:[3,6],PA:[3,7],NJ:[3,8],CT:[3,9],RI:[3,10],CA:[4,0],UT:[4,1],CO:[4,2],NE:[4,3],MO:[4,4],KY:[4,5],WV:[4,6],VA:[4,7],MD:[4,8],DE:[4,9],AZ:[5,0],NM:[5,1],KS:[5,2],AR:[5,3],TN:[5,4],NC:[5,5],SC:[5,6],DC:[5,8],OK:[6,2],LA:[6,3],MS:[6,4],AL:[6,5],GA:[6,6],HI:[7,0],TX:[6,1],FL:[6,8]};
+function buildCarto(){ const g=document.getElementById("cartoGrid"); if(!g||g.children.length)return;
+  STATES.forEach(s=>{ const gc=GRID[s[0]]; if(!gc)return; const t=document.createElement("div"); t.className="ctile"; t.dataset.a=s[0];
+    t.style.gridRow=gc[0]+1; t.style.gridColumn=gc[1]+1; t.title=s[1]; t.innerHTML=`<span class="ca">${s[0]}</span><span class="ce">${s[2]}</span>`;
+    t.addEventListener("click",()=>{ sel=s[0]; paint(); renderReason(); document.getElementById("reason").scrollIntoView({behavior:"smooth",block:"nearest"}); });
+    t.addEventListener("mousemove",e=>fcHover(e,s)); t.addEventListener("mouseleave",hideTip); g.appendChild(t); }); }
+function stateFillFor(s,i){ const o=SIM.mus[i];
+  if(mapMode==="prob")return probFill(SIM.winProb[i]);
+  if(mapMode==="flip"){const flip=(s[3]>0?"R":"D")!==(o.mu>0?"R":"D");return flip?(o.mu>0?cv("--r-deep"):cv("--d-deep")):cv("--bg2");}
+  return marginFill(o.mu); }
+function paintCarto(){ if(!SIM)return; const g=document.getElementById("cartoGrid"); if(!g)return;
+  g.querySelectorAll(".ctile").forEach(t=>{ const s=ABBR[t.dataset.a]; if(!s)return; const i=STATES.indexOf(s); t.style.background=stateFillFor(s,i); t.classList.toggle("sel",sel===s[0]); }); }
+buildCarto();
+if(typeof paint==="function"){ const _origPaint=paint; paint=function(){ _origPaint(); paintCarto(); }; }
+(function bindCarto(){ const b=document.getElementById("cartoBtn"); if(!b)return;
+  b.addEventListener("click",()=>{ const w=document.getElementById("cartoWrap"),m=document.getElementById("map"); const on=w.classList.toggle("on"); m.classList.toggle("hidden",on);
+    b.style.background=on?"var(--ink)":""; b.style.color=on?"var(--bg)":""; b.textContent=on?"🗺 Geographic":"⬡ Tile map"; if(on){buildCarto();paintCarto();} }); })();
 </script>

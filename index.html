@@ -395,9 +395,12 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
       </div>
 
       <div class="card">
-        <h3>⑤ Scenarios</h3>
-        <p class="sub">Jump to a preset, share your exact scenario, or reset.</p>
-        <div class="grp"><div class="lab">Preset</div><select id="preset">
+        <h3>⑤ Scenarios &amp; quick tools</h3>
+        <p class="sub">Swing the whole country at once, set how far out we are, roll the dice, or load a preset.</p>
+        <div class="grp"><div class="lab">National swing-o-meter <span class="info" title="Shifts every state the same amount at once — the fastest way to see the map tip. Right = everything moves toward Republicans; left = toward Democrats.">i</span><span class="v" id="swingV">0</span></div><input type="range" id="swing" min="-8" max="8" step="0.5" value="0"></div>
+        <div class="grp"><div class="lab">Months to Election Day <span class="info" title="How far out the forecast is. Further out = more uncertainty, so the win odds sit closer to 50/50 and the outcome range is wider. Closer in = more confident.">i</span><span class="v" id="monthsV">6 mo</span></div><input type="range" id="months" min="1" max="18" step="1" value="6"></div>
+        <div class="btnrow"><button class="btn" id="chaosbtn">🎲 Random scenario</button></div>
+        <div class="grp" style="margin-top:4px"><div class="lab">Preset</div><select id="preset">
           <option value="">— choose a scenario —</option>
           <option value="base">Baseline (neutral)</option>
           <option value="recession">2028 recession</option>
@@ -433,15 +436,20 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
       </div>
 
       <div class="summary"><div class="h">The model's read</div><p id="autoSummary">—</p></div>
+      <div class="biasmeter" id="biasMeter"></div>
 
       <div class="mapcard">
         <div class="maphead">
           <h3 id="mapTitle">Projected electoral map</h3>
-          <div class="modeset" id="mapmode">
-            <button data-m="margin" class="on">Margin</button>
-            <button data-m="prob">Win %</button>
-            <button data-m="flip">Flips</button>
-            <button data-m="path">Path to 270</button>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <span class="enlive" id="enLive"><span class="pulse"></span>LIVE</span>
+            <button class="enbtn" id="playEN">▶ Play election night</button>
+            <div class="modeset" id="mapmode">
+              <button data-m="margin" class="on">Margin</button>
+              <button data-m="prob">Win %</button>
+              <button data-m="flip">Flips</button>
+              <button data-m="path">Path to 270</button>
+            </div>
           </div>
         </div>
         <svg class="usmap" id="map" viewBox="0 0 960 560" role="img" aria-label="Interactive US electoral map"></svg>
@@ -692,8 +700,8 @@ const BT=[
 ];
 // per-state [white-evangelical share, rural share] — approximate (Pew / Census)
 const EX={AL:[.40,.41],AK:[.22,.34],AZ:[.20,.10],AR:[.35,.44],CA:[.10,.05],CO:[.15,.14],CT:[.08,.12],DE:[.12,.17],DC:[.05,.00],FL:[.20,.09],GA:[.30,.25],HI:[.08,.08],ID:[.22,.30],IL:[.15,.12],IN:[.25,.27],IA:[.22,.36],KS:[.25,.26],KY:[.35,.42],LA:[.27,.27],ME:[.10,.60],MD:[.12,.12],MA:[.05,.08],MI:[.18,.25],MN:[.18,.27],MS:[.40,.50],MO:[.28,.30],MT:[.22,.44],NE:[.25,.27],NV:[.15,.06],NH:[.08,.40],NJ:[.08,.05],NM:[.18,.22],NY:[.08,.12],NC:[.28,.34],ND:[.22,.40],OH:[.20,.22],OK:[.35,.34],OR:[.15,.19],PA:[.18,.21],RI:[.06,.09],SC:[.30,.34],SD:[.25,.43],TN:[.40,.33],TX:[.28,.16],UT:[.05,.09],VT:[.07,.60],VA:[.18,.24],WA:[.12,.16],WV:[.30,.50],WI:[.20,.30],WY:[.25,.35]};
-const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","t_wc","t_asn","t_sen","evang","urb","abo","crisis","surp"];
-const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,t_wc:0,t_asn:0,t_sen:0,evang:0,urb:0,abo:0,crisis:0,surp:0};
+const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","t_wc","t_asn","t_sen","evang","urb","abo","crisis","surp","swing","months"];
+const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,t_wc:0,t_asn:0,t_sen:0,evang:0,urb:0,abo:0,crisis:0,surp:0,swing:0,months:6};
 let P={...DEF}, sel=null, mapMode="margin", geo=null, SIM=null, HIST=null, histYearIdx=16, histMode="result", histSel=null, forced={};
 
 /* ============================ MODEL ============================ */
@@ -701,7 +709,7 @@ function nationalMargin(){
   const r=C[P.rnom],d=C[P.dnom];
   let m=1.5 + 0.30*P.appr + 0.9*(P.gdp-2.2) - 0.8*(P.unemp-4.2) - 0.7*(P.infl-2.5)
     + 0.9*(P.rdi-1.8) + 0.5*(P.wage-0.5) + 0.04*(P.sent-75) + 0.06*(P.track+20)
-    - 0.5*P.gen - 1.5*(P.thermo-0.5) - 0.4*(P.pid-2) - 1.0*P.abo + 0.8*P.crisis + 1.0*P.surp + 0.4*P.ad + 0.12*P.t_sen;
+    - 0.5*P.gen - 1.5*(P.thermo-0.5) - 0.4*(P.pid-2) - 1.0*P.abo + 0.8*P.crisis + 1.0*P.surp + 0.4*P.ad + 0.12*P.t_sen + (P.swing||0);
   m += 0.10*(r.fav-d.fav);
   m += -1.5*(Math.abs(r.ideo)-Math.abs(d.ideo));
   return m;
@@ -731,7 +739,7 @@ function runModel(){
   const natM=nationalMargin();
   const mus=STATES.map(s=>({s,mu:stateMu(s,natM)}));
   let dEV=0,rEV=0; mus.forEach(o=>{ if(o.mu>0)rEV+=o.s[2]; else dEV+=o.s[2]; });
-  const SIG_NAT=2.6,SIG_ST=2.0;
+  const uf=0.6+((P.months||6)/18)*1.2; const SIG_NAT=2.6*uf,SIG_ST=2.0*uf;
   let rWins=0,evCounts=new Array(539).fill(0),splits=0,sum=0,sumsq=0;
   const tipTally={}, winProb=mus.map(()=>0);
   for(let t=0;t<N_SIM;t++){
@@ -824,7 +832,7 @@ function render(){
   document.getElementById("pTip").textContent=SIM.tip; document.getElementById("pTip").style.fontSize="20px";
   document.getElementById("pComp").textContent=SIM.comp;
   document.getElementById("pSplit").textContent=Math.round(SIM.split*100)+"%";
-  drawHist(); writeSummary(); if(sel)renderReason();
+  drawHist(); writeSummary(); updateBias(); if(sel)renderReason();
   document.getElementById("matchLine").textContent=`${r.name} (R) vs. ${d.name} (D)`;
   updateAIForecast(); updateDataTable();
 }
@@ -836,6 +844,18 @@ function writeSummary(){
   txt+=`The national popular vote leans ${SIM.natM>0?'Republican':'Democratic'} by ${Math.abs(SIM.natM).toFixed(1)} points, and <b>${tipS?tipS[1]:SIM.tip}</b> is the tipping-point state. `;
   txt+=`${SIM.comp} state${SIM.comp===1?'':'s'} ${SIM.comp===1?'is':'are'} genuinely competitive.`;
   document.getElementById("autoSummary").innerHTML=txt;
+}
+function updateBias(){
+  const el=document.getElementById("biasMeter"); if(!el)return;
+  const tipS=ABBR[SIM.tip]; if(!tipS){el.innerHTML="";return;}
+  const tipMargin=SIM.mus[STATES.indexOf(tipS)].mu;
+  const bias=SIM.natM - tipMargin; const a=Math.abs(bias);
+  let biasHTML;
+  if(a<0.4) biasHTML=`<div class="bt">⚖ Electoral College bias</div>The map has <b>virtually no structural tilt</b> right now — the decisive state tracks the national popular vote almost exactly.`;
+  else { const leanR=bias>0, loser=leanR?"Democrat":"Republican";
+    biasHTML=`<div class="bt">⚖ Electoral College bias</div>The Electoral College currently leans <b style="color:${leanR?cv('--r-deep'):cv('--d-deep')}">${leanR?'Republican':'Democratic'} by ${a.toFixed(1)} pts</b>. A <b>${loser}</b> could win the national popular vote by up to <b>${a.toFixed(1)} points</b> and still lose the race for 270.`; }
+  const an=(typeof closestAnalog==="function")?closestAnalog():"";
+  el.innerHTML=biasHTML+(an?`<div style="margin-top:9px;padding-top:9px;border-top:1px solid var(--line);font-size:12.5px">${an}</div>`:"");
 }
 function drawHist(){
   const host=document.getElementById("hist"); host.innerHTML=""; const lo=160,hi=400,bins=48,bw=(hi-lo)/bins; const counts=new Array(bins).fill(0);
@@ -1137,6 +1157,7 @@ function syncControls(){
   setv("thermo",P.thermo,P.thermo.toFixed(1)); setv("pid",P.pid,(P.pid>0?'+':'')+P.pid); setv("edu",P.edu,P.edu.toFixed(2)+"×"); setv("ad",P.ad,(P.ad>0?'+':'')+P.ad);
   setv("t_wnc",P.t_wnc,(P.t_wnc>0?'+':'')+P.t_wnc); setv("t_lat",P.t_lat,(P.t_lat>0?'+':'')+P.t_lat); setv("t_blk",P.t_blk,(P.t_blk>0?'+':'')+P.t_blk); setv("t_yng",P.t_yng,(P.t_yng>0?'+':'')+P.t_yng);
   setv("t_wc",P.t_wc,(P.t_wc>0?'+':'')+P.t_wc); setv("t_asn",P.t_asn,(P.t_asn>0?'+':'')+P.t_asn); setv("t_sen",P.t_sen,(P.t_sen>0?'+':'')+P.t_sen); setv("evang",P.evang,(P.evang>0?'+':'')+P.evang); setv("urb",P.urb,(P.urb>0?'+':'')+P.urb);
+  setv("swing",P.swing,(P.swing>0?'+':'')+P.swing); setv("months",P.months,P.months+" mo");
   setv("abo",P.abo,(P.abo>0?'+':'')+P.abo); setv("crisis",P.crisis,(P.crisis>0?'+':'')+P.crisis); setv("surp",P.surp,(P.surp>0?'+':'')+P.surp);
   document.getElementById("locecon").checked=!!P.locecon;
 }
@@ -1144,11 +1165,12 @@ function bindControls(){
   document.getElementById("rnom").addEventListener("change",e=>{P.rnom=e.target.value;drawCards();render();});
   document.getElementById("dnom").addEventListener("change",e=>{P.dnom=e.target.value;drawCards();render();});
   document.getElementById("econ").addEventListener("input",e=>{setEconP(+e.target.value);syncEconReadout();render();drawTornado();});
-  const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["t_wc",v=>(v>0?'+':'')+v],["t_asn",v=>(v>0?'+':'')+v],["t_sen",v=>(v>0?'+':'')+v],["evang",v=>(v>0?'+':'')+v],["urb",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v]];
+  const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["t_wc",v=>(v>0?'+':'')+v],["t_asn",v=>(v>0?'+':'')+v],["t_sen",v=>(v>0?'+':'')+v],["evang",v=>(v>0?'+':'')+v],["urb",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v],["swing",v=>(v>0?'+':'')+v],["months",v=>v+" mo"]];
   simple.forEach(([id,fmt])=>{ const el=document.getElementById(id); el.addEventListener("input",e=>{P[id]=+e.target.value; document.getElementById(id+"V").textContent=fmt(+e.target.value); render(); drawTornado();}); });
   document.getElementById("locecon").addEventListener("change",e=>{P.locecon=e.target.checked?1:0;render();});
   document.getElementById("preset").addEventListener("change",e=>{applyPreset(e.target.value);e.target.value="";});
   document.getElementById("sharebtn").addEventListener("click",shareLink);
+  document.getElementById("chaosbtn").addEventListener("click",chaosScenario);
   document.getElementById("reset").addEventListener("click",()=>{P={...DEF};sel=null;forced={};syncControls();drawCards();render();renderReason();drawTornado();history.replaceState(null,"","#forecast");});
   document.getElementById("csvbtn").addEventListener("click",downloadCSV);
   document.querySelectorAll("#mapmode button").forEach(b=>b.addEventListener("click",()=>{ document.querySelectorAll("#mapmode button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); mapMode=b.dataset.m;
@@ -1174,6 +1196,17 @@ function applyPreset(k){
   else if(k==="repeat")Object.assign(P,{econ:4,appr:-2,rnom:"vance",dnom:"harris"});
   if(P.econ!==undefined)setEconP(P.econ);
   sel=null;forced={};syncControls();drawCards();render();drawTornado();toast("Loaded: "+document.querySelector(`#preset option[value="${k}"]`).textContent);
+}
+function chaosScenario(){
+  const rnd=(a,b)=>a+Math.random()*(b-a), pick=a=>a[Math.floor(Math.random()*a.length)], h=v=>Math.round(v*2)/2;
+  const Rs=CANDS.filter(c=>c.p==="R").map(c=>c.id), Ds=CANDS.filter(c=>c.p==="D").map(c=>c.id);
+  P={...DEF, rnom:pick(Rs), dnom:pick(Ds), econ:Math.floor(rnd(0,6)), appr:Math.round(rnd(-20,12)),
+    rdi:+rnd(-1.5,4).toFixed(1), wage:+rnd(-2,2.5).toFixed(1), sent:Math.round(rnd(55,100)), track:Math.round(rnd(-50,10)),
+    gen:h(rnd(-6,6)), thermo:+rnd(0,1.6).toFixed(1), pid:h(rnd(-2,5)), edu:+rnd(0.7,1.5).toFixed(2), ad:h(rnd(-2,2)),
+    t_wnc:Math.round(rnd(-4,4)), t_lat:Math.round(rnd(-4,4)), t_blk:Math.round(rnd(-4,4)), t_yng:Math.round(rnd(-4,4)),
+    t_wc:Math.round(rnd(-4,4)), t_asn:Math.round(rnd(-3,3)), t_sen:Math.round(rnd(-3,3)),
+    evang:h(rnd(-2,2)), urb:h(rnd(-2,2)), abo:h(rnd(-2,2)), crisis:0, surp:h(rnd(-2,2)), swing:0, months:Math.round(rnd(3,14))};
+  setEconP(P.econ); sel=null; forced={}; syncControls(); render(); drawTornado(); toast("🎲 Random scenario loaded");
 }
 function shareLink(){
   const parts=PARAMS.map(k=>P[k]); const hash=encodeURIComponent(btoa(JSON.stringify(parts)));
@@ -1235,9 +1268,10 @@ const HELP={
  rdi:["incomes falling · Dems","D","rising · GOP","R"], wage:["pay lags prices · Dems","D","pay beats prices · GOP","R"], sent:["gloomy · Dems","D","upbeat · GOP","R"],
  track:["sour mood · Dems","D","hopeful · GOP","R"], gen:["← Republican edge","R","Democratic edge →","D"], thermo:["calm toward GOP","R","'throw them out' · Dems","D"], pid:["← more Republicans","R","more Democrats →","D"],
  ad:["Democrats outspend","D","Republicans outspend","R"], abo:["low-profile issue","R","mobilizing · Dems","D"], surp:["late news helps Dems","D","late news helps GOP","R"],
- t_wc:["fewer · GOP","R","more · Dems","D"], t_asn:["fewer · GOP","R","more · Dems","D"], t_sen:["fewer · Dems","D","more · GOP","R"], evang:["demobilized · Dems","D","mobilized · GOP","R"], urb:["← urban · Dems","D","rural · GOP →","R"]
+ t_wc:["fewer · GOP","R","more · Dems","D"], t_asn:["fewer · GOP","R","more · Dems","D"], t_sen:["fewer · Dems","D","more · GOP","R"], evang:["demobilized · Dems","D","mobilized · GOP","R"], urb:["← urban · Dems","D","rural · GOP →","R"],
+ swing:["← toward Dems","D","toward GOP →","R"]
 };
-const SPECIAL={ edu:"Higher widens the college/non-college divide — degree-heavy states get bluer, working-class states redder.", crisis:"Right = a 'rally around the flag' moment helps the party in power (GOP). Left = a crisis blamed on them helps Dems." };
+const SPECIAL={ edu:"Higher widens the college/non-college divide — degree-heavy states get bluer, working-class states redder.", crisis:"Right = a 'rally around the flag' moment helps the party in power (GOP). Left = a crisis blamed on them helps Dems.", months:"Further out = more uncertainty (wider range, odds nearer 50/50); closer in = more confident." };
 function injectEffects(){
   Object.keys(HELP).concat(Object.keys(SPECIAL)).forEach(id=>{
     const inp=document.getElementById(id); if(!inp)return; const grp=inp.closest(".grp"); if(!grp||grp.querySelector(".efx,.efxone"))return;
@@ -1305,4 +1339,55 @@ function buildGlossary(){
    sec.items.map(it=>`<div class="gitem"><div class="gt">${it.t}</div><div class="gd">${it.d}</div></div>`).join("")+`</div>`).join("")+'</div>';
 }
 buildGlossary();
+
+/* ===================== v4: CLOSEST ANALOG ===================== */
+function closestAnalog(){
+  if(typeof HIST==="undefined"||!HIST||!SIM)return "";
+  let best=null,bd=1e9;
+  HIST.years.forEach(y=>{ const pv=HIST.national[String(y)][3]; const d=Math.abs(pv-SIM.natM); if(d<bd){bd=d;best=y;} });
+  const nm={1960:"Kennedy's razor-thin win",1964:"LBJ's landslide",1968:"Nixon's narrow comeback",1972:"Nixon's 49-state landslide",1976:"Carter's narrow win",1980:"Reagan's blowout",1984:"Reagan's 49-state landslide",1988:"Bush's comfortable win",1992:"Clinton's win",1996:"Clinton's re-election",2000:"the Bush–Gore cliffhanger",2004:"Bush's narrow re-election",2008:"Obama's sweep",2012:"Obama's re-election",2016:"Trump's upset",2020:"Biden's win",2024:"Trump's comeback"};
+  const pv=HIST.national[String(best)][3];
+  return `📅 Closest historical analog: <b>${best}</b> — ${nm[best]||""} (national margin ${pv>0?'R+':'D+'}${Math.abs(pv).toFixed(1)}).`;
+}
+
+/* ===================== v4: ELECTION NIGHT ===================== */
+let enTimer=null, enPlaying=false;
+function stopEN(){ if(enTimer){clearInterval(enTimer);enTimer=null;} enPlaying=false;
+  const l=document.getElementById("enLive"),b=document.getElementById("playEN"); if(l)l.classList.remove("on"); if(b)b.textContent="▶ Play election night"; }
+function playElectionNight(){
+  if(enPlaying){ stopEN(); render(); return; }
+  if(!SIM)return;
+  const order=SIM.mus.map(o=>({a:o.s[0],ev:o.s[2],win:o.mu>0?"R":"D",mu:o.mu})).sort((x,y)=>Math.abs(y.mu)-Math.abs(x.mu));
+  d3.select("#map").selectAll("path.state").attr("fill",cv("--bg2")).classed("sel",false);
+  let rEV=0,dEV=0,idx=0,done=false;
+  const setC=(r,d)=>{document.getElementById("rEV").textContent=r;document.getElementById("dEV").textContent=d;document.getElementById("barR").style.width=(r/538*100)+"%";document.getElementById("barD").style.width=(d/538*100)+"%";};
+  setC(0,0);
+  enPlaying=true; document.getElementById("enLive").classList.add("on"); document.getElementById("playEN").textContent="■ Stop";
+  document.getElementById("mapTitle").textContent="Election night — results coming in…";
+  enTimer=setInterval(()=>{
+    if(done)return;
+    if(idx>=order.length){ finishEN(rEV,dEV); return; }
+    const st=order[idx++]; d3.select('#map path[data-a="'+st.a+'"]').attr("fill", st.win==="R"?cv("--r-deep"):cv("--d-deep"));
+    if(st.win==="R")rEV+=st.ev; else dEV+=st.ev; setC(rEV,dEV);
+    if(rEV>=270||dEV>=270){ done=true; finishEN(rEV,dEV); }
+  },220);
+}
+function finishEN(rEV,dEV){
+  if(enTimer){clearInterval(enTimer);enTimer=null;}
+  const winR=rEV>=dEV, name=(winR?C[P.rnom]:C[P.dnom]).name;
+  document.getElementById("mapTitle").textContent="🎉 "+name+" wins — "+(winR?rEV:dEV)+" electoral votes";
+  confetti(winR?cv("--r-deep"):cv("--d-deep")); toast("🎉 "+name+" reaches 270!");
+  const l=document.getElementById("enLive"),b=document.getElementById("playEN"); if(l)l.classList.remove("on"); if(b)b.textContent="▶ Replay election night"; enPlaying=false;
+}
+function confetti(col){
+  const acc=cv("--accent"); const other=col;
+  for(let i=0;i<48;i++){ const s=document.createElement("div");
+    s.style.cssText=`position:fixed;top:-12px;left:${Math.random()*100}vw;width:${6+Math.random()*5}px;height:${6+Math.random()*5}px;background:${Math.random()<0.5?acc:other};z-index:90;border-radius:2px;pointer-events:none;transition:transform ${1.4+Math.random()*1}s ease-in,opacity 1.8s`;
+    document.body.appendChild(s);
+    requestAnimationFrame(()=>{ s.style.transform=`translateY(${88+Math.random()*14}vh) rotate(${Math.random()*720-360}deg)`; s.style.opacity="0"; });
+    setTimeout(()=>s.remove(),2400); }
+}
+(function bindEN(){ const b=document.getElementById("playEN"); if(b)b.addEventListener("click",playElectionNight);
+  document.querySelectorAll("#mapmode button").forEach(x=>x.addEventListener("click",()=>{ if(enPlaying)stopEN(); }));
+  document.querySelectorAll("nav a.tab").forEach(a=>a.addEventListener("click",()=>{ if(enPlaying){stopEN();render();} })); })();
 </script>

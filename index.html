@@ -409,6 +409,7 @@ nav a.tab.home{font-family:var(--serif);font-size:15px}
         <div class="grp"><div class="lab">National swing-o-meter <span class="info" title="Shifts every state the same amount at once — the fastest way to see the map tip. Right = everything moves toward Republicans; left = toward Democrats.">i</span><span class="v" id="swingV">0</span></div><input type="range" id="swing" min="-8" max="8" step="0.5" value="0"></div>
         <div class="grp"><div class="lab">Months to Election Day <span class="info" title="How far out the forecast is. Further out = more uncertainty, so the win odds sit closer to 50/50 and the outcome range is wider. Closer in = more confident.">i</span><span class="v" id="monthsV">6 mo</span></div><input type="range" id="months" min="1" max="18" step="1" value="6"></div>
         <div class="btnrow"><button class="btn" id="chaosbtn">🎲 Random scenario</button></div>
+        <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;cursor:pointer;margin:8px 0 2px"><input type="checkbox" id="splitME" style="width:auto;accent-color:var(--accent)"> Split Maine &amp; Nebraska by district <span class="info" title="Maine and Nebraska award some electoral votes by congressional district instead of winner-take-all. ON models ME-1/ME-2 and NE-1/NE-2/NE-3 separately, as they really do.">i</span></label>
         <div class="grp" style="margin-top:4px"><div class="lab">Preset</div><select id="preset">
           <option value="">— choose a scenario —</option>
           <option value="base">Baseline (neutral)</option>
@@ -719,8 +720,12 @@ const BT=[
 ];
 // per-state [white-evangelical share, rural share] — approximate (Pew / Census)
 const EX={AL:[.40,.41],AK:[.22,.34],AZ:[.20,.10],AR:[.35,.44],CA:[.10,.05],CO:[.15,.14],CT:[.08,.12],DE:[.12,.17],DC:[.05,.00],FL:[.20,.09],GA:[.30,.25],HI:[.08,.08],ID:[.22,.30],IL:[.15,.12],IN:[.25,.27],IA:[.22,.36],KS:[.25,.26],KY:[.35,.42],LA:[.27,.27],ME:[.10,.60],MD:[.12,.12],MA:[.05,.08],MI:[.18,.25],MN:[.18,.27],MS:[.40,.50],MO:[.28,.30],MT:[.22,.44],NE:[.25,.27],NV:[.15,.06],NH:[.08,.40],NJ:[.08,.05],NM:[.18,.22],NY:[.08,.12],NC:[.28,.34],ND:[.22,.40],OH:[.20,.22],OK:[.35,.34],OR:[.15,.19],PA:[.18,.21],RI:[.06,.09],SC:[.30,.34],SD:[.25,.43],TN:[.40,.33],TX:[.28,.16],UT:[.05,.09],VT:[.07,.60],VA:[.18,.24],WA:[.12,.16],WV:[.30,.50],WI:[.20,.30],WY:[.25,.35]};
-const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","t_wc","t_asn","t_sen","evang","urb","abo","crisis","surp","swing","months"];
-const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,t_wc:0,t_asn:0,t_sen:0,evang:0,urb:0,abo:0,crisis:0,surp:0,swing:0,months:6};
+const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","t_wc","t_asn","t_sen","evang","urb","abo","crisis","surp","swing","months","splitME"];
+const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,t_wc:0,t_asn:0,t_sen:0,evang:0,urb:0,abo:0,crisis:0,surp:0,swing:0,months:6,splitME:0};
+// congressional-district splits: [name, 2024 margin (R+), elasticity, EV]
+const DISTRICTS={ME:[["ME-at",-7,1.0,2],["ME-1",-23,0.9,1],["ME-2",9,1.1,1]],NE:[["NE-at",20,0.7,2],["NE-1",11,0.9,1],["NE-2",-5,1.2,1],["NE-3",40,0.7,1]]};
+function splitEV(s,natM,en,isSim){ const dl=DISTRICTS[s[0]],pd=stateDelta(s); let r=0;
+  dl.forEach(a=>{ let mu=a[1]+a[2]*(natM-1.5)+pd; if(isSim)mu+=a[2]*en+gauss()*2.0; if(mu>0)r+=a[3]; }); return r; }
 let P={...DEF}, sel=null, mapMode="margin", geo=null, SIM=null, HIST=null, histYearIdx=16, histMode="result", histSel=null, forced={};
 
 /* ============================ MODEL ============================ */
@@ -757,13 +762,16 @@ function detEV(){ const natM=nationalMargin(); let rEV=0; STATES.forEach(s=>{ if
 function runModel(){
   const natM=nationalMargin();
   const mus=STATES.map(s=>({s,mu:stateMu(s,natM)}));
-  let dEV=0,rEV=0; mus.forEach(o=>{ if(o.mu>0)rEV+=o.s[2]; else dEV+=o.s[2]; });
+  const splitOn=!!P.splitME;
+  let dEV=0,rEV=0; mus.forEach(o=>{ if(splitOn&&DISTRICTS[o.s[0]]){ const r=splitEV(o.s,natM,0,false); rEV+=r; dEV+=(o.s[2]-r); } else if(o.mu>0)rEV+=o.s[2]; else dEV+=o.s[2]; });
   const uf=0.6+((P.months||6)/18)*1.2; const SIG_NAT=2.6*uf,SIG_ST=2.0*uf;
   let rWins=0,evCounts=new Array(539).fill(0),splits=0,sum=0,sumsq=0;
   const tipTally={}, winProb=mus.map(()=>0);
   for(let t=0;t<N_SIM;t++){
     const en=gauss()*SIG_NAT; let rev=0; const trial=[];
-    mus.forEach((o,i)=>{ const m=o.mu+o.s[4]*en+gauss()*SIG_ST; if(m>0){rev+=o.s[2];winProb[i]++;} trial.push({ev:o.s[2],m,a:o.s[0]}); });
+    mus.forEach((o,i)=>{ const m=o.mu+o.s[4]*en+gauss()*SIG_ST; if(m>0)winProb[i]++;
+      if(splitOn&&DISTRICTS[o.s[0]])rev+=splitEV(o.s,natM,en,true); else if(m>0)rev+=o.s[2];
+      trial.push({ev:o.s[2],m,a:o.s[0]}); });
     if(rev>=270)rWins++; evCounts[rev]++; sum+=rev; sumsq+=rev*rev;
     const pv=natM+en; if((pv>0)!==(rev>=270))splits++;
     trial.sort((a,b)=>b.m-a.m); let acc=0; for(const st of trial){acc+=st.ev; if(acc>=270){tipTally[st.a]=(tipTally[st.a]||0)+1;break;}}
@@ -1179,6 +1187,7 @@ function syncControls(){
   setv("swing",P.swing,(P.swing>0?'+':'')+P.swing); setv("months",P.months,P.months+" mo");
   setv("abo",P.abo,(P.abo>0?'+':'')+P.abo); setv("crisis",P.crisis,(P.crisis>0?'+':'')+P.crisis); setv("surp",P.surp,(P.surp>0?'+':'')+P.surp);
   document.getElementById("locecon").checked=!!P.locecon;
+  {const sm=document.getElementById("splitME"); if(sm)sm.checked=!!P.splitME;}
 }
 function bindControls(){
   document.getElementById("rnom").addEventListener("change",e=>{P.rnom=e.target.value;drawCards();render();});
@@ -1187,6 +1196,7 @@ function bindControls(){
   const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["t_wc",v=>(v>0?'+':'')+v],["t_asn",v=>(v>0?'+':'')+v],["t_sen",v=>(v>0?'+':'')+v],["evang",v=>(v>0?'+':'')+v],["urb",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v],["swing",v=>(v>0?'+':'')+v],["months",v=>v+" mo"]];
   simple.forEach(([id,fmt])=>{ const el=document.getElementById(id); el.addEventListener("input",e=>{P[id]=+e.target.value; document.getElementById(id+"V").textContent=fmt(+e.target.value); render(); drawTornado();}); });
   document.getElementById("locecon").addEventListener("change",e=>{P.locecon=e.target.checked?1:0;render();});
+  document.getElementById("splitME").addEventListener("change",e=>{P.splitME=e.target.checked?1:0;render();});
   document.getElementById("preset").addEventListener("change",e=>{applyPreset(e.target.value);e.target.value="";});
   document.getElementById("sharebtn").addEventListener("click",shareLink);
   document.getElementById("chaosbtn").addEventListener("click",chaosScenario);

@@ -1,0 +1,1138 @@
+<meta charset="utf-8">
+<title>Road to 270</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* ===== Road to 270 — newsroom-ledger election platform ===== */
+:root{
+  --bg:#f3f1ea; --bg2:#ebe8de; --panel:#fffdf8; --ink:#1b1a17; --ink2:#403c34; --muted:#6f6a60;
+  --line:#e0dacb; --line2:#cfc8b6; --accent:#b5832c; --accent-soft:#e9dcbf;
+  --r-deep:#a21829; --r-mid:#cc4a46; --r-lite:#edb0a8; --r-bg:#f6e4e0;
+  --d-deep:#164a92; --d-mid:#3d6fce; --d-lite:#aec6ef; --d-bg:#e2e9f7;
+  --toss:#8a74a8; --ind:#4a9d6f; --gold:#c9a227; --good:#2f7a46; --warn:#b9772a;
+  --sans:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --shadow:0 1px 2px rgba(40,34,20,.06),0 6px 20px rgba(40,34,20,.05);
+  --cb-r:#d55e00; --cb-d:#0072b2; /* colorblind (Okabe-Ito) */
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121109; --bg2:#19170f; --panel:#1e1b12; --ink:#f0ead9; --ink2:#ccc5b3; --muted:#9a9384;
+  --line:#2d2a1f; --line2:#413c2d; --accent:#d6a650; --accent-soft:#3a3222;
+  --r-deep:#e8534f; --r-mid:#b23a36; --r-lite:#5c231f; --r-bg:#2a1614;
+  --d-deep:#5d93f2; --d-mid:#2f4f9e; --d-lite:#1d2f5a; --d-bg:#141e33;
+  --toss:#a98fc9; --ind:#5bbd8a; --gold:#d7b64a; --good:#56a06d; --warn:#cc9a4a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35); color-scheme:dark;
+  --cb-r:#e8820e; --cb-d:#3b9ae0;
+}}
+:root[data-theme="dark"]{
+  --bg:#121109; --bg2:#19170f; --panel:#1e1b12; --ink:#f0ead9; --ink2:#ccc5b3; --muted:#9a9384;
+  --line:#2d2a1f; --line2:#413c2d; --accent:#d6a650; --accent-soft:#3a3222;
+  --r-deep:#e8534f; --r-mid:#b23a36; --r-lite:#5c231f; --r-bg:#2a1614;
+  --d-deep:#5d93f2; --d-mid:#2f4f9e; --d-lite:#1d2f5a; --d-bg:#141e33;
+  --toss:#a98fc9; --ind:#5bbd8a; --gold:#d7b64a; --good:#56a06d; --warn:#cc9a4a;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px rgba(0,0,0,.35); color-scheme:dark;
+  --cb-r:#e8820e; --cb-d:#3b9ae0;
+}
+:root[data-cb="1"]{ --r-deep:var(--cb-r); --r-mid:var(--cb-r); --d-deep:var(--cb-d); --d-mid:var(--cb-d); }
+*{box-sizing:border-box} html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased;font-size:15px}
+.gut{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1220px;margin:0 auto}
+h1,h2,h3,h4{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;text-wrap:balance;margin:0}
+a{color:var(--accent)}
+.mono{font-family:var(--mono)} .tnum{font-variant-numeric:tabular-nums}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--panel);z-index:40}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--panel) 93%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .inner{display:flex;align-items:center;gap:4px;height:56px;overflow-x:auto}
+nav .logo{font-family:var(--serif);font-weight:600;font-size:19px;margin-right:auto;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;white-space:nowrap}
+nav .logo b{color:var(--accent)} nav .dot{width:9px;height:9px;border-radius:50%;background:var(--r-deep);box-shadow:0 0 0 3px var(--r-bg)}
+nav a.tab{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:7px;white-space:nowrap}
+nav a.tab:hover{color:var(--ink);background:var(--bg2)} nav a.tab.on{color:var(--ink);background:var(--accent-soft)}
+.themebtn{border:1px solid var(--line2);background:transparent;color:var(--muted);border-radius:7px;width:30px;height:30px;cursor:pointer;font-size:13px;display:grid;place-items:center;flex:none}
+@media(max-width:760px){nav .logo span.full{display:none} nav a.tab{padding:7px 7px;font-size:12px}}
+
+section{padding-block:36px;scroll-margin-top:66px} section.alt{background:var(--bg2);border-block:1px solid var(--line)}
+.eyebrow{font-family:var(--mono);text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:var(--accent);font-weight:500}
+.lead{color:var(--ink2);max-width:68ch;font-size:16px} .secttl{font-size:clamp(23px,4vw,33px);margin:4px 0 6px}
+
+.hero{padding-block:38px 20px}
+.hero .dateline{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,7vw,66px);line-height:.98;margin-top:8px}
+.hero h1 .r270{color:var(--accent)}
+.hero .tagline{max-width:62ch;font-size:clamp(16px,2.2vw,19px);color:var(--ink2);margin-top:14px}
+.herorow{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
+.chip{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:30px;padding:6px 13px;color:var(--ink2)}
+.chip .k{color:var(--accent);font-family:var(--mono);font-size:11px}
+
+.fc{display:grid;grid-template-columns:336px 1fr;gap:24px;align-items:start}
+@media(max-width:960px){.fc{grid-template-columns:1fr}}
+.rail{display:flex;flex-direction:column;gap:15px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow)}
+.card>h3{font-size:15.5px;display:flex;align-items:center;gap:8px}
+.card .sub{font-size:12px;color:var(--muted);margin:2px 0 13px}
+.grp{margin-bottom:16px} .grp:last-child{margin-bottom:0}
+.grp>.lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;font-weight:600;margin-bottom:6px}
+.grp>.lab .v{font-family:var(--mono);font-size:11.5px;color:var(--accent);font-weight:500;text-align:right;white-space:nowrap}
+.info{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--line2);color:var(--muted);font-size:9px;font-style:normal;cursor:help;flex:none;font-family:var(--mono)}
+input[type=range]{width:100%;margin:0;accent-color:var(--accent);height:22px;cursor:pointer}
+.ticks{display:flex;justify-content:space-between;font-size:9.5px;color:var(--muted);font-family:var(--mono);margin-top:-2px}
+select{width:100%;font-family:var(--sans);font-size:13.5px;font-weight:600;padding:9px 10px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);border-radius:8px}
+.econreadout{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}
+.econreadout .ei{background:var(--bg2);border:1px solid var(--line);border-radius:7px;padding:6px 5px;text-align:center}
+.econreadout .ei .n{font-family:var(--mono);font-size:13px;font-weight:600;line-height:1}
+.econreadout .ei .l{font-size:8.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:3px}
+details.adv{margin-top:4px;border-top:1px solid var(--line);padding-top:10px}
+details.adv>summary{cursor:pointer;font-size:12px;font-weight:600;color:var(--muted);list-style:none}
+details.adv>summary::-webkit-details-marker{display:none} details.adv>summary::before{content:"\25B8 ";color:var(--accent)}
+details.adv[open]>summary::before{content:"\25BE "}
+.btnrow{display:flex;gap:7px;margin-top:4px}
+.btn{flex:1;padding:9px;border:1px solid var(--line2);background:transparent;color:var(--ink2);border-radius:8px;cursor:pointer;font-family:var(--sans);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn:hover{border-color:var(--accent);color:var(--ink)} .btn.ghost{border-style:dashed;color:var(--muted);font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+
+.rescol{min-width:0;display:flex;flex-direction:column;gap:15px}
+.verdict{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:18px;box-shadow:var(--shadow)}
+.vtop{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.vside .nm{font-family:var(--serif);font-size:15px;font-weight:600;line-height:1.1} .vside .party{font-size:10.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.vside .ev{font-size:46px;font-weight:600;font-family:var(--serif);line-height:.9;margin-top:3px}
+.vside.d .ev{color:var(--d-deep)} .vside.r{text-align:right} .vside.r .ev{color:var(--r-deep)}
+.vmid{text-align:center} .vmid .w{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)} .vmid .num{font-family:var(--serif);font-size:20px;font-weight:600}
+.evbar{position:relative;height:20px;border-radius:10px;overflow:hidden;margin-top:14px;background:var(--toss);display:flex}
+.evbar .bd{background:var(--d-deep);height:100%} .evbar .br{background:var(--r-deep);height:100%;margin-left:auto}
+.evbar .m270{position:absolute;left:50%;top:-4px;bottom:-4px;width:2px;background:var(--ink);transform:translateX(-50%);z-index:2}
+.evbar .m270::after{content:"270";position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:9px;color:var(--muted)}
+.needle{display:flex;gap:16px;align-items:center;margin-top:16px;flex-wrap:wrap}
+.needle svg{flex:none}
+.needleinfo{min-width:0}
+.needleinfo .big{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1}
+.needleinfo .cap{font-size:12px;color:var(--muted);margin-top:2px}
+.prob{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:16px}
+@media(max-width:520px){.prob{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:11px 10px;text-align:center}
+.stat .big{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1} .stat .cap{font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-top:4px;line-height:1.2}
+
+.mapcard{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:var(--shadow);min-width:0}
+.maphead{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.maphead h3{font-size:16px}
+.modeset{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:3px}
+.modeset button{border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:600;padding:5px 9px;border-radius:6px;cursor:pointer;font-family:var(--sans)}
+.modeset button.on{background:var(--panel);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+svg.usmap{width:100%;height:auto;display:block}
+svg.usmap path.state{stroke:var(--panel);stroke-width:.7;cursor:pointer;transition:fill .35s ease}
+svg.usmap path.state:hover{opacity:.82} svg.usmap path.state.sel{stroke:var(--ink);stroke-width:1.7}
+svg.usmap .lbl{font-family:var(--mono);font-size:8px;font-weight:600;fill:#fff;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:rgba(0,0,0,.28);stroke-width:1.6px}
+.tip{position:fixed;z-index:60;background:var(--ink);color:var(--bg);font-size:12px;padding:8px 10px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .1s;max-width:230px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.tip b{font-family:var(--serif)} .tip .mm{font-family:var(--mono);font-size:11px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 15px;margin-top:10px;font-size:11px;color:var(--muted);font-family:var(--mono);align-items:center}
+.leg .sw{display:inline-flex;align-items:center;gap:5px} .leg i{width:13px;height:13px;border-radius:3px;display:inline-block;border:1px solid rgba(0,0,0,.08)}
+.pathnote{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+.summary{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:11px;padding:15px 17px;box-shadow:var(--shadow)}
+.summary .h{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:6px}
+.summary p{margin:0;font-size:14.5px;color:var(--ink2)} .summary b{color:var(--ink)}
+
+.reason{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:var(--shadow)}
+.rh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:12px}
+.rh .st{font-family:var(--serif);font-size:21px;font-weight:600} .rh .vd{font-family:var(--mono);font-size:12px;padding:3px 9px;border-radius:20px;font-weight:600;color:#fff} .rh .ev2{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.lede{font-size:14px;margin:0 0 14px;color:var(--ink2)} .lede .m{font-family:var(--mono);font-weight:600;color:var(--ink)}
+.factors{display:flex;flex-direction:column;gap:8px}
+.frow{display:grid;grid-template-columns:130px 1fr 48px;gap:9px;align-items:center;font-size:12.5px}
+@media(max-width:440px){.frow{grid-template-columns:96px 1fr 42px}}
+.frow .fl{color:var(--muted)} .ftrack{height:10px;background:var(--bg2);border-radius:5px;position:relative;border:1px solid var(--line)}
+.fmid{position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--muted);opacity:.5} .fbar{position:absolute;top:0;bottom:0;border-radius:5px} .fv{font-family:var(--mono);font-size:11px;text-align:right}
+.spark{margin-top:14px} .spark svg{width:100%;height:46px;display:block} .sparkcap{font-size:10.5px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+.demobars{display:flex;height:24px;border-radius:7px;overflow:hidden;margin-top:12px;border:1px solid var(--line)}
+.demobars span{display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;overflow:hidden;font-family:var(--mono)}
+.demolegend{font-size:10.5px;color:var(--muted);margin-top:6px;font-family:var(--mono)}
+.flipbox{margin-top:12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:12.5px;color:var(--ink2)} .flipbox b{color:var(--ink);font-family:var(--mono)}
+.empty{color:var(--muted);font-style:italic;font-size:14px}
+
+.histwrap .hist{display:flex;align-items:flex-end;gap:1px;height:92px;margin-top:8px}
+.hist .hb{flex:1;min-width:0;border-radius:2px 2px 0 0} .histaxis{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:3px}
+
+/* history explorer */
+.histctl{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.yrbig{font-family:var(--serif);font-size:40px;font-weight:600;line-height:.9;min-width:95px}
+.histbanner{font-size:13px;color:var(--ink2)} .histbanner b{color:var(--ink);font-family:var(--serif)}
+.histmodes{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:3px}
+.histmodes button{border:0;background:transparent;color:var(--muted);font-size:11px;font-weight:600;padding:5px 9px;border-radius:6px;cursor:pointer}
+.histmodes button.on{background:var(--panel);color:var(--ink)}
+.pvtrend svg{width:100%;height:120px;display:block} .streaks{font-size:12.5px;color:var(--ink2);margin-top:10px;line-height:1.7}
+.streaks b{font-family:var(--mono);color:var(--ink)}
+
+/* candidates */
+.field{margin-top:18px} .field h3{font-size:18px;display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.field h3 .pq{font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:20px;color:#fff}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
+.cc{background:var(--panel);border:1px solid var(--line);border-radius:13px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:transform .1s,border-color .1s}
+.cc:hover{transform:translateY(-2px);border-color:var(--accent)} .cc.pick{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft),var(--shadow)}
+.cc .port{aspect-ratio:1/1;width:100%;display:block;object-fit:cover;background:var(--bg2)}
+.cc .meta{padding:10px 11px} .cc .meta .nm{font-family:var(--serif);font-size:15px;font-weight:600;line-height:1.05} .cc .meta .role{font-size:10.5px;color:var(--muted);margin-top:1px}
+.cc .tags{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap} .cc .t{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:12px;background:var(--bg2);color:var(--muted)}
+.cc .pickbadge{display:none} .cc.pick .pickbadge{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:12px;background:var(--accent);color:#fff}
+.pickrow{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin:14px 0 2px;flex-wrap:wrap} .pickrow .tag{font-family:var(--mono);font-size:10px;background:var(--accent-soft);color:var(--ink);padding:2px 8px;border-radius:20px;font-weight:600}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:70;background:rgba(10,8,4,.55);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 14px}
+.modal.open{display:flex} .sheet{background:var(--panel);border:1px solid var(--line2);border-radius:16px;max-width:620px;width:100%;box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden;margin:auto}
+.sheet .top{display:flex;gap:16px;padding:20px;border-bottom:1px solid var(--line);align-items:center}
+.sheet .top img{width:92px;height:92px;border-radius:12px;object-fit:cover;flex:none;background:var(--bg2)}
+.sheet .top .nm{font-family:var(--serif);font-size:24px;font-weight:600;line-height:1} .sheet .top .role{font-size:13px;color:var(--muted);margin-top:2px}
+.sheet .top .party{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:20px;color:#fff;margin-top:7px}
+.sheet .body{padding:20px;display:flex;flex-direction:column;gap:16px}
+.sheet .bio{font-size:14px;color:var(--ink2);margin:0}
+.axis{position:relative;height:38px;background:linear-gradient(90deg,var(--d-deep),var(--bg2) 50%,var(--r-deep));border-radius:8px;margin-top:6px}
+.axis .me{position:absolute;top:-4px;width:3px;height:46px;background:var(--ink);transform:translateX(-50%)}
+.axis .peer{position:absolute;top:50%;width:7px;height:7px;border-radius:50%;background:var(--muted);transform:translate(-50%,-50%);opacity:.6}
+.axislbl{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:4px}
+.coal{display:flex;flex-direction:column;gap:6px}
+.crow{display:grid;grid-template-columns:96px 1fr 34px;gap:8px;align-items:center;font-size:12px}
+.crow .cl{color:var(--muted)} .ctrack{height:9px;background:var(--bg2);border-radius:5px;position:relative;border:1px solid var(--line)} .cmid{position:absolute;left:50%;top:-1px;bottom:-1px;width:1px;background:var(--muted);opacity:.5} .cbar{position:absolute;top:0;bottom:0;border-radius:5px} .cv{font-family:var(--mono);font-size:10px;text-align:right}
+.srbox{display:grid;grid-template-columns:1fr 1fr;gap:12px} @media(max-width:480px){.srbox{grid-template-columns:1fr}}
+.srbox h5{margin:0 0 5px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.srbox ul{margin:0;padding-left:16px;font-size:12.5px;color:var(--ink2)} .srbox li{margin-bottom:3px}
+.closex{position:absolute;top:14px;right:16px;border:0;background:var(--bg2);color:var(--ink);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px}
+.ifnom{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:11px 13px;font-size:13px;color:var(--ink2)} .ifnom b{color:var(--ink);font-family:var(--mono)}
+
+/* matrix + scatter */
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px} @media(max-width:860px){.twocol{grid-template-columns:1fr}}
+.matrix{overflow-x:auto} table.mx{border-collapse:collapse;font-size:11px;margin-top:8px} table.mx th,table.mx td{padding:5px 4px;text-align:center;min-width:34px}
+table.mx th{font-family:var(--mono);font-size:9.5px;color:var(--muted);font-weight:600} table.mx td{color:#fff;font-family:var(--mono);font-weight:600;border-radius:3px;cursor:pointer}
+table.mx th.rowh{text-align:right;padding-right:7px;color:var(--ink2)}
+.scatter svg{width:100%;height:300px;display:block}
+
+/* model/methodology */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:18px}
+.step{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:var(--shadow)}
+.step .no{font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:600;letter-spacing:.1em} .step h4{font-size:16px;margin:6px 0 7px} .step p{font-size:13px;color:var(--ink2);margin:0}
+.eq{background:var(--bg2);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;padding:13px 15px;font-family:var(--mono);font-size:12.5px;color:var(--ink2);margin-top:14px;overflow-x:auto;line-height:1.7} .eq b{color:var(--ink)}
+.tbl{width:100%;border-collapse:collapse;margin-top:14px;font-size:12.5px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tbl th,.tbl td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line)} .tbl th{background:var(--bg2);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600} .tbl td.mono{font-family:var(--mono)}
+.scrollx{overflow-x:auto}
+.tornado{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+.tnrow{display:grid;grid-template-columns:150px 1fr 44px;gap:9px;align-items:center;font-size:12px} @media(max-width:440px){.tnrow{grid-template-columns:104px 1fr 38px}}
+.tnrow .tl{color:var(--ink2)} .tntrack{height:14px;background:var(--bg2);border-radius:4px;position:relative;border:1px solid var(--line)} .tnbar{position:absolute;top:0;bottom:0;left:0;border-radius:4px;background:var(--accent)} .tnv{font-family:var(--mono);font-size:10.5px;text-align:right;color:var(--muted)}
+.glossary{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:16px}
+.gdef{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:13px 15px} .gdef dt{font-family:var(--serif);font-weight:600;font-size:14px} .gdef dd{margin:4px 0 0;font-size:12.5px;color:var(--ink2)}
+.limits{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:16px} .limits h4{font-size:15px;margin-bottom:8px} .limits ul{margin:0;padding-left:18px;font-size:13px;color:var(--ink2)} .limits li{margin-bottom:5px}
+
+/* AI forecast */
+.aif{max-width:760px} .aif .callbig{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow);margin-top:18px;text-align:center}
+.aif .callbig .lbl{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.aif .callbig .who{font-family:var(--serif);font-size:clamp(26px,5vw,38px);font-weight:600;margin:6px 0} .aif .callbig .det{font-family:var(--mono);font-size:13px;color:var(--ink2)}
+.aif h3{font-size:19px;margin:26px 0 8px} .aif p{font-size:15px;color:var(--ink2);max-width:70ch} .aif .pq{font-family:var(--serif);font-size:19px;font-style:italic;color:var(--ink);border-left:3px solid var(--accent);padding-left:14px;margin:18px 0}
+.keyrace{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.kr{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px} .kr .s{font-family:var(--serif);font-size:16px;font-weight:600} .kr .m{font-family:var(--mono);font-size:12px;margin-top:3px}
+
+/* data */
+.datatable{overflow-x:auto;margin-top:16px} table.dt{border-collapse:collapse;font-size:12px;width:100%;min-width:620px}
+table.dt th,table.dt td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap} table.dt th:first-child,table.dt td:first-child{text-align:left}
+table.dt th{background:var(--bg2);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);cursor:pointer;position:sticky;top:0} table.dt td.mono{font-family:var(--mono)} table.dt tr:hover td{background:var(--bg2)}
+.btgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:13px;margin-top:16px}
+.btc{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px;box-shadow:var(--shadow)} .btc .yr{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1}
+.btc .row{display:flex;justify-content:space-between;font-size:12px;margin-top:8px;padding-top:6px;border-top:1px solid var(--line)} .btc .row .lab{color:var(--muted)} .btc .row .val{font-family:var(--mono);font-weight:600}
+.hitpill{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:20px;margin-top:9px;font-weight:600} .hit{background:var(--d-bg);color:var(--d-deep)} .hit.r{background:var(--r-bg);color:var(--r-deep)} .miss{background:var(--accent-soft);color:var(--warn)}
+.metacard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:16px} .metacard h4{font-size:15px;margin-bottom:8px}
+.credits{columns:2;column-gap:20px;font-size:11px;color:var(--muted);margin-top:8px} @media(max-width:560px){.credits{columns:1}} .credits a{color:var(--accent)}
+
+footer{padding-block:28px 46px;border-top:1px solid var(--line);color:var(--muted);font-size:12px} footer .disc{max-width:80ch} footer b{color:var(--ink)}
+.srcnote{font-size:11px;color:var(--muted);margin-top:8px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:9px;font-size:13px;font-weight:600;opacity:0;transition:.25s;z-index:80;pointer-events:none} .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<nav class="gut"><div class="wrap inner">
+  <div class="logo"><span class="dot"></span>Road to <b>270</b></div>
+  <a class="tab on" href="#forecast">Forecast</a>
+  <a class="tab" href="#history">History</a>
+  <a class="tab" href="#candidates">Candidates</a>
+  <a class="tab" href="#model">Model</a>
+  <a class="tab" href="#aiforecast">AI Forecast</a>
+  <a class="tab" href="#data">Data</a>
+  <button class="themebtn" id="cbbtn" title="Colorblind-safe palette" aria-label="Colorblind palette">◑</button>
+  <button class="themebtn" id="themebtn" title="Toggle light/dark" aria-label="Toggle theme">◐</button>
+</div></nav>
+
+<header class="hero gut"><div class="wrap">
+  <div class="dateline" id="dateline">Forecast as of November 2026 · Hypothetical 2028 cycle</div>
+  <h1>Road to <span class="r270">270</span></h1>
+  <p class="tagline">A probabilistic model of the 2028 presidential race you can interrogate. Set the economy, pick the nominees, move turnout and dozens of other signals — and watch every state, the Electoral College, and the <b>odds of winning</b> re-forecast in real time.</p>
+  <div class="herorow">
+    <span class="chip"><span class="k">51</span> contests modeled</span>
+    <span class="chip"><span class="k">5</span> demographic blocks/state</span>
+    <span class="chip"><span class="k" id="simchip">2,001</span> simulations</span>
+    <span class="chip"><span class="k">14</span> candidates</span>
+    <span class="chip"><span class="k">1960</span>–2024 history</span>
+  </div>
+</div></header>
+
+<section id="forecast" class="gut"><div class="wrap">
+  <div class="fc">
+    <aside class="rail">
+      <div class="card">
+        <h3>① The matchup</h3>
+        <p class="sub">Pick each party's nominee. Each candidate carries real demographic strengths that reshape the map. Click a face in <a href="#candidates">Candidates</a> for a full profile.</p>
+        <div class="grp"><div class="lab">Republican nominee</div><select id="rnom"></select></div>
+        <div class="grp" style="margin-bottom:0"><div class="lab">Democratic nominee</div><select id="dnom"></select></div>
+      </div>
+
+      <div class="card">
+        <h3>② The economy</h3>
+        <p class="sub">Conditions by Election Day 2028. Each preset is a real bundle of indicators, shown below. <b>Neutral</b> = the long-run post-war averages.</p>
+        <div class="grp">
+          <div class="lab">Overall climate <span class="info" title="A one-slider summary of the economy. It sets GDP growth, unemployment, and inflation together. NEUTRAL = long-run averages (about +2.2% growth, 4.2% unemployment, 2.5% inflation) — a coin-flip economy that neither helps nor hurts the party in power.">i</span><span class="v" id="econName">Neutral</span></div>
+          <input type="range" id="econ" min="0" max="5" step="1" value="3">
+          <div class="ticks"><span>Deep recession</span><span>Boom</span></div>
+          <div class="econreadout">
+            <div class="ei"><div class="n" id="egdp">+2.2%</div><div class="l">GDP</div></div>
+            <div class="ei"><div class="n" id="eunemp">4.2%</div><div class="l">Unemp.</div></div>
+            <div class="ei"><div class="n" id="einfl">2.5%</div><div class="l">Inflation</div></div>
+            <div class="ei"><div class="n" id="emis">6.7</div><div class="l">Misery</div></div>
+          </div>
+        </div>
+        <div class="grp" style="margin-bottom:0">
+          <div class="lab">Presidential approval <span class="info" title="Net approval of the sitting president (the Republican, since the GOP won in 2024): the share who approve minus the share who disapprove. NEUTRAL (0) = as many approve as disapprove. Positive helps the incumbent party; negative hurts it. The single strongest political predictor in the model.">i</span><span class="v" id="apprV">+2</span></div>
+          <input type="range" id="appr" min="-25" max="15" step="1" value="2">
+          <div class="ticks"><span>−25</span><span>0</span><span>+15</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>③ Who shows up</h3>
+        <p class="sub">Turnout change by group, in points vs. 2024. <b>0 = same as 2024.</b> Positive means that group votes at a higher rate; effects scale with each state's demographics.</p>
+        <div class="grp"><div class="lab">Non-college white <span class="info" title="Turnout of white voters without a 4-year degree, vs. 2024. This group leans Republican, so a positive shift (surge) generally helps the GOP, most in heavily working-class states. 0 = 2024 levels.">i</span><span class="v" id="t_wncV">0</span></div><input type="range" id="t_wnc" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">Latino <span class="info" title="Latino turnout vs. 2024. Latino voters lean Democratic on balance (though they shifted toward the GOP in 2024), so a surge tends to help Democrats, concentrated in AZ, NV, TX, FL, NM. 0 = 2024 levels.">i</span><span class="v" id="t_latV">0</span></div><input type="range" id="t_lat" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp"><div class="lab">Black <span class="info" title="Black turnout vs. 2024. Black voters are the most Democratic group, so a surge helps Democrats, concentrated in GA, NC, MS, SC, and the industrial Midwest cities. 0 = 2024 levels.">i</span><span class="v" id="t_blkV">0</span></div><input type="range" id="t_blk" min="-6" max="6" step="1" value="0"></div>
+        <div class="grp" style="margin-bottom:0"><div class="lab">Young voters (18–29) <span class="info" title="Turnout of voters under 30 vs. 2024. Younger voters lean Democratic, so a surge helps Democrats broadly. 0 = 2024 levels.">i</span><span class="v" id="t_yngV">0</span></div><input type="range" id="t_yng" min="-6" max="6" step="1" value="0"></div>
+      </div>
+
+      <div class="card">
+        <h3>④ More factors</h3>
+        <p class="sub">Deeper signals real forecasters use. All start at <b>neutral</b> so they change nothing until you move them. Hover any ⓘ for the definition.</p>
+        <details class="adv" open><summary>Economic signals</summary>
+          <div class="grp" style="margin-top:12px"><div class="lab">Real disposable income growth <span class="info" title="After-inflation growth in households' take-home income. The single best economic predictor in academic models (Hibbs's 'Bread and Peace'). NEUTRAL = +1.8%/yr (post-war average). Higher helps the party in power.">i</span><span class="v" id="rdiV">+1.8%</span></div><input type="range" id="rdi" min="-2" max="5" step="0.1" value="1.8"></div>
+          <div class="grp"><div class="lab">Real wage growth <span class="info" title="Wage growth minus inflation — whether paychecks are keeping up with prices. NEUTRAL = +0.5%. Captures the 2022–24 'good job numbers but things feel expensive' gap.">i</span><span class="v" id="wageV">+0.5%</span></div><input type="range" id="wage" min="-3" max="3" step="0.1" value="0.5"></div>
+          <div class="grp" style="margin-bottom:0"><div class="lab">Consumer sentiment <span class="info" title="University of Michigan Consumer Sentiment Index — how good people feel about the economy. NEUTRAL = 75. Higher (toward 100+) helps the incumbent party; below ~60 signals real pessimism.">i</span><span class="v" id="sentV">75</span></div><input type="range" id="sent" min="50" max="110" step="1" value="75"></div>
+        </details>
+        <details class="adv"><summary>Political climate</summary>
+          <div class="grp" style="margin-top:12px"><div class="lab">Right / wrong track <span class="info" title="Net share saying the country is headed in the 'right direction' minus 'wrong track'. NEUTRAL = −20 (voters are usually net-sour). Less sour helps the party in power.">i</span><span class="v" id="trackV">−20</span></div><input type="range" id="track" min="-60" max="20" step="1" value="-20"></div>
+          <div class="grp"><div class="lab">Generic ballot (D–R) <span class="info" title="If the election were 'a generic Democrat vs. a generic Republican for Congress,' the national margin. NEUTRAL = 0 (tied). Positive = Democratic edge, negative = Republican edge.">i</span><span class="v" id="genV">0</span></div><input type="range" id="gen" min="-8" max="8" step="0.5" value="0"></div>
+          <div class="grp"><div class="lab">Thermostatic penalty <span class="info" title="The electorate's tendency to swing AGAINST whoever holds power ('throw the bums out'). NEUTRAL = 0.5 (a mild, historically normal drag on the incumbent party). Higher = a stronger anti-incumbent mood.">i</span><span class="v" id="thermoV">0.5</span></div><input type="range" id="thermo" min="0" max="2" step="0.1" value="0.5"></div>
+          <div class="grp" style="margin-bottom:0"><div class="lab">Party-ID edge (D–R) <span class="info" title="How many more voters identify as Democrats than Republicans nationally. NEUTRAL = +2 (a slight Democratic edge, the modern norm). Positive favors Democrats.">i</span><span class="v" id="pidV">+2</span></div><input type="range" id="pid" min="-4" max="6" step="0.5" value="2"></div>
+        </details>
+        <details class="adv"><summary>Structure &amp; campaign</summary>
+          <div class="grp" style="margin-top:12px"><div class="lab">Education polarization <span class="info" title="How sharply college vs. non-college voters split by party (the 'diploma divide'). NEUTRAL = 1.0 (2024 levels). Above 1 widens the gap — pushing degree-heavy states more Democratic and working-class states more Republican.">i</span><span class="v" id="eduV">1.0×</span></div><input type="range" id="edu" min="0.5" max="1.8" step="0.05" value="1.0"></div>
+          <div class="grp"><div class="lab">Fundraising / ad edge <span class="info" title="Net paid-media and resource advantage. NEUTRAL = 0 (even). Positive = Republican advantage, negative = Democratic. Money moves the margin modestly.">i</span><span class="v" id="adV">0</span></div><input type="range" id="ad" min="-3" max="3" step="0.5" value="0"></div>
+          <div class="grp" style="margin-bottom:0"><label style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;cursor:pointer"><input type="checkbox" id="locecon" style="width:auto;accent-color:var(--accent)"> State-localized economy <span class="info" title="When ON, a downturn or boom hits different states differently — working-class industrial states swing more with the economy than white-collar ones. When OFF, the economy moves every state equally.">i</span></label></div>
+        </details>
+        <details class="adv"><summary>Event shocks</summary>
+          <div class="grp" style="margin-top:12px"><div class="lab">Abortion salience <span class="info" title="How mobilizing abortion is as an issue post-Dobbs. NEUTRAL = 0. Positive (more salient) helps Democrats, concentrated in suburban, college-heavy states.">i</span><span class="v" id="aboV">0</span></div><input type="range" id="abo" min="-2" max="2" step="0.5" value="0"></div>
+          <div class="grp"><div class="lab">Foreign-policy crisis <span class="info" title="A major international crisis or war. NEUTRAL = 0. Positive = a 'rally around the flag' effect helping the incumbent party; negative = a crisis that damages it.">i</span><span class="v" id="crisisV">0</span></div><input type="range" id="crisis" min="-2" max="2" step="0.5" value="0"></div>
+          <div class="grp" style="margin-bottom:0"><div class="lab">October surprise <span class="info" title="A generic late-breaking shock (scandal, event, news). NEUTRAL = 0. Positive helps Republicans, negative helps Democrats.">i</span><span class="v" id="surpV">0</span></div><input type="range" id="surp" min="-3" max="3" step="0.5" value="0"></div>
+        </details>
+      </div>
+
+      <div class="card">
+        <h3>⑤ Scenarios</h3>
+        <p class="sub">Jump to a preset, share your exact scenario, or reset.</p>
+        <div class="grp"><div class="lab">Preset</div><select id="preset">
+          <option value="">— choose a scenario —</option>
+          <option value="base">Baseline (neutral)</option>
+          <option value="recession">2028 recession</option>
+          <option value="boom">Economic boom</option>
+          <option value="dwave">Democratic wave</option>
+          <option value="rwave">MAGA base surge</option>
+          <option value="repeat">Repeat of 2024</option>
+        </select></div>
+        <div class="btnrow"><button class="btn" id="sharebtn">🔗 Copy share link</button></div>
+        <div class="btnrow"><button class="btn ghost" id="reset">↺ Reset to baseline</button></div>
+      </div>
+    </aside>
+
+    <div class="rescol">
+      <div class="verdict">
+        <div class="vtop">
+          <div class="vside d"><div class="nm" id="dName">Buttigieg</div><div class="party">Democrat</div><div class="ev" id="dEV">226</div></div>
+          <div class="vmid"><div class="w">to win</div><div class="num">270</div></div>
+          <div class="vside r"><div class="nm" id="rName">Vance</div><div class="party">Republican</div><div class="ev" id="rEV">312</div></div>
+        </div>
+        <div class="evbar"><div class="bd" id="barD"></div><div class="br" id="barR"></div><div class="m270"></div></div>
+        <div class="needle">
+          <svg id="gauge" width="150" height="88" viewBox="0 0 150 88"></svg>
+          <div class="needleinfo"><div class="big" id="pWin">—</div><div class="cap" id="pWinL">chance of winning</div>
+            <div class="cap" style="margin-top:6px" id="ciLine">80% range: —</div></div>
+        </div>
+        <div class="prob">
+          <div class="stat"><div class="big tnum" id="pNat">—</div><div class="cap">nat. popular vote</div></div>
+          <div class="stat"><div class="big" id="pTip">—</div><div class="cap">tipping-point state</div></div>
+          <div class="stat"><div class="big" id="pComp">—</div><div class="cap">competitive states</div></div>
+          <div class="stat"><div class="big" id="pSplit">—</div><div class="cap">EC/popular split odds</div></div>
+        </div>
+      </div>
+
+      <div class="summary"><div class="h">The model's read</div><p id="autoSummary">—</p></div>
+
+      <div class="mapcard">
+        <div class="maphead">
+          <h3 id="mapTitle">Projected electoral map</h3>
+          <div class="modeset" id="mapmode">
+            <button data-m="margin" class="on">Margin</button>
+            <button data-m="prob">Win %</button>
+            <button data-m="flip">Flips</button>
+            <button data-m="path">Path to 270</button>
+          </div>
+        </div>
+        <svg class="usmap" id="map" viewBox="0 0 960 560" role="img" aria-label="Interactive US electoral map"></svg>
+        <div class="leg" id="leg"></div>
+        <div class="pathnote" id="pathnote" hidden>In <b>Path to 270</b> mode, click tossup states to assign a winner and watch each side's total. Safe states are locked; starred states are must-wins.</div>
+      </div>
+
+      <div class="reason" id="reason">
+        <p class="empty">Click any state on the map to see how the model builds its call — the fundamentals, the demographic math, its voting history, and exactly what would flip it.</p>
+      </div>
+
+      <div class="card histwrap">
+        <h3>Distribution of outcomes</h3>
+        <p class="sub" id="histSub">Across 2,001 simulated elections with correlated, polling-style error. Red bars = GOP totals at or above 270.</p>
+        <div class="hist" id="hist"></div>
+        <div class="histaxis"><span>160</span><span>220</span><span>270</span><span>320</span><span>400</span></div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="history" class="alt gut"><div class="wrap">
+  <div class="eyebrow">The long view</div>
+  <h2 class="secttl">Every election since 1960</h2>
+  <p class="lead">Drag the year to replay the real electoral map of any modern election, or switch to <b>Swing</b> to see how each state moved from one election to the next — the Southern realignment, the Blue Wall, the 2016 Rust Belt break. Click a state for its full voting history. (1960 is the first election with all 50 states.)</p>
+  <div class="card" style="margin-top:18px">
+    <div class="histctl">
+      <div class="yrbig" id="yrBig">2024</div>
+      <div style="flex:1;min-width:180px">
+        <input type="range" id="yearSlider" min="0" max="16" step="1" value="16">
+        <div class="ticks"><span>1960</span><span>1988</span><span>2024</span></div>
+      </div>
+      <div class="histmodes" id="histmodes"><button data-hm="result" class="on">Result</button><button data-hm="swing">Swing vs. prev</button></div>
+    </div>
+    <div class="histbanner" id="histBanner"></div>
+    <svg class="usmap" id="histmap" viewBox="0 0 960 560" role="img" aria-label="Historical US electoral map" style="margin-top:8px"></svg>
+    <div class="leg" id="histleg"></div>
+  </div>
+  <div class="twocol">
+    <div class="card"><h3 style="font-size:16px">National popular-vote margin, 1960–2024</h3><p class="sub">Positive = Republican margin, negative = Democratic. Hover the forecast map's states for how the model sees 2028 against this history.</p><div class="pvtrend"><svg id="pvtrend"></svg></div></div>
+    <div class="card"><h3 style="font-size:16px" id="streakTitle">State spotlight</h3><p class="sub" id="streakSub">Click a state on the historical map to see its streaks and bellwether record.</p><div class="streaks" id="streaks"><span class="empty">No state selected.</span></div></div>
+  </div>
+</div></section>
+
+<section id="candidates" class="gut"><div class="wrap">
+  <div class="eyebrow">The field</div>
+  <h2 class="secttl">Fourteen candidates, real profiles</h2>
+  <p class="lead">Nobody has announced for 2028, so this is the plausible field by current polling. Each candidate is modeled on four traits that actually move votes — ideology, net favorability, home-state pull, and demographic appeal. Click a card for a full profile, or use it to drop that candidate into the forecast.</p>
+  <div class="pickrow"><span class="tag">Now running</span> <span id="matchLine">Vance (R) vs. Buttigieg (D)</span></div>
+  <div class="field"><h3>Republicans <span class="pq" style="background:var(--r-deep)">GOP</span></h3><div class="cgrid" id="rcards"></div></div>
+  <div class="field"><h3>Democrats <span class="pq" style="background:var(--d-deep)">DEM</span></h3><div class="cgrid" id="dcards"></div></div>
+  <div class="twocol">
+    <div class="card"><h3 style="font-size:16px">Electability matrix</h3><p class="sub">Baseline Republican electoral votes for every possible matchup, under neutral national conditions. Deeper red = a stronger GOP result; deeper blue = a stronger Democratic one. Rows are Republicans, columns Democrats.</p><div class="matrix" id="matrix"></div></div>
+    <div class="card"><h3 style="font-size:16px">The field at a glance</h3><p class="sub">Every candidate by ideology (left ↔ right) and net favorability (unpopular ↕ popular). The upper-middle is the electoral sweet spot: popular and moderate.</p><div class="scatter"><svg id="scatter"></svg></div></div>
+  </div>
+  <p class="srcnote">Photos: official U.S. government portraits (public domain) and Wikimedia Commons images — full credits in the <a href="#data">Data &amp; sources</a> section. Candidate trait values are the author's estimates of public figures and will change as the real field forms.</p>
+</div></section>
+
+<section id="model" class="alt gut"><div class="wrap">
+  <div class="eyebrow">Under the hood</div>
+  <h2 class="secttl">How the model thinks</h2>
+  <p class="lead">This isn't a lookup table. It mirrors how professional forecasters build an election forecast — Abramowitz's "Time for Change," Hibbs's "Bread and Peace," and the simulation approach of outlets like 538 and The Economist — in four layers, every one of them transparent.</p>
+  <div class="steps">
+    <div class="step"><div class="no">LAYER 01</div><h4>Fundamentals → national vote</h4><p>The economy and presidential approval set an expected national popular-vote margin for the party in power (Republicans, who won in 2024) — before any state is drawn.</p></div>
+    <div class="step"><div class="no">LAYER 02</div><h4>Demographic electorate</h4><p>Each state is a stack of five voter blocks — non-college white, college white, Black, Latino, Asian/other — each with a real population share, turnout, and partisan lean. Candidate appeal and turnout shifts act <i>through</i> these blocks.</p></div>
+    <div class="step"><div class="no">LAYER 03</div><h4>Calibration to 2024</h4><p>Every state is anchored to its <b>real 2024 result</b>, so the model predicts <i>changes</i> from reality and never drifts into fantasy maps.</p></div>
+    <div class="step"><div class="no">LAYER 04</div><h4>Monte Carlo uncertainty</h4><p>2,001 simulated elections add correlated national error plus state-level noise, producing win probabilities, a range of outcomes, and the tipping-point state.</p></div>
+  </div>
+  <div class="eq">
+    <b>National margin (GOP − Dem)</b> = 1.5 + 0.30·approval + 0.9·(GDP−2.2) − 0.8·(unemp−4.2) − 0.7·(inflation−2.5)<br>
+    &nbsp;&nbsp;+ 0.9·(real income−1.8) + 0.5·(real wages−0.5) + 0.04·(sentiment−75) + 0.06·(right-track+20)<br>
+    &nbsp;&nbsp;− 0.5·generic ballot − 1.5·(thermostatic−0.5) − 0.4·(party-ID−2) − abortion + 0.8·crisis + Oct. surprise + 0.4·ad edge<br>
+    &nbsp;&nbsp;+ 0.10·(favorability<sub>R</sub>−favorability<sub>D</sub>) − 1.5·(|ideology<sub>R</sub>|−|ideology<sub>D</sub>|)
+    <br><br><b>State margin</b> = margin<sub>2024</sub> + elasticity·(national shift) + demographic &amp; turnout Δ + candidate-appeal Δ + home-state bonus
+  </div>
+  <h3 style="font-size:18px;margin-top:24px">What moves the needle most</h3>
+  <p class="sub" style="max-width:66ch">A sensitivity test: holding everything else at your current scenario, how many electoral votes swing when each input moves across a typical range. Longer bar = the outcome is more sensitive to that factor right now.</p>
+  <div class="tornado" id="tornado"></div>
+  <h3 style="font-size:18px;margin-top:26px">The economic climate presets, defined</h3>
+  <div class="scrollx"><table class="tbl"><thead><tr><th>Climate</th><th>GDP growth</th><th>Unemployment</th><th>Inflation</th><th>What it means</th></tr></thead><tbody id="econTable"></tbody></table></div>
+  <h3 style="font-size:18px;margin-top:26px">Glossary</h3>
+  <div class="glossary">
+    <dl class="gdef"><dt>Two-party margin</dt><dd>The gap between the two major parties, ignoring third parties. "R+3" means the Republican leads by 3 points.</dd></dl>
+    <dl class="gdef"><dt>Elasticity</dt><dd>How much a state swings when the national mood shifts. Elastic states (≈1.3) move a lot; inelastic ones (≈0.6) barely budge.</dd></dl>
+    <dl class="gdef"><dt>Tipping-point state</dt><dd>The state that provides the decisive 270th electoral vote when you line states up from most to least favorable. Whoever wins it wins the election.</dd></dl>
+    <dl class="gdef"><dt>Monte Carlo</dt><dd>Running the election thousands of times with random, realistic error to see the <i>range</i> of outcomes, not one guess.</dd></dl>
+    <dl class="gdef"><dt>Credible interval</dt><dd>The "80% range" means 8 in 10 simulations landed between those two electoral-vote totals.</dd></dl>
+    <dl class="gdef"><dt>Fundamentals</dt><dd>The non-campaign basics — the economy, approval, incumbency — that political scientists show predict most of the result.</dd></dl>
+  </div>
+  <div class="limits"><h4>Assumptions &amp; honest limitations</h4><ul>
+    <li>No 2028 polling exists yet — every number is a <b>modeled estimate</b>, not a measurement.</li>
+    <li>Coefficients are illustrative, chosen to reproduce historical relationships; they are not fitted regression weights.</li>
+    <li>Demographic shares approximate the 2024 electorate; candidate traits are author estimates of public figures.</li>
+    <li>Maine and Nebraska are shown winner-take-all for clarity (they actually split by district).</li>
+    <li>The simulation's error size is an assumption; real forecasting error varies by how far out you are.</li>
+  </ul></div>
+  <p class="srcnote">Data sources: U.S. Census ACS (demographics), certified state results (2024 baseline &amp; 1960–2024 history), economic indicators patterned on BEA/BLS/University of Michigan series. See <a href="#data">Data &amp; sources</a>.</p>
+</div></section>
+
+<section id="aiforecast" class="gut"><div class="wrap aif">
+  <div class="eyebrow">The call</div>
+  <h2 class="secttl">How the AI thinks 2028 plays out</h2>
+  <p class="lead">A central-case forecast written from the model's own default run — stated assumptions, the likely nominees, the battleground, and who it thinks wins. Change the scenario on the <a href="#forecast">Forecast</a> tab and this logic moves with it.</p>
+  <div class="callbig"><div class="lbl">Current central-case call</div><div class="who" id="aiWho">—</div><div class="det" id="aiDet">—</div></div>
+  <div id="aiNarr"></div>
+  <h3>The battlegrounds</h3>
+  <p>The handful of states that decide it under the current scenario — each a near-coin-flip where a point of turnout or a debate swing could tip the Electoral College.</p>
+  <div class="keyrace" id="keyRaces"></div>
+  <p class="srcnote" style="margin-top:20px">This narrative is generated from the model's current inputs. It is a reasoned projection, not a prediction of record — read it as "if these assumptions hold, here is the most likely story."</p>
+</div></section>
+
+<section id="data" class="alt gut"><div class="wrap">
+  <div class="eyebrow">Show the work</div>
+  <h2 class="secttl">Data &amp; sources</h2>
+  <p class="lead">Every state's inputs and the model's outputs, exportable. Plus how the fundamentals layer scores past elections, and full credits.</p>
+  <div style="display:flex;gap:8px;align-items:center;margin-top:14px;flex-wrap:wrap"><button class="btn" id="csvbtn" style="flex:none;padding:9px 16px">⬇ Copy / download CSV</button><span class="srcnote" style="margin:0">Click any column header to sort.</span></div>
+  <div class="datatable"><table class="dt" id="dataTable"></table></div>
+
+  <h3 style="font-size:19px;margin-top:30px">Backtest: does the fundamentals layer work?</h3>
+  <p class="lead" style="font-size:15px">Fed each past cycle's real economy and approval, does the model's fundamentals equation call the national winner? Predicted national margin vs. the real result.</p>
+  <div class="btgrid" id="btgrid"></div>
+  <div class="metacard"><h4>Scorecard</h4><p id="btScore" style="font-size:13.5px;color:var(--ink2);margin:0"></p></div>
+
+  <div class="metacard"><h4>Provenance &amp; changelog</h4>
+    <p style="font-size:13px;color:var(--ink2);margin:0 0 6px"><b>Geography:</b> U.S. Census cartographic boundaries (via us-atlas). <b>Demographics:</b> Census ACS estimates. <b>2024 baseline &amp; 1960–2024 winners:</b> certified state results. <b>Economic framing:</b> BEA (GDP, income), BLS (unemployment, CPI), University of Michigan (sentiment).</p>
+    <p style="font-size:13px;color:var(--ink2);margin:0"><b>Changelog:</b> v2.0 — added probabilistic engine, 30+ input signals, 1960–2024 history, candidate profiles with photos, electability matrix, AI Forecast. v1.0 — deterministic state map.</p>
+  </div>
+
+  <div class="metacard"><h4>Photo credits</h4>
+    <p style="font-size:12px;color:var(--muted);margin:0 0 6px">Portraits are U.S. government official photos (public domain) or Wikimedia Commons images, used for educational commentary. Source pages:</p>
+    <div class="credits" id="credits"></div>
+  </div>
+</div></section>
+
+<footer class="gut"><div class="wrap">
+  <p class="disc"><b>How to read this.</b> Road to 270 is a teaching model and a hypothetical — a 2028 built to be interrogated, not a prediction of record. No 2028 polling exists yet; every number is a modeled estimate. State baselines are real <b>2024 certified results</b>; the historical maps are real results 1960–2024; demographic shares approximate the 2024 electorate; coefficients are illustrative. County-level zoom and live polling/market feeds are planned next. Built with Claude.</p>
+</div></footer>
+
+<div class="tip" id="tip"></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet" style="position:relative"><button class="closex" id="closex" aria-label="Close">✕</button><div id="sheetContent"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+/* ============================ DATA ============================ */
+const N_SIM=2001;
+const LEAN={wnc:32, wc:-7, blk:-72, lat:-14, asn:-20};
+const GK=["wnc","wc","blk","lat","asn"];
+const STATES=[
+["AL","Alabama",9,30,.6,"01",[.50,.22,.25,.02,.03]],["AK","Alaska",3,13,.7,"02",[.55,.25,.03,.05,.12]],
+["AZ","Arizona",11,5.5,1.3,"04",[.38,.30,.04,.24,.06]],["AR","Arkansas",6,28,.6,"05",[.62,.20,.14,.05,.03]],
+["CA","California",54,-20,.7,"06",[.25,.33,.05,.28,.14]],["CO","Colorado",10,-11,1,"08",[.44,.35,.04,.15,.04]],
+["CT","Connecticut",7,-14.5,.7,"09",[.40,.40,.09,.09,.07]],["DE","Delaware",3,-15,.7,"10",[.48,.28,.18,.05,.04]],
+["DC","D.C.",3,-85,.5,"11",[.12,.32,.44,.08,.05]],["FL","Florida",30,13,1.1,"12",[.35,.31,.13,.24,.08]],
+["GA","Georgia",16,2.2,1.3,"13",[.38,.30,.28,.05,.06]],["HI","Hawaii",4,-23,.6,"15",[.25,.25,.02,.08,.40]],
+["ID","Idaho",4,37,.6,"16",[.68,.23,.01,.06,.03]],["IL","Illinois",19,-11,.8,"17",[.45,.30,.14,.11,.06]],
+["IN","Indiana",11,19,.8,"18",[.60,.26,.09,.05,.03]],["IA","Iowa",6,13,1,"19",[.66,.26,.03,.04,.03]],
+["KS","Kansas",6,16,.7,"20",[.62,.26,.05,.06,.03]],["KY","Kentucky",8,30,.6,"21",[.60,.22,.07,.04,.07]],
+["LA","Louisiana",8,22,.6,"22",[.45,.20,.30,.03,.03]],["ME","Maine",4,-7,1,"23",[.72,.24,.01,.01,.03]],
+["MD","Maryland",10,-29,.6,"24",[.35,.30,.28,.05,.09]],["MA","Massachusetts",11,-25,.6,"25",[.35,.45,.07,.08,.08]],
+["MI","Michigan",15,1.4,1.3,"26",[.53,.28,.12,.04,.04]],["MN","Minnesota",10,-4,1.1,"27",[.52,.33,.07,.04,.07]],
+["MS","Mississippi",6,23,.6,"28",[.38,.18,.37,.03,.04]],["MO","Missouri",10,18,.8,"29",[.60,.26,.10,.03,.03]],
+["MT","Montana",4,20,.7,"30",[.72,.22,.01,.03,.03]],["NE","Nebraska",5,20,.7,"31",[.64,.26,.05,.07,.03]],
+["NV","Nevada",6,3,1.3,"32",[.38,.26,.09,.20,.09]],["NH","New Hampshire",4,-2.8,1.1,"33",[.55,.37,.01,.03,.04]],
+["NJ","New Jersey",14,-6,.9,"34",[.35,.33,.13,.17,.11]],["NM","New Mexico",5,-6,1,"35",[.28,.22,.03,.42,.05]],
+["NY","New York",28,-12.6,.7,"36",[.38,.33,.15,.14,.10]],["NC","North Carolina",16,3.2,1.3,"37",[.45,.30,.19,.04,.05]],
+["ND","North Dakota",3,36,.6,"38",[.70,.23,.02,.03,.03]],["OH","Ohio",17,11,1.1,"39",[.57,.28,.10,.03,.03]],
+["OK","Oklahoma",7,34,.6,"40",[.62,.22,.07,.07,.04]],["OR","Oregon",8,-15,.9,"41",[.55,.32,.02,.09,.05]],
+["PA","Pennsylvania",19,1.7,1.3,"42",[.52,.30,.10,.05,.04]],["RI","Rhode Island",4,-14,.7,"44",[.50,.33,.06,.09,.05]],
+["SC","South Carolina",9,18,.8,"45",[.45,.22,.27,.03,.04]],["SD","South Dakota",3,29,.6,"46",[.70,.22,.02,.03,.03]],
+["TN","Tennessee",11,30,.6,"47",[.62,.24,.10,.04,.03]],["TX","Texas",40,14,1.1,"48",[.33,.28,.11,.25,.08]],
+["UT","Utah",6,22,.8,"49",[.60,.30,.01,.07,.05]],["VT","Vermont",3,-32,.6,"50",[.60,.35,.01,.02,.02]],
+["VA","Virginia",13,-5.8,1,"51",[.40,.33,.18,.05,.07]],["WA","Washington",12,-18,.8,"53",[.45,.35,.04,.09,.12]],
+["WV","West Virginia",4,42,.5,"54",[.70,.18,.04,.03,.05]],["WI","Wisconsin",10,.9,1.3,"55",[.58,.30,.06,.04,.03]],
+["WY","Wyoming",3,46,.5,"56",[.72,.22,.01,.04,.02]]
+];
+const FIPS={}, ABBR={};
+STATES.forEach(s=>{FIPS[s[5]]=s;ABBR[s[0]]=s;
+  const g=s[6],sum=g.reduce((a,b)=>a+b,0); s.share={}; GK.forEach((k,i)=>s.share[k]=g[i]/sum);
+  s.baseLean=GK.reduce((a,k)=>a+s.share[k]*LEAN[k],0);
+});
+
+const CANDS=[
+{id:"vance",name:"J.D. Vance",role:"Vice President",p:"R",ideo:.7,fav:-6,home:"OH",age:44,ap:{wnc:3,wc:-1,lat:-2,asn:-1},
+ bio:"Venture capitalist turned senator from Ohio and author of Hillbilly Elegy, elevated to the vice presidency in 2025. A standard-bearer for national populism with deep roots in the industrial Midwest.",
+ str:["Natural fit with non-college white voters","Rust Belt and Appalachian appeal","Incumbent vice-presidential profile"],rsk:["Below-water personal favorability","Weakness with suburban and Latino voters"]},
+{id:"rubio",name:"Marco Rubio",role:"Secretary of State",p:"R",ideo:.5,fav:2,home:"FL",age:57,ap:{lat:4,wnc:-1,wc:1,asn:1},
+ bio:"Longtime Florida senator and the sitting Secretary of State, with a national-security profile and unusual reach into Latino communities for a Republican.",
+ str:["Strongest GOP performer with Latino voters","Locks down Florida","More palatable to suburbanites"],rsk:["Less magnetic with the populist base","Thinner Rust Belt appeal"]},
+{id:"desantis",name:"Ron DeSantis",role:"Governor of Florida",p:"R",ideo:.75,fav:-4,home:"FL",age:49,ap:{wnc:2,lat:1},
+ bio:"Two-term governor of Florida who built a national brand on culture-war fights and pandemic-era contrarianism before a bruising 2024 primary run.",
+ str:["Record of winning a mega-state by landslide","Strong with conservative base"],rsk:["Uneven retail-politics skills","Favorability underwater nationally"]},
+{id:"haley",name:"Nikki Haley",role:"Fmr. UN Ambassador",p:"R",ideo:.35,fav:4,home:"SC",age:54,ap:{wc:3,wnc:-2,asn:2,lat:1},
+ bio:"Former South Carolina governor and UN ambassador, the most moderate and broadly acceptable figure in the GOP field, with crossover appeal to college-educated voters.",
+ str:["Best GOP numbers with suburban/college voters","Highest net favorability in the field","Daughter-of-immigrants profile"],rsk:["Distrusted by the MAGA base","Turnout risk with populists"]},
+{id:"youngkin",name:"Glenn Youngkin",role:"Governor of Virginia",p:"R",ideo:.45,fav:3,home:"VA",age:58,ap:{wc:2,wnc:1},
+ bio:"Private-equity executive who won blue-trending Virginia in 2021 by fusing business-friendly moderation with cultural conservatism.",
+ str:["Suburban-friendly fleece-vest brand","Won a Biden state"],rsk:["Low national name recognition","Untested on a presidential stage"]},
+{id:"cruz",name:"Ted Cruz",role:"U.S. Senator, TX",p:"R",ideo:.85,fav:-8,home:"TX",age:57,ap:{wnc:2,lat:1,wc:-2},
+ bio:"Texas senator and 2016 runner-up, a movement-conservative debater with a hardcore base and famously high negatives.",
+ str:["Deep conservative-movement loyalty","Strong debater and fundraiser"],rsk:["Among the worst favorability in the field","Repels moderates and suburbanites"]},
+{id:"djtjr",name:"Donald Trump Jr.",role:"Businessman",p:"R",ideo:.9,fav:-10,home:"FL",age:48,ap:{wnc:3,wc:-3,lat:-1},
+ bio:"Businessman and the most prominent heir to the MAGA movement, a rally favorite who would run as the keeper of his father's coalition.",
+ str:["Unmatched base enthusiasm","Massive small-dollar network"],rsk:["Deeply polarizing; high floor but low ceiling","Alienates college-educated voters"]},
+{id:"buttigieg",name:"Pete Buttigieg",role:"Fmr. Transportation Sec.",p:"D",ideo:-.4,fav:6,home:"MI",age:46,ap:{wnc:-2,wc:-2,lat:2,blk:1},
+ bio:"Former South Bend mayor and Transportation Secretary, a Midwestern moderate and gifted communicator who relocated to Michigan.",
+ str:["Crossover appeal to white working-class voters","Disciplined messenger on hostile turf","Strong in the industrial Midwest"],rsk:["Softer support among Black and Latino voters","Has never won a big statewide race"]},
+{id:"newsom",name:"Gavin Newsom",role:"Governor of California",p:"D",ideo:-.6,fav:-2,home:"CA",age:61,ap:{wnc:2,wc:-1,lat:-3,blk:-2,asn:-1},
+ bio:"Two-term California governor and prolific fundraiser who has become the party's most aggressive national messenger.",
+ str:["Enormous fundraising and media reach","Energizes the Democratic base and Sun Belt turnout"],rsk:["'California liberal' attack line","Weaker with Rust Belt working-class whites"]},
+{id:"whitmer",name:"Gretchen Whitmer",role:"Governor of Michigan",p:"D",ideo:-.45,fav:4,home:"MI",age:54,ap:{wnc:-2,wc:-2,blk:-1},
+ bio:"Two-term Michigan governor who has won the ultimate swing state twice, with a kitchen-table brand built on roads and manufacturing.",
+ str:["Proven winner in the tipping-point state","Strong with Midwestern working-class voters"],rsk:["Lower national name ID","Less tested with Sun Belt coalitions"]},
+{id:"shapiro",name:"Josh Shapiro",role:"Governor of Pennsylvania",p:"D",ideo:-.4,fav:5,home:"PA",age:52,ap:{wnc:-2,wc:-1,blk:-1},
+ bio:"Popular Pennsylvania governor who won the single most important swing state by double digits, with a reputation as a disciplined pragmatist.",
+ str:["Owns Pennsylvania, the likeliest tipping point","High approval; broad coalition"],rsk:["Less defined nationally","Untested in a brutal primary"]},
+{id:"beshear",name:"Andy Beshear",role:"Governor of Kentucky",p:"D",ideo:-.35,fav:5,home:"KY",age:47,ap:{wnc:-3,wc:-1},
+ bio:"Two-term Democratic governor of deep-red Kentucky, proof of unusual crossover appeal with rural and working-class white voters.",
+ str:["Exceptional Appalachian/rural crossover","Folksy, broadly likable brand"],rsk:["Thin national profile","More conservative than the primary base"]},
+{id:"aoc",name:"Alexandria Ocasio-Cortez",role:"U.S. Rep., NY",p:"D",ideo:-.85,fav:-6,home:"NY",age:36,ap:{wnc:3,lat:-3,blk:-1},
+ bio:"New York congresswoman and the most prominent figure on the party's left, a fundraising and turnout powerhouse among young and Latino voters.",
+ str:["Electrifies young and Latino turnout","Unrivaled small-dollar fundraising"],rsk:["Polarizing; weak with white working class","'Socialist' attack line in swing states"]},
+{id:"harris",name:"Kamala Harris",role:"Fmr. Vice President",p:"D",ideo:-.55,fav:-3,home:"CA",age:63,ap:{blk:-3,asn:-2,lat:-1,wnc:2},
+ bio:"Former vice president and 2024 nominee, with deep strength among Black and Asian voters but carrying the baggage of a narrow 2024 loss.",
+ str:["Strong with Black and Asian coalitions","Fully vetted, known national quantity"],rsk:["Carries 2024 defeat","Weak with white working-class voters"]}
+];
+const C=Object.fromEntries(CANDS.map(c=>[c.id,c]));
+const ECON=[
+ {name:"Deep recession",gdp:-2.5,unemp:7.5,infl:1.0,read:"Sharp contraction — a classic incumbent killer"},
+ {name:"Recession",gdp:-0.5,unemp:6.0,infl:2.0,read:"Mild downturn, rising joblessness"},
+ {name:"Sluggish",gdp:1.0,unemp:5.0,infl:3.5,read:"Weak growth with lingering prices"},
+ {name:"Neutral",gdp:2.2,unemp:4.2,infl:2.5,read:"Long-run averages — a coin-flip economy"},
+ {name:"Strong",gdp:3.5,unemp:3.6,infl:2.5,read:"Solid expansion, low unemployment"},
+ {name:"Boom",gdp:4.5,unemp:3.2,infl:2.0,read:"Roaring economy — an incumbent tailwind"}
+];
+const BT=[
+ {yr:2012,inc:"D",gdp:1.3,unemp:8.1,infl:1.7,appr:-0.5,actual:3.9,win:"D",incName:"Obama (D)"},
+ {yr:2016,inc:"D",gdp:1.2,unemp:4.9,infl:1.1,appr:3,actual:2.1,win:"D",note:"PV D, EC R",incName:"Clinton (D)"},
+ {yr:2020,inc:"R",gdp:-9,unemp:8.4,infl:1.2,appr:-10,actual:-4.5,win:"D",incName:"Trump (R)"},
+ {yr:2024,inc:"D",gdp:3.0,unemp:4.1,infl:3.0,appr:-14,actual:-1.5,win:"R",incName:"Harris (D)"}
+];
+const PARAMS=["rnom","dnom","econ","appr","rdi","wage","sent","track","gen","thermo","pid","edu","ad","locecon","t_wnc","t_lat","t_blk","t_yng","abo","crisis","surp"];
+const DEF={rnom:"vance",dnom:"buttigieg",econ:3,appr:2,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1.0,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,abo:0,crisis:0,surp:0};
+let P={...DEF}, sel=null, mapMode="margin", geo=null, SIM=null, HIST=null, histYearIdx=16, histMode="result", histSel=null, forced={};
+
+/* ============================ MODEL ============================ */
+function nationalMargin(){
+  const r=C[P.rnom],d=C[P.dnom];
+  let m=1.5 + 0.30*P.appr + 0.9*(P.gdp-2.2) - 0.8*(P.unemp-4.2) - 0.7*(P.infl-2.5)
+    + 0.9*(P.rdi-1.8) + 0.5*(P.wage-0.5) + 0.04*(P.sent-75) + 0.06*(P.track+20)
+    - 0.5*P.gen - 1.5*(P.thermo-0.5) - 0.4*(P.pid-2) - 1.0*P.abo + 0.8*P.crisis + 1.0*P.surp + 0.4*P.ad;
+  m += 0.10*(r.fav-d.fav);
+  m += -1.5*(Math.abs(r.ideo)-Math.abs(d.ideo));
+  return m;
+}
+function stateDelta(s){
+  const r=C[P.rnom],d=C[P.dnom];
+  const tshift={wnc:P.t_wnc,lat:P.t_lat,blk:P.t_blk,asn:0,wc:0};
+  let w={},wsum=0;
+  GK.forEach(k=>{const mult=1+(tshift[k]||0)/100*3; w[k]=s.share[k]*mult; wsum+=w[k];});
+  const leanAdj={};
+  GK.forEach(k=>{ let base=LEAN[k]; if(k==="wnc"||k==="wc") base=base*P.edu; leanAdj[k]=base+(r.ap[k]||0)+(d.ap[k]||0); });
+  let wLean=0; GK.forEach(k=>{ wLean+=(w[k]/wsum)*leanAdj[k]; });
+  let demoDelta=wLean-s.baseLean;
+  demoDelta -= P.t_yng*0.12;
+  demoDelta -= P.abo*s.share.wc*1.5;
+  if(P.locecon){ const ec=0.9*(P.gdp-2.2)+0.9*(P.rdi-1.8)-0.8*(P.unemp-4.2); demoDelta += ec*(s.share.wnc-0.42)*1.3; }
+  let home=0; if(r.home===s[0])home+=2.5; if(d.home===s[0])home-=2.5;
+  return demoDelta+home;
+}
+function stateMu(s,natM){ return s[3]+s[4]*(natM-1.5)+stateDelta(s); }
+let _sp=null;
+function gauss(){ if(_sp!=null){const v=_sp;_sp=null;return v;} let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); const r=Math.sqrt(-2*Math.log(u)); _sp=r*Math.sin(2*Math.PI*v); return r*Math.cos(2*Math.PI*v); }
+function detEV(){ const natM=nationalMargin(); let rEV=0; STATES.forEach(s=>{ if(stateMu(s,natM)>0)rEV+=s[2]; }); return rEV; }
+function runModel(){
+  const natM=nationalMargin();
+  const mus=STATES.map(s=>({s,mu:stateMu(s,natM)}));
+  let dEV=0,rEV=0; mus.forEach(o=>{ if(o.mu>0)rEV+=o.s[2]; else dEV+=o.s[2]; });
+  const SIG_NAT=2.6,SIG_ST=2.0;
+  let rWins=0,evCounts=new Array(539).fill(0),splits=0,sum=0,sumsq=0;
+  const tipTally={}, winProb=mus.map(()=>0);
+  for(let t=0;t<N_SIM;t++){
+    const en=gauss()*SIG_NAT; let rev=0; const trial=[];
+    mus.forEach((o,i)=>{ const m=o.mu+o.s[4]*en+gauss()*SIG_ST; if(m>0){rev+=o.s[2];winProb[i]++;} trial.push({ev:o.s[2],m,a:o.s[0]}); });
+    if(rev>=270)rWins++; evCounts[rev]++; sum+=rev; sumsq+=rev*rev;
+    const pv=natM+en; if((pv>0)!==(rev>=270))splits++;
+    trial.sort((a,b)=>b.m-a.m); let acc=0; for(const st of trial){acc+=st.ev; if(acc>=270){tipTally[st.a]=(tipTally[st.a]||0)+1;break;}}
+  }
+  let cum=0,med=0,lo=0,hi=0;
+  for(let e=0;e<=538;e++){cum+=evCounts[e]; if(!lo&&cum>=N_SIM*0.1)lo=e; if(!med&&cum>=N_SIM*0.5)med=e; if(!hi&&cum>=N_SIM*0.9){hi=e;break;}}
+  const mean=sum/N_SIM, sd=Math.sqrt(sumsq/N_SIM-mean*mean);
+  const comp=mus.filter(o=>Math.abs(o.mu)<5).length;
+  let tip=Object.entries(tipTally).sort((a,b)=>b[1]-a[1])[0];
+  SIM={natM,mus,dEV,rEV,rWins,pWin:rWins/N_SIM,evCounts,med,lo,hi,sd,comp,split:splits/N_SIM,winProb:winProb.map(w=>w/N_SIM),tip:tip?tip[0]:"—"};
+  return SIM;
+}
+
+/* ============================ COLORS ============================ */
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function mix(c1,c2,t){const h=x=>{x=x.trim();return [parseInt(x.slice(1,3),16),parseInt(x.slice(3,5),16),parseInt(x.slice(5,7),16)];};const a=h(c1),b=h(c2);return `rgb(${a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(",")})`;}
+function marginFill(m){const a=Math.min(Math.abs(m)/24,1); if(Math.abs(m)<1.2)return cv("--toss"); return m>0?mix(cv("--r-lite"),cv("--r-deep"),a):mix(cv("--d-lite"),cv("--d-deep"),a);}
+function probFill(p){ if(p>0.4&&p<0.6)return cv("--toss"); const a=Math.min(Math.abs(p-0.5)*2,1); return p>0.5?mix(cv("--r-lite"),cv("--r-deep"),a):mix(cv("--d-lite"),cv("--d-deep"),a);}
+
+/* ============================ FORECAST MAP ============================ */
+let mapPaths=null, mapPath=null;
+function drawMap(svgSel,onClick,onHover){
+  const svg=d3.select(svgSel); svg.selectAll("*").remove();
+  const feats=geo.features.filter(f=>FIPS[f.id]);
+  const proj=d3.geoAlbersUsa().fitSize([960,560],{type:"FeatureCollection",features:feats});
+  const path=d3.geoPath(proj); const g=svg.append("g");
+  const sel=g.selectAll("path").data(feats).join("path").attr("class","state").attr("d",path).attr("data-a",f=>FIPS[f.id][0]);
+  if(onClick)sel.on("click",(e,f)=>onClick(FIPS[f.id][0]));
+  if(onHover)sel.on("mousemove",(e,f)=>onHover(e,FIPS[f.id])).on("mouseleave",hideTip);
+  g.selectAll("text").data(feats).join("text").attr("class","lbl").attr("x",f=>path.centroid(f)[0]).attr("y",f=>path.centroid(f)[1]+3).text(f=>FIPS[f.id][0]);
+  return {svg,path};
+}
+function paint(){
+  d3.select("#map").selectAll("path.state").each(function(f){
+    const a=d3.select(this).attr("data-a"); const s=ABBR[a]; const i=STATES.indexOf(s); const o=SIM.mus[i]; let fill;
+    if(mapMode==="margin")fill=marginFill(o.mu);
+    else if(mapMode==="prob")fill=probFill(SIM.winProb[i]);
+    else if(mapMode==="flip"){const flip=(s[3]>0?"R":"D")!==(o.mu>0?"R":"D"); fill=flip?(o.mu>0?cv("--r-deep"):cv("--d-deep")):cv("--bg2");}
+    else{ // path
+      if(forced[a])fill=forced[a]==="R"?cv("--r-deep"):cv("--d-deep");
+      else if(Math.abs(o.mu)>=6)fill=o.mu>0?cv("--r-lite"):cv("--d-lite");
+      else fill=cv("--toss");
+    }
+    d3.select(this).attr("fill",fill).classed("sel",sel===a);
+  });
+}
+
+/* ============================ TOOLTIP ============================ */
+const tip=document.getElementById("tip");
+function fcHover(e,s){ const i=STATES.indexOf(s),o=SIM.mus[i],m=o.mu,p=SIM.winProb[i]; const win=m>0?C[P.rnom].name:C[P.dnom].name;
+  tip.innerHTML=`<b>${s[1]}</b> · ${s[2]} EV<br><span class="mm">${win.split(" ").slice(-1)[0]} ${m>0?'+':''}${m.toFixed(1)}</span><br><span class="mm" style="opacity:.8">GOP win ${(p*100).toFixed(0)}%</span>`;
+  tip.style.opacity=1; tip.style.left=Math.min(e.clientX+14,innerWidth-240)+"px"; tip.style.top=(e.clientY+14)+"px"; }
+function hideTip(){tip.style.opacity=0;}
+
+/* ============================ GAUGE (needle) ============================ */
+function drawGauge(p){ // p = GOP win prob
+  const svg=d3.select("#gauge"); svg.selectAll("*").remove();
+  const cx=75,cy=80,r=62;
+  const arc=(a0,a1,col)=>{ const x0=cx+r*Math.cos(Math.PI-a0*Math.PI),y0=cy-r*Math.sin(Math.PI-a0*Math.PI),x1=cx+r*Math.cos(Math.PI-a1*Math.PI),y1=cy-r*Math.sin(Math.PI-a1*Math.PI);
+    svg.append("path").attr("d",`M ${x0} ${y0} A ${r} ${r} 0 0 1 ${x1} ${y1}`).attr("fill","none").attr("stroke",col).attr("stroke-width",14).attr("stroke-linecap","butt"); };
+  arc(0,0.5,cv("--d-deep")); arc(0.5,1,cv("--r-deep"));
+  // needle at p (0=D side left, 1=R side right)
+  const ang=Math.PI-p*Math.PI; const nx=cx+(r-2)*Math.cos(ang),ny=cy-(r-2)*Math.sin(ang);
+  svg.append("line").attr("x1",cx).attr("y1",cy).attr("x2",nx).attr("y2",ny).attr("stroke",cv("--ink")).attr("stroke-width",3).attr("stroke-linecap","round");
+  svg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",5).attr("fill",cv("--ink"));
+  svg.append("text").attr("x",10).attr("y",cy+4).attr("font-size",9).attr("font-family","var(--mono)").attr("fill",cv("--d-deep")).text("DEM");
+  svg.append("text").attr("x",118).attr("y",cy+4).attr("font-size",9).attr("font-family","var(--mono)").attr("fill",cv("--r-deep")).text("GOP");
+}
+
+/* ============================ RENDER ============================ */
+function render(){
+  runModel(); if(geo)paint();
+  const r=C[P.rnom],d=C[P.dnom];
+  document.getElementById("rName").textContent=r.name; document.getElementById("dName").textContent=d.name;
+  document.getElementById("rEV").textContent=SIM.rEV; document.getElementById("dEV").textContent=SIM.dEV;
+  document.getElementById("barD").style.width=(SIM.dEV/538*100)+"%"; document.getElementById("barR").style.width=(SIM.rEV/538*100)+"%";
+  const winR=SIM.rEV>=270, winName=(winR?r:d).name.split(" ").slice(-1)[0];
+  const pShown=winR?SIM.pWin:1-SIM.pWin;
+  document.getElementById("pWin").textContent=Math.round(pShown*100)+"%";
+  document.getElementById("pWin").style.color=winR?cv("--r-deep"):cv("--d-deep");
+  document.getElementById("pWinL").textContent=winName+" chance of winning";
+  document.getElementById("ciLine").textContent=`80% range: ${SIM.lo}–${SIM.hi} GOP EV`;
+  drawGauge(SIM.pWin);
+  const nm=SIM.natM; document.getElementById("pNat").innerHTML=`<span style="color:${nm>0?cv('--r-deep'):cv('--d-deep')}">${nm>0?'R+':'D+'}${Math.abs(nm).toFixed(1)}</span>`;
+  document.getElementById("pTip").textContent=SIM.tip; document.getElementById("pTip").style.fontSize="20px";
+  document.getElementById("pComp").textContent=SIM.comp;
+  document.getElementById("pSplit").textContent=Math.round(SIM.split*100)+"%";
+  drawHist(); writeSummary(); if(sel)renderReason();
+  document.getElementById("matchLine").textContent=`${r.name} (R) vs. ${d.name} (D)`;
+  updateAIForecast(); updateDataTable();
+}
+function writeSummary(){
+  const r=C[P.rnom],d=C[P.dnom],winR=SIM.rEV>=270,win=(winR?r:d),winEV=winR?SIM.rEV:SIM.dEV,loseEV=winR?SIM.dEV:SIM.rEV;
+  const tipS=ABBR[SIM.tip]; const pw=winR?SIM.pWin:1-SIM.pWin; const conf=pw>0.85?"a clear favorite":pw>0.65?"favored":"a tossup";
+  const p=Math.round(pw*100);
+  let txt=`In this scenario, <b>${win.name}</b> (${win.p==="R"?"R":"D"}) wins <b>${winEV}–${loseEV}</b> in the Electoral College, with a <b>${p}% chance</b> of victory across ${N_SIM.toLocaleString()} simulations — ${conf}. `;
+  txt+=`The national popular vote leans ${SIM.natM>0?'Republican':'Democratic'} by ${Math.abs(SIM.natM).toFixed(1)} points, and <b>${tipS?tipS[1]:SIM.tip}</b> is the tipping-point state. `;
+  txt+=`${SIM.comp} state${SIM.comp===1?'':'s'} ${SIM.comp===1?'is':'are'} genuinely competitive.`;
+  document.getElementById("autoSummary").innerHTML=txt;
+}
+function drawHist(){
+  const host=document.getElementById("hist"); host.innerHTML=""; const lo=160,hi=400,bins=48,bw=(hi-lo)/bins; const counts=new Array(bins).fill(0);
+  for(let e=0;e<=538;e++){ if(SIM.evCounts[e]){ let b=Math.floor((e-lo)/bw); if(b<0)b=0; if(b>=bins)b=bins-1; counts[b]+=SIM.evCounts[e]; } }
+  const max=Math.max(...counts,1);
+  counts.forEach((c,i)=>{ const ev=lo+i*bw; const el=document.createElement("div"); el.className="hb"; el.style.height=(c/max*100)+"%"; el.style.background=ev>=270?cv("--r-mid"):cv("--d-mid"); host.appendChild(el); });
+}
+
+/* ============================ REASONING ============================ */
+function sgn(v){return (v>0?"+":"")+v.toFixed(1);}
+function renderReason(){
+  const box=document.getElementById("reason");
+  if(!sel){box.innerHTML='<p class="empty">Click any state on the map to see how the model builds its call.</p>';return;}
+  const s=ABBR[sel],i=STATES.indexOf(s),o=SIM.mus[i],m=o.mu,p=SIM.winProb[i],r=C[P.rnom],d=C[P.dnom],natM=SIM.natM;
+  const natComp=s[4]*(natM-1.5),delta=stateDelta(s);
+  const factors=[{l:"2024 baseline",v:s[3]},{l:"National climate",v:natComp},{l:"Demographics & turnout",v:delta}].filter(f=>Math.abs(f.v)>=.25);
+  const winP=m>0?"R":"D",win=m>0?r.name:d.name;
+  const comp=Math.abs(m)<1.2?"a dead heat":Math.abs(m)<4?"a true tossup":Math.abs(m)<9?"leaning":"safely";
+  const flip=(s[3]>0?"R":"D")!==winP,vcol=m>0?cv("--r-deep"):cv("--d-deep");
+  let lede=`The model calls <b>${s[1]}</b> <b>${comp}</b> ${winP==="R"?"Republican":"Democratic"} — <span class="m">${win.split(" ").slice(-1)[0]} ${sgn(m)}</span>, with a <span class="m">${(p*100).toFixed(0)}%</span> chance of going Republican. `;
+  lede+= flip?`Under your scenario it <b>flips from its 2024 result</b>. `:`It holds its 2024 side. `;
+  const frows=factors.map(f=>{const a=Math.min(Math.abs(f.v)/26,1)*50,left=f.v>0?50:50-a,col=f.v>0?cv("--r-mid"):cv("--d-mid");
+    return `<div class="frow"><span class="fl">${f.l}</span><span class="ftrack"><span class="fmid"></span><span class="fbar" style="left:${left}%;width:${a}%;background:${col}"></span></span><span class="fv">${sgn(f.v)}</span></div>`;}).join("");
+  const colors={wnc:"#c99a4a",wc:"#4a90c9",blk:"#7a5bb0",lat:"#d2794a",asn:"#4ab08a"},gn={wnc:"Non-col. white",wc:"College white",blk:"Black",lat:"Latino",asn:"Asian/other"};
+  const demo=GK.map(k=>{const pc=s.share[k]*100; return `<span style="width:${pc}%;background:${colors[k]}">${pc>7?pc.toFixed(0):''}</span>`;}).join("");
+  // flip threshold
+  const shift=(-m/s[4]); const dir=shift>0?"toward the GOP":"toward the Democrats";
+  const flipTxt=Math.abs(m)<0.4?`It is essentially tied — the smallest push decides it.`:`It flips if the national environment moves about <b>${Math.abs(shift).toFixed(1)} pts ${dir}</b>.`;
+  // history sparkline
+  const spark=histSparkline(sel);
+  box.innerHTML=`<div class="rh"><span class="st">${s[1]}</span><span class="vd" style="background:${vcol}">${win.split(" ").slice(-1)[0]} ${sgn(m)}</span><span class="ev2">${s[2]} electoral votes</span></div>
+    <p class="lede">${lede}</p><div class="factors">${frows}</div>
+    <div class="flipbox">${flipTxt}</div>
+    ${spark}
+    <div class="demobars">${demo}</div><div class="demolegend">${GK.map(k=>`<span style="color:${colors[k]}">■</span> ${gn[k]}`).join("  ")}</div>`;
+}
+function histSparkline(ab){
+  if(!HIST)return "";
+  const yrs=HIST.years, w=360,h=42,n=yrs.length;
+  const pts=yrs.map((y,i)=>{ const win=HIST.winners[String(y)][ab]; const val=win==="R"?1:win==="D"?-1:0; return {x:i/(n-1)*w, y:h/2 - val*(h/2-4), win}; });
+  const dots=pts.map(pt=>`<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="3" fill="${pt.win==='R'?cv('--r-deep'):pt.win==='D'?cv('--d-deep'):cv('--ind')}"/>`).join("");
+  const line=`<polyline points="${pts.map(pt=>pt.x.toFixed(1)+','+pt.y.toFixed(1)).join(" ")}" fill="none" stroke="var(--line2)" stroke-width="1.5"/>`;
+  const rWins=yrs.filter(y=>HIST.winners[String(y)][ab]==="R").length, dWins=yrs.filter(y=>HIST.winners[String(y)][ab]==="D").length;
+  return `<div class="spark"><svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><line x1="0" y1="${h/2}" x2="${w}" y2="${h/2}" stroke="var(--line)" stroke-dasharray="2 3"/>${line}${dots}</svg>
+    <div class="sparkcap">Voting history 1960–2024 · ${rWins} R, ${dWins} D (top = Republican)</div></div>`;
+}
+
+/* ============================ LEGEND ============================ */
+function drawLeg(){
+  const el=document.getElementById("leg");
+  if(mapMode==="flip")el.innerHTML=`<span class="sw"><i style="background:var(--d-deep)"></i><i style="background:var(--r-deep)"></i> flipped vs. 2024</span><span class="sw"><i style="background:var(--bg2)"></i> held</span>`;
+  else if(mapMode==="path")el.innerHTML=`<span class="sw"><i style="background:var(--d-lite)"></i><i style="background:var(--r-lite)"></i> safe (locked)</span><span class="sw"><i style="background:var(--toss)"></i> tossup — click to assign</span>`;
+  else el.innerHTML=`<span class="sw"><i style="background:var(--d-deep)"></i><i style="background:var(--d-lite)"></i> Dem</span><span class="sw"><i style="background:var(--toss)"></i> Tossup</span><span class="sw"><i style="background:var(--r-lite)"></i><i style="background:var(--r-deep)"></i> Rep</span><span style="margin-left:auto">${mapMode==="prob"?"shade = win probability":mapMode==="margin"?"shade = margin size":""}</span>`;
+}
+function fcClick(a){
+  if(mapMode==="path"){ const s=ABBR[a],i=STATES.indexOf(s),o=SIM.mus[i]; if(Math.abs(o.mu)>=6)return;
+    forced[a]=forced[a]==="R"?"D":forced[a]==="D"?null:"R"; if(!forced[a])delete forced[a]; paint(); updatePathTotals(); return; }
+  sel=a; paint(); renderReason(); document.getElementById("reason").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function updatePathTotals(){
+  let rEV=0,dEV=0; SIM.mus.forEach((o,i)=>{ const a=o.s[0]; let win; if(forced[a])win=forced[a]; else if(Math.abs(o.mu)>=6)win=o.mu>0?"R":"D"; else win=null; if(win==="R")rEV+=o.s[2]; else if(win==="D")dEV+=o.s[2]; });
+  document.getElementById("rEV").textContent=rEV; document.getElementById("dEV").textContent=dEV;
+  document.getElementById("barR").style.width=(rEV/538*100)+"%"; document.getElementById("barD").style.width=(dEV/538*100)+"%";
+}
+
+/* ============================ HISTORY EXPLORER ============================ */
+function drawHistMap(){
+  if(!geo||!HIST)return;
+  const svg=d3.select("#histmap");
+  if(svg.selectAll("path").empty()){ drawMap("#histmap", a=>{histSel=a;renderStreaks();paintHist();}, (e,s)=>histHover(e,s)); }
+  paintHist();
+}
+function paintHist(){
+  const yr=HIST.years[histYearIdx], win=HIST.winners[String(yr)];
+  d3.select("#histmap").selectAll("path.state").each(function(){
+    const a=d3.select(this).attr("data-a"); let fill;
+    if(histMode==="result"){ const w=win[a]; fill=w==="R"?cv("--r-deep"):w==="D"?cv("--d-deep"):cv("--ind"); }
+    else { const prevYr=HIST.years[histYearIdx-1]; if(histYearIdx===0){fill=cv("--bg2");} else { const now=win[a],prev=HIST.winners[String(prevYr)][a]; if(now===prev)fill=cv("--bg2"); else fill=now==="R"?cv("--r-deep"):now==="D"?cv("--d-deep"):cv("--ind"); } }
+    d3.select(this).attr("fill",fill).classed("sel",histSel===a);
+  });
+  const nat=HIST.national[String(yr)];
+  const names={"1960":"Kennedy","1964":"Johnson","1968":"Nixon","1972":"Nixon","1976":"Carter","1980":"Reagan","1984":"Reagan","1988":"G.H.W. Bush","1992":"Clinton","1996":"Clinton","2000":"G.W. Bush","2004":"G.W. Bush","2008":"Obama","2012":"Obama","2016":"Trump","2020":"Biden","2024":"Trump"};
+  document.getElementById("yrBig").textContent=yr;
+  const pv=nat[3];
+  document.getElementById("histBanner").innerHTML= histMode==="swing" && histYearIdx>0
+    ? `Colored states <b>flipped</b> from ${HIST.years[histYearIdx-1]} to <b>${yr}</b>; grey held. ${nat[0]==="R"?'<span style="color:var(--r-deep)">Republican</span>':'<span style="color:var(--d-deep)">Democratic</span>'} win.`
+    : `<b>${yr}:</b> ${names[String(yr)]} (${nat[0]}) wins <b>${nat[1]}–${nat[2]}</b> electoral votes · popular vote ${pv>0?'R+':'D+'}${Math.abs(pv).toFixed(1)}${nat[4]?' · '+nat[4]:''}`;
+  document.getElementById("histleg").innerHTML = histMode==="swing"
+    ? `<span class="sw"><i style="background:var(--r-deep)"></i> flipped R</span><span class="sw"><i style="background:var(--d-deep)"></i> flipped D</span><span class="sw"><i style="background:var(--bg2)"></i> held</span>`
+    : `<span class="sw"><i style="background:var(--d-deep)"></i> Democratic</span><span class="sw"><i style="background:var(--r-deep)"></i> Republican</span><span class="sw"><i style="background:var(--ind)"></i> third party</span>`;
+}
+function histHover(e,s){ const yr=HIST.years[histYearIdx],w=HIST.winners[String(yr)][s[0]]; tip.innerHTML=`<b>${s[1]}</b> · ${yr}<br><span class="mm">${w==="R"?"Republican":w==="D"?"Democratic":"Third party"}</span>`; tip.style.opacity=1; tip.style.left=Math.min(e.clientX+14,innerWidth-200)+"px"; tip.style.top=(e.clientY+14)+"px"; }
+function renderStreaks(){
+  if(!histSel){return;} const s=ABBR[histSel]; const yrs=HIST.years;
+  const seq=yrs.map(y=>HIST.winners[String(y)][histSel]);
+  const rW=seq.filter(x=>x==="R").length,dW=seq.filter(x=>x==="D").length,iW=seq.filter(x=>x==="I").length;
+  // current streak
+  let streak=1,last=seq[seq.length-1]; for(let i=seq.length-2;i>=0;i--){if(seq[i]===last)streak++;else break;}
+  // bellwether: times matched national winner
+  let match=0; yrs.forEach(y=>{ if(HIST.winners[String(y)][histSel]===HIST.national[String(y)][0])match++; });
+  // longest streak any party
+  let longest=1,run=1; for(let i=1;i<seq.length;i++){ if(seq[i]===seq[i-1]){run++;longest=Math.max(longest,run);} else run=1; }
+  document.getElementById("streakTitle").textContent=s[1];
+  document.getElementById("streakSub").textContent=`${s[2]} electoral votes · voting record 1960–2024`;
+  document.getElementById("streaks").innerHTML=
+    `Since 1960: <b>${rW}</b> Republican, <b>${dW}</b> Democratic${iW?`, <b>${iW}</b> third-party`:''} wins.<br>
+     Current streak: <b>${streak}</b> straight for the <b>${last==="R"?"Republicans":last==="D"?"Democrats":"third party"}</b>.<br>
+     Longest streak for one party: <b>${longest}</b> elections.<br>
+     Bellwether record: picked the national winner <b>${match} of ${yrs.length}</b> times (${Math.round(match/yrs.length*100)}%).`;
+}
+function drawPVTrend(){
+  const svg=d3.select("#pvtrend"); svg.selectAll("*").remove();
+  const W=520,H=120,pad=22; svg.attr("viewBox",`0 0 ${W} ${H}`);
+  const yrs=HIST.years, vals=yrs.map(y=>HIST.national[String(y)][3]); const mx=Math.max(...vals.map(Math.abs),10);
+  const x=i=>pad+i/(yrs.length-1)*(W-2*pad), y=v=>H/2 - v/mx*(H/2-pad);
+  svg.append("line").attr("x1",pad).attr("y1",H/2).attr("x2",W-pad).attr("y2",H/2).attr("stroke",cv("--line2")).attr("stroke-dasharray","2 3");
+  svg.append("text").attr("x",pad).attr("y",14).attr("font-size",9).attr("fill",cv("--r-deep")).attr("font-family","var(--mono)").text("R+");
+  svg.append("text").attr("x",pad).attr("y",H-6).attr("font-size",9).attr("fill",cv("--d-deep")).attr("font-family","var(--mono)").text("D+");
+  svg.append("polyline").attr("points",yrs.map((_,i)=>x(i)+','+y(vals[i])).join(" ")).attr("fill","none").attr("stroke",cv("--accent")).attr("stroke-width",2);
+  yrs.forEach((yv,i)=>{ svg.append("circle").attr("cx",x(i)).attr("cy",y(vals[i])).attr("r",2.6).attr("fill",vals[i]>0?cv("--r-deep"):cv("--d-deep")); });
+  [0,4,8,12,16].forEach(i=>{ if(i<yrs.length) svg.append("text").attr("x",x(i)).attr("y",H-4).attr("font-size",8).attr("text-anchor","middle").attr("fill",cv("--muted")).attr("font-family","var(--mono)").text(yrs[i]); });
+}
+
+/* ============================ CANDIDATES ============================ */
+function candCard(c){
+  const picked=(c.p==="R"&&P.rnom===c.id)||(c.p==="D"&&P.dnom===c.id);
+  const ideoL=c.ideo< -.6?"Progressive":c.ideo<-.3?"Liberal":c.ideo<0?"Moderate lib.":c.ideo<.4?"Moderate con.":c.ideo<.7?"Conservative":"Very cons.";
+  return `<div class="cc ${picked?'pick':''}" data-cid="${c.id}">
+    <img class="port" src="img/${c.id}.jpg" alt="${c.name}" loading="lazy">
+    <div class="meta"><div class="nm">${c.name}</div><div class="role">${c.role}</div>
+    <div class="tags"><span class="t">${ideoL}</span><span class="t">fav ${c.fav>0?'+':''}${c.fav}</span><span class="pickbadge">running</span></div></div></div>`;
+}
+function drawCards(){
+  document.getElementById("rcards").innerHTML=CANDS.filter(c=>c.p==="R").map(candCard).join("");
+  document.getElementById("dcards").innerHTML=CANDS.filter(c=>c.p==="D").map(candCard).join("");
+  document.querySelectorAll(".cc").forEach(el=>el.addEventListener("click",()=>openProfile(el.dataset.cid)));
+}
+function openProfile(cid){
+  const c=C[cid], pcol=c.p==="R"?cv("--r-deep"):cv("--d-deep");
+  // ideology axis with peers
+  const peers=CANDS.map(x=>`<span class="peer" style="left:${(x.ideo+1)/2*100}%" title="${x.name}"></span>`).join("");
+  const mePos=(c.ideo+1)/2*100;
+  // coalition
+  const gn={wnc:"Non-col. white",wc:"College white",blk:"Black",lat:"Latino",asn:"Asian/other"};
+  const coal=GK.map(k=>{ const v=(c.ap[k]||0); const a=Math.min(Math.abs(v)/4,1)*50,left=v>0?50:50-a,col=v>0?cv("--r-mid"):cv("--d-mid");
+    const lbl=v>0?"+"+v:v; return `<div class="crow"><span class="cl">${gn[k]}</span><span class="ctrack"><span class="cmid"></span><span class="cbar" style="left:${left}%;width:${a}%;background:${col}"></span></span><span class="cv">${v===0?'·':lbl}</span></div>`;}).join("");
+  // if nominated baseline
+  const save={...P}; if(c.p==="R")P.rnom=c.id; else P.dnom=c.id; const sim=runModel(); const gopW=sim.pWin>=0.5;
+  const ifTxt=`If <b>${c.name}</b> were the ${c.p==="R"?"Republican":"Democratic"} nominee against ${c.p==="R"?C[P.dnom].name:C[P.rnom].name} under the current scenario: <b>${sim.rEV}–${sim.dEV}</b>, ${gopW?C[P.rnom].name.split(" ").slice(-1)[0]:C[P.dnom].name.split(" ").slice(-1)[0]} favored (${Math.round((gopW?sim.pWin:1-sim.pWin)*100)}%).`;
+  P=save; runModel();
+  const homeS=ABBR[c.home];
+  document.getElementById("sheetContent").innerHTML=`
+    <div class="top"><img src="img/${c.id}.jpg" alt="${c.name}"><div><div class="nm">${c.name}</div><div class="role">${c.role} · age ${c.age} · home: ${homeS?homeS[1]:c.home}</div><span class="party" style="background:${pcol}">${c.p==="R"?"Republican":"Democrat"}</span></div></div>
+    <div class="body">
+      <p class="bio">${c.bio}</p>
+      <div><h5 style="margin:0 0 2px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Ideology vs. the field</h5>
+        <div class="axis">${peers}<span class="me" style="left:${mePos}%"></span></div>
+        <div class="axislbl"><span>Progressive left</span><span>Moderate</span><span>Populist right</span></div></div>
+      <div><h5 style="margin:0 0 6px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)">Demographic edge (vs. a generic nominee)</h5><div class="coal">${coal}</div>
+        <div class="demolegend" style="margin-top:6px">Blue = pulls the group Democratic · Red = pulls it Republican</div></div>
+      <div class="srbox"><div><h5>Strengths</h5><ul>${c.str.map(x=>`<li>${x}</li>`).join("")}</ul></div><div><h5>Risks</h5><ul>${c.rsk.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>
+      <div class="ifnom">${ifTxt}</div>
+      <div class="btnrow"><button class="btn" id="useCand" style="flex:none;padding:9px 16px">Put ${c.name.split(" ").slice(-1)[0]} on the ${c.p==="R"?"GOP":"Dem"} ticket →</button></div>
+    </div>`;
+  document.getElementById("modal").classList.add("open");
+  document.getElementById("useCand").addEventListener("click",()=>{ if(c.p==="R"){P.rnom=c.id;document.getElementById("rnom").value=c.id;} else {P.dnom=c.id;document.getElementById("dnom").value=c.id;} closeModal(); drawCards(); render(); document.getElementById("forecast").scrollIntoView({behavior:"smooth"}); });
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");}
+function drawMatrix(){
+  const R=CANDS.filter(c=>c.p==="R"),D=CANDS.filter(c=>c.p==="D"); const save={...P};
+  // neutral conditions
+  Object.assign(P,{econ:3,appr:0,gdp:2.2,unemp:4.2,infl:2.5,rdi:1.8,wage:0.5,sent:75,track:-20,gen:0,thermo:0.5,pid:2,edu:1,ad:0,locecon:0,t_wnc:0,t_lat:0,t_blk:0,t_yng:0,abo:0,crisis:0,surp:0});
+  let html="<table class='mx'><thead><tr><th></th>"+D.map(d=>`<th>${d.name.split(" ").slice(-1)[0]}</th>`).join("")+"</tr></thead><tbody>";
+  R.forEach(r=>{ html+=`<tr><th class="rowh">${r.name.split(" ").slice(-1)[0]}</th>`;
+    D.forEach(d=>{ P.rnom=r.id;P.dnom=d.id; const ev=detEV(); const col=marginFill((ev-269)/8); html+=`<td style="background:${col}" title="${r.name} ${ev} – ${538-ev} ${d.name}">${ev}</td>`; });
+    html+="</tr>"; });
+  html+="</tbody></table>"; document.getElementById("matrix").innerHTML=html;
+  P=save; runModel();
+}
+function drawScatter(){
+  const svg=d3.select("#scatter"); svg.selectAll("*").remove(); const W=520,H=300,pad=34; svg.attr("viewBox",`0 0 ${W} ${H}`);
+  const x=iv=>pad+(iv+1)/2*(W-2*pad), y=fv=>H-pad-(fv+20)/40*(H-2*pad);
+  svg.append("line").attr("x1",W/2).attr("y1",pad-8).attr("x2",W/2).attr("y2",H-pad).attr("stroke",cv("--line")).attr("stroke-dasharray","2 3");
+  svg.append("line").attr("x1",pad).attr("y1",y(0)).attr("x2",W-pad).attr("y2",y(0)).attr("stroke",cv("--line")).attr("stroke-dasharray","2 3");
+  svg.append("text").attr("x",pad).attr("y",H-8).attr("font-size",9).attr("fill",cv("--muted")).attr("font-family","var(--mono)").text("← left");
+  svg.append("text").attr("x",W-pad).attr("y",H-8).attr("font-size",9).attr("text-anchor","end").attr("fill",cv("--muted")).attr("font-family","var(--mono)").text("right →");
+  svg.append("text").attr("x",6).attr("y",pad).attr("font-size",9).attr("fill",cv("--muted")).attr("font-family","var(--mono)").text("popular");
+  svg.append("text").attr("x",6).attr("y",H-pad+4).attr("font-size",9).attr("fill",cv("--muted")).attr("font-family","var(--mono)").text("unpop.");
+  CANDS.forEach(c=>{ const g=svg.append("g").style("cursor","pointer").on("click",()=>openProfile(c.id));
+    g.append("circle").attr("cx",x(c.ideo)).attr("cy",y(c.fav)).attr("r",6).attr("fill",c.p==="R"?cv("--r-deep"):cv("--d-deep")).attr("stroke",cv("--panel")).attr("stroke-width",1.5);
+    g.append("text").attr("x",x(c.ideo)).attr("y",y(c.fav)-9).attr("font-size",8.5).attr("text-anchor","middle").attr("fill",cv("--ink2")).attr("font-family","var(--mono)").text(c.name.split(" ").slice(-1)[0]); });
+}
+
+/* ============================ MODEL: TORNADO + TABLES ============================ */
+function drawTornado(){
+  const base=detEV(); const save={...P};
+  const tests=[
+    ["Economy (recession↔boom)","econ",0,5,v=>setEconP(v)],
+    ["Presidential approval","appr",-25,15],
+    ["Education polarization","edu",0.5,1.8],
+    ["Generic ballot","gen",-8,8],
+    ["Non-college white turnout","t_wnc",-6,6],
+    ["Latino turnout","t_lat",-6,6],
+    ["Real income growth","rdi",-2,5],
+    ["Nominee quality (fav)","appr",0,0] // placeholder removed below
+  ].slice(0,7);
+  const rows=tests.map(([label,key,lo,hi,fn])=>{
+    let a,b;
+    if(fn){fn(lo);a=detEV(); fn(hi);b=detEV(); setEconP(P.econ);}
+    else {P[key]=lo;a=detEV(); P[key]=hi;b=detEV(); P[key]=save[key];}
+    Object.assign(P,save);
+    return {label,swing:Math.abs(b-a)};
+  });
+  Object.assign(P,save); setEconP(P.econ);
+  const max=Math.max(...rows.map(r=>r.swing),1); rows.sort((a,b)=>b.swing-a.swing);
+  document.getElementById("tornado").innerHTML=rows.map(r=>`<div class="tnrow"><span class="tl">${r.label}</span><span class="tntrack"><span class="tnbar" style="width:${r.swing/max*100}%"></span></span><span class="tnv">${r.swing} EV</span></div>`).join("");
+}
+function setEconP(i){ const e=ECON[i]; P.econ=i; P.gdp=e.gdp; P.unemp=e.unemp; P.infl=e.infl; }
+function drawEconTable(){ document.getElementById("econTable").innerHTML=ECON.map(e=>`<tr><td><b>${e.name}</b></td><td class="mono">${e.gdp>0?'+':''}${e.gdp.toFixed(1)}%</td><td class="mono">${e.unemp.toFixed(1)}%</td><td class="mono">${e.infl.toFixed(1)}%</td><td style="color:var(--muted)">${e.read}</td></tr>`).join(""); }
+
+/* ============================ AI FORECAST ============================ */
+function updateAIForecast(){
+  const r=C[P.rnom],d=C[P.dnom],winR=SIM.rEV>=270,win=winR?r:d,lose=winR?d:r,winEV=winR?SIM.rEV:SIM.dEV,loseEV=winR?SIM.dEV:SIM.rEV;
+  const p=Math.round((winR?SIM.pWin:1-SIM.pWin)*100), tipS=ABBR[SIM.tip];
+  document.getElementById("aiWho").innerHTML=`${win.name} <span style="color:${win.p==='R'?cv('--r-deep'):cv('--d-deep')}">(${win.p})</span>`;
+  document.getElementById("aiDet").textContent=`${winEV}–${loseEV} electoral votes · ${p}% · tipping point ${SIM.tip}`;
+  // battlegrounds
+  const battles=SIM.mus.map((o,i)=>({s:o.s,mu:o.mu,p:SIM.winProb[i]})).filter(o=>Math.abs(o.mu)<6).sort((a,b)=>Math.abs(a.mu)-Math.abs(b.mu)).slice(0,6);
+  document.getElementById("keyRaces").innerHTML=battles.map(o=>`<div class="kr"><div class="s">${o.s[1]}</div><div class="m" style="color:${o.mu>0?cv('--r-deep'):cv('--d-deep')}">${o.mu>0?'R':'D'}+${Math.abs(o.mu).toFixed(1)} · ${o.s[2]} EV</div><div class="m" style="color:var(--muted)">GOP ${(o.p*100).toFixed(0)}%</div></div>`).join("");
+  const conf=p>85?"a commanding position":p>65?"a clear but not safe lead":"a genuine tossup";
+  const econName=ECON[P.econ]?ECON[P.econ].name.toLowerCase():"a custom economy";
+  const narr=`
+   <p>The model begins from the <b>fundamentals</b>. With presidential approval at <b>${P.appr>0?'+':''}${P.appr}</b> and ${P.econ!==undefined&&ECON[P.econ]?`a <b>${econName}</b> economy`:'the current economy'}, the party in power (the Republicans) starts from a national popular-vote lean of <b>${SIM.natM>0?'R':'D'}+${Math.abs(SIM.natM).toFixed(1)}</b>. That is ${Math.abs(SIM.natM)<2?'close enough to even that the Electoral College, not the popular vote, decides everything':'a real but reversible edge'}.</p>
+   <p>On the <b>Democratic</b> side, <b>${d.name}</b> emerges as the nominee in this scenario — ${d.str[0].toLowerCase()} is the asset the model leans on, while ${d.rsk[0].toLowerCase()} is the exposure. For the <b>Republicans</b>, <b>${r.name}</b> carries ${r.str[0].toLowerCase()}, offset by ${r.rsk[0].toLowerCase()}.</p>
+   <p class="pq">${win.name} holds ${conf}: ${winEV} electoral votes to ${loseEV}, winning ${p}% of simulated elections.</p>
+   <p>The whole contest runs through <b>${tipS?tipS[1]:SIM.tip}</b>, the tipping-point state — win it and you almost certainly win the presidency. With <b>${SIM.comp}</b> states truly in play and an 80% outcome range of <b>${SIM.lo}–${SIM.hi}</b> Republican electoral votes, the race is ${SIM.sd>35?'highly volatile — small shifts cascade':SIM.sd>22?'sensitive to a normal-sized polling error':'relatively stable'}.</p>
+   <p><b>What would change the call:</b> a swing of about <b>${Math.max(1,Math.abs(SIM.natM)+ (tipS?Math.abs(SIM.mus[STATES.indexOf(tipS)].mu):1)).toFixed(0)} points</b> in the national environment — a worse economy, an approval slump, or a turnout surge in the right coalition — would flip the tipping-point state and with it the Electoral College.</p>`;
+  document.getElementById("aiNarr").innerHTML=narr;
+}
+
+/* ============================ DATA TABLE + CSV ============================ */
+let sortKey="ev",sortDir=-1;
+function tableRows(){
+  return SIM.mus.map((o,i)=>({a:o.s[0],name:o.s[1],ev:o.s[2],base:o.s[3],elast:o.s[4],mu:o.mu,p:SIM.winProb[i]*100,
+    win:o.mu>0?"R":"D",flip:((o.s[3]>0?"R":"D")!==(o.mu>0?"R":"D"))?"✓":""}));
+}
+function updateDataTable(){
+  const rows=tableRows(); rows.sort((a,b)=>(a[sortKey]>b[sortKey]?1:-1)*sortDir);
+  const cols=[["name","State"],["ev","EV"],["base","2024"],["elast","Elast."],["mu","2028 margin"],["p","GOP win %"],["win","Call"],["flip","Flip"]];
+  let h="<thead><tr>"+cols.map(c=>`<th data-k="${c[0]}">${c[1]}</th>`).join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{ h+=`<tr><td>${r.name}</td><td class="mono">${r.ev}</td><td class="mono">${sgn(r.base)}</td><td class="mono">${r.elast.toFixed(2)}</td><td class="mono" style="color:${r.mu>0?cv('--r-deep'):cv('--d-deep')}">${r.win} ${sgn(r.mu)}</td><td class="mono">${r.p.toFixed(0)}%</td><td class="mono">${r.win}</td><td class="mono">${r.flip}</td></tr>`; });
+  h+="</tbody>"; const t=document.getElementById("dataTable"); t.innerHTML=h;
+  t.querySelectorAll("th").forEach(th=>th.addEventListener("click",()=>{ const k=th.dataset.k; if(sortKey===k)sortDir*=-1; else{sortKey=k;sortDir=(k==="name")?1:-1;} updateDataTable(); }));
+}
+function downloadCSV(){
+  const rows=tableRows(); const head=["state","abbr","ev","margin_2024","elasticity","margin_2028","gop_win_pct","call","flip_vs_2024"];
+  const lines=[head.join(",")].concat(rows.map(r=>[r.name,r.a,r.ev,r.base,r.elast,r.mu.toFixed(2),r.p.toFixed(1),r.win,r.flip?"yes":"no"].join(",")));
+  const csv=lines.join("\n"); let copied=false;
+  if(navigator.clipboard&&navigator.clipboard.writeText){ try{navigator.clipboard.writeText(csv);copied=true;}catch(e){} }
+  try{ const blob=new Blob([csv],{type:"text/csv"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="road-to-270-scenario.csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000); }catch(e){}
+  toast(copied?"CSV copied to clipboard (downloads too, if your browser allows)":"CSV downloaded");
+}
+
+/* ============================ BACKTEST ============================ */
+function fundMargin(b){ return 0.40*b.appr + 1.0*(b.gdp-2.2) - 0.7*(b.unemp-4.2) - 0.6*(b.infl-2.5) + 1.0; }
+function drawBacktest(){
+  let hits=0,abserr=0;
+  document.getElementById("btgrid").innerHTML=BT.map(b=>{ const pred=fundMargin(b); const predWin=pred>0?b.inc:(b.inc==="D"?"R":"D"); const hit=predWin===b.win; if(hit)hits++;
+    abserr+=Math.abs(pred - b.actual*(b.inc==="D"?1:1));
+    const pills=hit?`<span class="hitpill ${b.win==='R'?'hit r':'hit'}">✓ called ${b.win}</span>`:`<span class="hitpill miss">✗ missed</span>`;
+    return `<div class="btc"><div class="yr">${b.yr}</div>
+      <div class="row"><span class="lab">Incumbent</span><span class="val">${b.incName}</span></div>
+      <div class="row"><span class="lab">Economy</span><span class="val">${b.gdp>0?'+':''}${b.gdp} GDP · ${b.unemp}u</span></div>
+      <div class="row"><span class="lab">Net approval</span><span class="val">${b.appr>0?'+':''}${b.appr}</span></div>
+      <div class="row"><span class="lab">Model says</span><span class="val">${b.inc} ${pred>0?'+':''}${pred.toFixed(1)}</span></div>
+      <div class="row"><span class="lab">Actual</span><span class="val">${b.inc} ${b.actual>0?'+':''}${b.actual}</span></div>
+      ${pills}${b.note?`<div class="srcnote">${b.note}</div>`:''}</div>`; }).join("");
+  const mae=(abserr/BT.length).toFixed(1);
+  document.getElementById("btScore").innerHTML=`The fundamentals layer called the <b>winner in ${hits} of ${BT.length}</b> backtested cycles. Mean absolute error on the national margin: <b>${mae} points</b>. It misses hardest in split-decision years (2000, 2016) where the popular-vote winner lost the Electoral College — a known limit of any popular-vote fundamentals model.`;
+}
+
+/* ============================ CONTROLS ============================ */
+function fillSelects(){
+  document.getElementById("rnom").innerHTML=CANDS.filter(c=>c.p==="R").map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+  document.getElementById("dnom").innerHTML=CANDS.filter(c=>c.p==="D").map(c=>`<option value="${c.id}">${c.name}</option>`).join("");
+  document.getElementById("rnom").value=P.rnom; document.getElementById("dnom").value=P.dnom;
+}
+function syncEconReadout(){ const e=ECON[P.econ]; if(e){document.getElementById("econName").textContent=e.name;}
+  document.getElementById("egdp").textContent=(P.gdp>0?'+':'')+P.gdp.toFixed(1)+"%";
+  document.getElementById("eunemp").textContent=P.unemp.toFixed(1)+"%"; document.getElementById("einfl").textContent=P.infl.toFixed(1)+"%";
+  document.getElementById("emis").textContent=(P.unemp+P.infl).toFixed(1); }
+function syncControls(){
+  fillSelects();
+  document.getElementById("econ").value=P.econ; syncEconReadout();
+  const setv=(id,val,txt)=>{const el=document.getElementById(id); if(el)el.value=val; const v=document.getElementById(id+"V"); if(v)v.textContent=txt;};
+  setv("appr",P.appr,(P.appr>0?'+':'')+P.appr);
+  setv("rdi",P.rdi,(P.rdi>0?'+':'')+P.rdi.toFixed(1)+"%"); setv("wage",P.wage,(P.wage>0?'+':'')+P.wage.toFixed(1)+"%");
+  setv("sent",P.sent,P.sent); setv("track",P.track,(P.track>0?'+':'')+P.track); setv("gen",P.gen,(P.gen>0?'+':'')+P.gen);
+  setv("thermo",P.thermo,P.thermo.toFixed(1)); setv("pid",P.pid,(P.pid>0?'+':'')+P.pid); setv("edu",P.edu,P.edu.toFixed(2)+"×"); setv("ad",P.ad,(P.ad>0?'+':'')+P.ad);
+  setv("t_wnc",P.t_wnc,(P.t_wnc>0?'+':'')+P.t_wnc); setv("t_lat",P.t_lat,(P.t_lat>0?'+':'')+P.t_lat); setv("t_blk",P.t_blk,(P.t_blk>0?'+':'')+P.t_blk); setv("t_yng",P.t_yng,(P.t_yng>0?'+':'')+P.t_yng);
+  setv("abo",P.abo,(P.abo>0?'+':'')+P.abo); setv("crisis",P.crisis,(P.crisis>0?'+':'')+P.crisis); setv("surp",P.surp,(P.surp>0?'+':'')+P.surp);
+  document.getElementById("locecon").checked=!!P.locecon;
+}
+function bindControls(){
+  document.getElementById("rnom").addEventListener("change",e=>{P.rnom=e.target.value;drawCards();render();});
+  document.getElementById("dnom").addEventListener("change",e=>{P.dnom=e.target.value;drawCards();render();});
+  document.getElementById("econ").addEventListener("input",e=>{setEconP(+e.target.value);syncEconReadout();render();drawTornado();});
+  const simple=[["appr",v=>(v>0?'+':'')+v],["rdi",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["wage",v=>(v>0?'+':'')+(+v).toFixed(1)+"%"],["sent",v=>v],["track",v=>(v>0?'+':'')+v],["gen",v=>(v>0?'+':'')+v],["thermo",v=>(+v).toFixed(1)],["pid",v=>(v>0?'+':'')+v],["edu",v=>(+v).toFixed(2)+"×"],["ad",v=>(v>0?'+':'')+v],["t_wnc",v=>(v>0?'+':'')+v],["t_lat",v=>(v>0?'+':'')+v],["t_blk",v=>(v>0?'+':'')+v],["t_yng",v=>(v>0?'+':'')+v],["abo",v=>(v>0?'+':'')+v],["crisis",v=>(v>0?'+':'')+v],["surp",v=>(v>0?'+':'')+v]];
+  simple.forEach(([id,fmt])=>{ const el=document.getElementById(id); el.addEventListener("input",e=>{P[id]=+e.target.value; document.getElementById(id+"V").textContent=fmt(+e.target.value); render(); drawTornado();}); });
+  document.getElementById("locecon").addEventListener("change",e=>{P.locecon=e.target.checked?1:0;render();});
+  document.getElementById("preset").addEventListener("change",e=>{applyPreset(e.target.value);e.target.value="";});
+  document.getElementById("sharebtn").addEventListener("click",shareLink);
+  document.getElementById("reset").addEventListener("click",()=>{P={...DEF};sel=null;forced={};syncControls();drawCards();render();renderReason();drawTornado();history.replaceState(null,"","#forecast");});
+  document.getElementById("csvbtn").addEventListener("click",downloadCSV);
+  document.querySelectorAll("#mapmode button").forEach(b=>b.addEventListener("click",()=>{ document.querySelectorAll("#mapmode button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); mapMode=b.dataset.m;
+    document.getElementById("mapTitle").textContent={margin:"Projected electoral map",prob:"Win probability by state",flip:"States that flip from 2024",path:"Build your path to 270"}[mapMode];
+    document.getElementById("pathnote").hidden=mapMode!=="path"; if(mapMode==="path"){forced={};updatePathTotals();}else{render();} paint(); drawLeg(); }));
+  document.querySelectorAll("#histmodes button").forEach(b=>b.addEventListener("click",()=>{ document.querySelectorAll("#histmodes button").forEach(x=>x.classList.remove("on")); b.classList.add("on"); histMode=b.dataset.hm; paintHist(); }));
+  document.getElementById("yearSlider").addEventListener("input",e=>{histYearIdx=+e.target.value;paintHist();});
+  document.getElementById("themebtn").addEventListener("click",()=>{ const cur=document.documentElement.getAttribute("data-theme"); const dark=cur?cur==="dark":matchMedia("(prefers-color-scheme:dark)").matches; document.documentElement.setAttribute("data-theme",dark?"light":"dark"); setTimeout(repaintAll,30); });
+  document.getElementById("cbbtn").addEventListener("click",()=>{ const on=document.documentElement.getAttribute("data-cb")==="1"; document.documentElement.setAttribute("data-cb",on?"0":"1"); setTimeout(repaintAll,30); toast(on?"Standard colors":"Colorblind-safe colors"); });
+  document.getElementById("closex").addEventListener("click",closeModal);
+  document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal();});
+  const secs=["forecast","history","candidates","model","aiforecast","data"];
+  addEventListener("scroll",()=>{ let cur=secs[0]; for(const id of secs){ if(document.getElementById(id).getBoundingClientRect().top<120)cur=id; } document.querySelectorAll("nav a.tab").forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+cur)); },{passive:true});
+}
+function repaintAll(){ if(geo){paint();paintHist();} drawGauge(SIM.pWin); drawHist(); drawLeg(); if(sel)renderReason(); drawCards(); drawMatrix(); drawScatter(); drawPVTrend(); drawTornado(); }
+
+/* ============================ PRESETS + SHARE ============================ */
+function applyPreset(k){
+  if(!k)return; P={...DEF};
+  if(k==="recession")Object.assign(P,{econ:1,appr:-12,rdi:-0.5,wage:-1.5,sent:58,track:-40,thermo:1.0});
+  else if(k==="boom")Object.assign(P,{econ:5,appr:10,rdi:3.5,wage:2.0,sent:98,track:0});
+  else if(k==="dwave")Object.assign(P,{appr:-15,gen:6,thermo:1.3,pid:5,t_blk:4,t_yng:4,abo:1.5,dnom:"shapiro"});
+  else if(k==="rwave")Object.assign(P,{appr:6,gen:-3,t_wnc:5,surp:1.5,dnom:"newsom"});
+  else if(k==="repeat")Object.assign(P,{econ:4,appr:-2,rnom:"vance",dnom:"harris"});
+  if(P.econ!==undefined)setEconP(P.econ);
+  sel=null;forced={};syncControls();drawCards();render();drawTornado();toast("Loaded: "+document.querySelector(`#preset option[value="${k}"]`).textContent);
+}
+function shareLink(){
+  const parts=PARAMS.map(k=>P[k]); const hash=encodeURIComponent(btoa(JSON.stringify(parts)));
+  const url=location.origin+location.pathname+"#s="+hash; location.hash="s="+hash;
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(()=>toast("Share link copied!"),()=>toast("Link in address bar")); }
+  else toast("Link in address bar");
+}
+function loadFromHash(){
+  const h=location.hash; if(!h.startsWith("#s="))return false;
+  try{ const parts=JSON.parse(atob(decodeURIComponent(h.slice(3)))); PARAMS.forEach((k,i)=>{ if(parts[i]!==undefined)P[k]=parts[i]; }); if(P.econ!==undefined&&ECON[P.econ])setEconP(P.econ); return true; }catch(e){return false;}
+}
+
+/* ============================ MISC ============================ */
+let toastT=null;
+function toast(msg){ const t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),2200); }
+function drawCredits(){
+  const pages={vance:"JD_Vance",rubio:"Marco_Rubio",desantis:"Ron_DeSantis",haley:"Nikki_Haley",youngkin:"Glenn_Youngkin",cruz:"Ted_Cruz",djtjr:"Donald_Trump_Jr.",buttigieg:"Pete_Buttigieg",newsom:"Gavin_Newsom",whitmer:"Gretchen_Whitmer",shapiro:"Josh_Shapiro",beshear:"Andy_Beshear",aoc:"Alexandria_Ocasio-Cortez",harris:"Kamala_Harris"};
+  document.getElementById("credits").innerHTML=CANDS.map(c=>`<div>${c.name} — <a href="https://en.wikipedia.org/wiki/${pages[c.id]}" target="_blank" rel="noopener">source</a></div>`).join("");
+}
+
+/* ============================ BOOT ============================ */
+document.getElementById("simchip").textContent=N_SIM.toLocaleString();
+document.getElementById("histSub").textContent=`Across ${N_SIM.toLocaleString()} simulated elections with correlated, polling-style error. Red bars = GOP totals at or above 270.`;
+loadFromHash();
+fillSelects(); setEconP(P.econ); syncControls();
+drawCards(); drawEconTable(); drawBacktest(); drawCredits(); bindControls();
+Promise.all([
+  fetch("us-states.geojson").then(r=>r.json()),
+  fetch("history.json").then(r=>r.json())
+]).then(([gj,hist])=>{
+  geo=gj; HIST=hist; HIST.years.sort((a,b)=>a-b);
+  render(); drawLeg(); drawMap("#map",fcClick,fcHover); paint();
+  drawHistMap(); drawPVTrend(); drawMatrix(); drawScatter(); drawTornado();
+}).catch(err=>{ document.getElementById("map").outerHTML='<p class="empty" style="padding:20px">Map data could not load. If hosting yourself, keep <b>us-states.geojson</b> and <b>history.json</b> next to index.html.</p>'; render(); drawMatrix(); drawScatter(); drawTornado(); });
+</script>
